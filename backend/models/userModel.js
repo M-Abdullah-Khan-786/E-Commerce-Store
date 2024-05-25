@@ -47,6 +47,9 @@ const userSchema = new mongoose.Schema({
             ref: 'Product'
         }
     ],
+    refreshToken: {
+        type: String,
+    }
 
 }, { timestamps: true });
 
@@ -71,7 +74,7 @@ userSchema.methods.checkPassword = async function (password) {
 // Generate JWT Token
 userSchema.methods.generateToken = async function () {
     return jwt.sign({ id: this._id }, process.env.JWT_SECRET, {
-        expiresIn: "3d"
+        expiresIn: "1d"
     });
 }
 

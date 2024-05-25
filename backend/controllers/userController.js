@@ -2,6 +2,8 @@ const User = require("../models/userModel");
 const asyncHandler = require("express-async-handler");
 const { errorhandler } = require("../middlewares/errorMiddleware");
 const validateId = require("../utils/validateId");
+const generateRefreshtoken = require("../config/refreshToken");
+const jwt = require("jsonwebtoken")
 
 // resgister User
 exports.registerUser = asyncHandler(async (req, res, next) => {
@@ -23,11 +25,23 @@ exports.registerUser = asyncHandler(async (req, res, next) => {
         password,
     });
 
-    return res.status(201).json({
+    const refreshToken = await generateRefreshtoken(user._id);
+    const registerUser = await User.findByIdAndUpdate(
+        user._id,
+        { refreshToken },
+        {
+            new: true,
+        }
+    ).select("-refreshToken");
+
+    return res.cookie("refreshToken", refreshToken, {
+        httpOnly: true,
+        maxAge: 3 * 24 * 60 * 60 * 1000,
+    }).status(201).json({
         success: true,
         message: "User register successfully",
         token: await user.generateToken(),
-        user,
+        registerUser,
     });
 });
 
@@ -50,120 +64,170 @@ exports.loginUser = asyncHandler(async (req, res, next) => {
         return next(errorhandler(401, "Invalid Email or Password"));
     }
 
-    return res.status(200).json({
+    const refreshToken = await generateRefreshtoken(userExist._id);
+    const loginUser = await User.findByIdAndUpdate(
+        userExist._id,
+        { refreshToken },
+        {
+            new: true,
+        }
+    ).select("-refreshToken");
+
+    return res.cookie("refreshToken", refreshToken, {
+        httpOnly: true,
+        maxAge: 3 * 24 * 60 * 60 * 1000,
+    }).status(200).json({
         success: true,
         message: "User login successfully",
         token: await userExist.generateToken(),
-        userExist,
+        loginUser,
     });
 });
+
+// logout User
+exports.logoutUser = asyncHandler(async (req, res, next) => {
+    const cookie = req.cookies
+    if (!cookie.refreshToken) {
+        return next(errorhandler(400, "Token not available in cookies"))
+    }
+    return res.clearCookie("refreshToken", {
+        httpOnly: true,
+        secure: true
+    }).status(200).json({
+        success: true,
+        message: "User logout successfully"
+    })
+})
+
+// handle Refresh Token
+exports.handleToken = asyncHandler(async (req, res, next) => {
+    const cookie = req.cookies
+    if (!cookie.refreshToken) {
+        return next(errorhandler(400, "Token not available in cookies"))
+    }
+    const refreshToken = cookie.refreshToken
+    const user = await User.findOne({ refreshToken })
+    const decoded = await jwt.verify(refreshToken, process.env.JWT_SECRET)
+    if (user._id.toString() !== decoded.id) {
+        return next(errorhandler(401, "Invalid Refresh Token"))
+    }
+    const accessToken = await generateRefreshtoken(user._id)
+    res.status(200).json({
+        success: true,
+        accessToken
+    })
+})
 
 // get all Users
 exports.getAllUsers = asyncHandler(async (req, res, next) => {
     const users = await User.find().select("-password");
     res.status(200).json({
         success: true,
-        users
+        users,
     });
 });
 
-
 // get single User
 exports.getSingleUser = asyncHandler(async (req, res, next) => {
-    const { id } = req.params
-    next(validateId(id))
-    const user = await User.findById(id).select("-password")
+    const { id } = req.params;
+    next(validateId(id));
+    const user = await User.findById(id).select("-password");
     if (!user) {
-        return next(errorhandler(404, "User not found"))
+        return next(errorhandler(404, "User not found"));
     }
 
     return res.status(200).json({
         success: true,
-        user
-    })
-})
-
+        user,
+    });
+});
 
 // update User
 exports.UpdateeUser = asyncHandler(async (req, res, next) => {
-    const { _id } = req.user
-    next(validateId(_id))
-    const user = await User.findById(_id).select("-password")
+    const { _id } = req.user;
+    next(validateId(_id));
+    const user = await User.findById(_id).select("-password");
     if (!user) {
-        return next(errorhandler(404, "User not found"))
+        return next(errorhandler(404, "User not found"));
     }
 
     const updateUser = await User.findByIdAndUpdate(_id, req.body, {
         runValidators: true,
-        new: true
-    })
+        new: true,
+    });
 
     return res.status(200).json({
         success: true,
         message: "User Updated Successfully",
-        updateUser
-    })
-})
-
+        updateUser,
+    });
+});
 
 // delete User
 exports.deleteUser = asyncHandler(async (req, res, next) => {
-    const { id } = req.params
-    next(validateId(id))
-    const user = await User.findById(id)
+    const { id } = req.params;
+    next(validateId(id));
+    const user = await User.findById(id);
 
     if (!user) {
-        return next(errorhandler(404, "User not found"))
+        return next(errorhandler(404, "User not found"));
     }
 
-    const userdeletd = await User.findByIdAndDelete(id).select("-password")
+    const userdeletd = await User.findByIdAndDelete(id).select("-password");
 
     return res.status(200).json({
         success: true,
         message: "User deleted Successfully",
-        userdeletd
-    })
-})
-
+        userdeletd,
+    });
+});
 
 // Block User
 exports.blockUser = asyncHandler(async (req, res, next) => {
-    const { id } = req.params
-    next(validateId(id))
-    const user = await User.findById(id).select("-password")
+    const { id } = req.params;
+    next(validateId(id));
+    const user = await User.findById(id).select("-password");
     if (!user) {
-        return next(errorhandler(404, "User not found"))
+        return next(errorhandler(404, "User not found"));
     }
 
-    const block = await User.findByIdAndUpdate(id, { isBlocked: true }, {
-        runValidators: true,
-        new: true
-    })
+    const block = await User.findByIdAndUpdate(
+        id,
+        { isBlocked: true },
+        {
+            runValidators: true,
+            new: true,
+        }
+    );
 
     return res.status(200).json({
         success: true,
         message: "User Blocked Successfully",
-        block
-    })
-})
+        block,
+    });
+});
 
 // Unblock User
 exports.unBlockUser = asyncHandler(async (req, res, next) => {
-    const { id } = req.params
-    next(validateId(id))
-    const user = await User.findById(id).select("-password")
+    const { id } = req.params;
+    next(validateId(id));
+    const user = await User.findById(id).select("-password");
     if (!user) {
-        return next(errorhandler(404, "User not found"))
+        return next(errorhandler(404, "User not found"));
     }
 
-    const unblock = await User.findByIdAndUpdate(id, { isBlocked: false }, {
-        runValidators: true,
-        new: true
-    })
+    const unblock = await User.findByIdAndUpdate(
+        id,
+        { isBlocked: false },
+        {
+            runValidators: true,
+            new: true,
+        }
+    );
 
     return res.status(200).json({
         success: true,
         message: "User Unblocked Successfully",
-        unblock
-    })
-})
+        unblock,
+    });
+});
