@@ -1,7 +1,7 @@
 const User = require("../models/userModel");
 const asyncHandler = require("express-async-handler");
 const { errorhandler } = require("../middlewares/errorMiddleware");
-
+const validateId = require("../utils/validateId");
 
 // resgister User
 exports.registerUser = asyncHandler(async (req, res, next) => {
@@ -71,6 +71,7 @@ exports.getAllUsers = asyncHandler(async (req, res, next) => {
 // get single User
 exports.getSingleUser = asyncHandler(async (req, res, next) => {
     const { id } = req.params
+    next(validateId(id))
     const user = await User.findById(id).select("-password")
     if (!user) {
         return next(errorhandler(404, "User not found"))
@@ -86,6 +87,7 @@ exports.getSingleUser = asyncHandler(async (req, res, next) => {
 // update User
 exports.UpdateeUser = asyncHandler(async (req, res, next) => {
     const { _id } = req.user
+    next(validateId(_id))
     const user = await User.findById(_id).select("-password")
     if (!user) {
         return next(errorhandler(404, "User not found"))
@@ -107,6 +109,7 @@ exports.UpdateeUser = asyncHandler(async (req, res, next) => {
 // delete User
 exports.deleteUser = asyncHandler(async (req, res, next) => {
     const { id } = req.params
+    next(validateId(id))
     const user = await User.findById(id)
 
     if (!user) {
@@ -126,6 +129,7 @@ exports.deleteUser = asyncHandler(async (req, res, next) => {
 // Block User
 exports.blockUser = asyncHandler(async (req, res, next) => {
     const { id } = req.params
+    next(validateId(id))
     const user = await User.findById(id).select("-password")
     if (!user) {
         return next(errorhandler(404, "User not found"))
@@ -146,6 +150,7 @@ exports.blockUser = asyncHandler(async (req, res, next) => {
 // Unblock User
 exports.unBlockUser = asyncHandler(async (req, res, next) => {
     const { id } = req.params
+    next(validateId(id))
     const user = await User.findById(id).select("-password")
     if (!user) {
         return next(errorhandler(404, "User not found"))
