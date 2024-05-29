@@ -5,10 +5,12 @@ dotenv.config({ path: "./config/.env" })
 const bodyparser = require("body-parser")
 const cors = require("cors")
 const cookieParser = require('cookie-parser')
+const morgan = require("morgan")
 
 
 const connectDb = require("./database/connectDb")
 const userRouter = require("./routes/userRoute")
+const productRouter = require("./routes/productRoute")
 const { errorMiddleware } = require("./middlewares/errorMiddleware")
 
 const corsOptions = {
@@ -18,6 +20,7 @@ const corsOptions = {
     optionsSuccessStatus: 200
 }
 
+app.use(morgan("dev"))
 app.use(bodyparser.json())
 app.use(bodyparser.urlencoded({ extended: false }))
 app.use(cors(corsOptions))
@@ -25,6 +28,7 @@ app.use(cookieParser())
 
 
 app.use("/api/v1/user", userRouter)
+app.use("/api/v1/product", productRouter)
 
 connectDb()
 
