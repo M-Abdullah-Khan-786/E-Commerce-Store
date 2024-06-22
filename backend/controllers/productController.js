@@ -76,7 +76,7 @@ exports.getAllProducts = asyncHandler(async (req, res, next) => {
 
         let query = Product.find(JSON.parse(queryStr))
 
-        // Sorting the Sorting
+        // Sorting the Products
         if (req.query.sort) {
             const sortedBy = req.query.sort.split(",").join(" ");
             query = query.sort(sortedBy)
