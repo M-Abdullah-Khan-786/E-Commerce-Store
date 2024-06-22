@@ -65,9 +65,51 @@ exports.updateProduct = asyncHandler(async (req, res, next) => {
 
 // get all Products
 exports.getAllProducts = asyncHandler(async (req, res, next) => {
-    const products = await Product.find()
-    res.status(200).json({
-        success: true,
-        products
-    })
+    try {
+        // Filtering the Products
+        const queryObject = { ...req.query }
+        const excludeField = ["limit", "sort", "page", "fields"]
+        excludeField.forEach((el) => delete queryObject[el])
+
+        let queryStr = JSON.stringify(queryObject)
+        queryStr = queryStr.replace(/\b(gte|lte|gt|lt)\b/g, str => `$${str}`)
+
+        let query = Product.find(JSON.parse(queryStr))
+
+        // Sorting the Sorting
+        if (req.query.sort) {
+            const sortedBy = req.query.sort.split(",").join(" ");
+            query = query.sort(sortedBy)
+        } else {
+            query = query.sort('-createdAt')
+        }
+
+        // Limiting the Fields
+        if (req.query.fields) {
+            const fields = req.query.fields.split(",").join(" ");
+            query = query.select(fields)
+        } else {
+            query = query.select('-__v')
+        }
+
+
+        // Pagination on Products
+        const page = req.query.page * 1 || 1
+        const limit = req.query.limit || 22;
+        const skip = (page - 1) * limit
+        query = query.skip(skip).limit(limit)
+        if (req.query.page) {
+            const productCount = await Product.countDocuments();
+            if (skip >= productCount) return next(errorhandler(400, "Page does not exist"))
+        }
+
+        const getAllproducts = await query
+        res.status(200).json({
+            success: true,
+            getAllproducts
+        })
+    } catch (error) {
+        console.error("Error while getting products:", error);
+        return next(errorhandler(500, "Internal server error"))
+    }
 })
