@@ -1,9 +1,11 @@
 const User = require("../models/userModel");
 const asyncHandler = require("express-async-handler");
 const { errorhandler } = require("../middlewares/errorMiddleware");
+const crypto = require('crypto')
 const validateId = require("../utils/validateId");
 const generateRefreshtoken = require("../config/refreshToken");
-const jwt = require("jsonwebtoken")
+const jwt = require("jsonwebtoken");
+const sendEmail = require("./emailController");
 
 // resgister User
 exports.registerUser = asyncHandler(async (req, res, next) => {
@@ -143,7 +145,7 @@ exports.getSingleUser = asyncHandler(async (req, res, next) => {
 });
 
 // update User
-exports.UpdateeUser = asyncHandler(async (req, res, next) => {
+exports.UpdateUser = asyncHandler(async (req, res, next) => {
     const { _id } = req.user;
     next(validateId(_id));
     const user = await User.findById(_id).select("-password");
@@ -231,3 +233,68 @@ exports.unBlockUser = asyncHandler(async (req, res, next) => {
         unblock,
     });
 });
+
+// Update User Password
+exports.updatePassword = asyncHandler(async (req, res, next) => {
+    const { _id } = req.user
+    const { password } = req.body
+    validateId(_id);
+    const user = await User.findById(_id);
+    if (password) {
+        user.password = password;
+        const updatedPassword = await user.save();
+        res.json({
+            success: true,
+            message: "Password updated successfully",
+            updatedPassword
+        })
+    } else {
+        res.json(user)
+    }
+})
+
+// Forgot Password Token Generate
+exports.forgotPasswordtoken = asyncHandler(async (req, res, next) => {
+    const { email } = req.body;
+    const user = await User.findOne({ email });
+    if (!user) {
+        return next(errorhandler(404, "User not found"));
+    }
+    try {
+        const token = await user.createPasswordResetToken()
+        await user.save()
+        const resetURL = `Hi, Please follow this link to reset your password. This link is valid for 10 minutes. <a href="http://localhost:8800/api/user/reset-password/${token}">Click here</a>`;
+        const data = {
+            to: email,
+            subject: "Your password reset token (valid for 2 minutes)",
+            text: `Hey, ${user.firstName}`,
+            html: resetURL
+        }
+        sendEmail(data)
+        res.json(token)
+    } catch (error) {
+        return next(errorhandler(500, error))
+    }
+})
+
+
+// Reset Password
+exports.resetPassword = asyncHandler(async (req, res, next) => {
+    const { password } = req.body
+    const { token } = req.params
+    const hashedToken = crypto.createHash("sha256").update(token).digest("hex");
+    const user = await User.findOne({
+        passwordResetToken: hashedToken,
+        passwordResetExpires: { $gt: Date.now() }
+    })
+    if (!user) return next(errorhandler(404, "TimeOut, Please reset you password again"));
+    user.password = password
+    user.passwordResetToken = undefined;
+    user.passwordResetExpires = undefined;
+    await user.save()
+    return res.json({
+        success: true,
+        message: "Password reset successfully",
+        user
+    })
+})
