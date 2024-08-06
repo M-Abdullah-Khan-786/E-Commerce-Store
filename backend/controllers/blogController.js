@@ -25,6 +25,7 @@ exports.createBlog = asyncHandler(async (req, res, next) => {
 // Update Blog
 exports.updateBlog = asyncHandler(async (req, res, next) => {
   const { id } = req.params;
+  next (validateId(id))
   const findBlog = await Blog.findById(id);
   if (!findBlog) {
     return next(errorhandler(404, "Blog not found"));
@@ -45,6 +46,7 @@ exports.updateBlog = asyncHandler(async (req, res, next) => {
 // Delete Blog
 exports.deleteBlog = asyncHandler(async (req, res, next) => {
   const { id } = req.params;
+  next (validateId(id))
   const findBlog = await Blog.findById(id);
   if (!findBlog) {
     return next(errorhandler(404, "Blog not found"));
@@ -68,7 +70,7 @@ exports.singleBlog = asyncHandler(async (req, res, next) => {
   },
 {
     new: true
-})
+}).populate("likes").populate("dislikes")
   if (!findBlog) {
     return next(errorhandler(404, "Blog not found"));
   }
@@ -87,3 +89,110 @@ exports.getAllBlogs = asyncHandler(async (req, res, next) => {
       blogs,
     });
   });
+
+  // Liked Blog
+  exports.likedBlog = asyncHandler(async (req, res, next) => {
+    const {blogId} = req.body;
+    const findBlog = await Blog.findById(blogId);
+    if (!findBlog) {
+      return next(errorhandler(404, "Blog not found"));
+    }
+    const loginUserId = req.user._id
+    const isLiked = findBlog?.isLiked
+    const isDisliked = findBlog?.dislikes?.find(
+      (userId)=> (userId.toString() === loginUserId?.toString())
+    )
+
+    if(isDisliked){
+      const blog = await Blog.findByIdAndUpdate(blogId,{
+      },{
+        $pull: {dislikes: loginUserId},
+        isDisliked: false
+      })
+      return res.status(200).json({
+        success: true,
+        blog
+      })
+    }
+    
+    if(isLiked){
+      const blog = await Blog.findByIdAndUpdate(blogId,{
+
+      },{
+        $pull: {likes: loginUserId},
+        isLiked: false
+      },{
+        new: true
+      })
+      return res.status(200).json({
+        success: true,
+        blog
+      })
+    }else{
+      const blog = await Blog.findByIdAndUpdate(blogId,{
+        $push: {likes: loginUserId},
+        isLiked: true
+      },{
+        new: true
+      })
+      return res.status(200).json({
+        success: true,
+        blog
+      })
+    }
+
+  })
+
+
+  // Disliked Blog
+  exports.disLikedBlog = asyncHandler(async (req, res, next) => {
+    const {blogId} = req.body;
+    const findBlog = await Blog.findById(blogId);
+    if (!findBlog) {
+      return next(errorhandler(404, "Blog not found"));
+    }
+    const loginUserId = req.user._id
+    const isDisliked = findBlog?.isDisliked
+    const isLiked = findBlog?.likes?.find(
+      (userId)=> (userId.toString() === loginUserId?.toString())
+    )
+
+    if(isLiked){
+      const blog = await Blog.findByIdAndUpdate(blogId,{
+      },{
+        $pull: {liked: loginUserId},
+        isLiked: false
+      })
+      return res.status(200).json({
+        success: true,
+        blog
+      })
+    }
+    
+    if(isDisliked){
+      const blog = await Blog.findByIdAndUpdate(blogId,{
+
+      },{
+        $pull: {dislikes: loginUserId},
+        isDisliked: false
+      },{
+        new: true
+      })
+      return res.status(200).json({
+        success: true,
+        blog
+      })
+    }else{
+      const blog = await Blog.findByIdAndUpdate(blogId,{
+        $push: {dislikes: loginUserId},
+        isDisliked: true
+      },{
+        new: true
+      })
+      return res.status(200).json({
+        success: true,
+        blog
+      })
+    }
+
+  })
