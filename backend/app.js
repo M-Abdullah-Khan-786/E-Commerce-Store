@@ -11,6 +11,7 @@ const morgan = require("morgan")
 const connectDb = require("./database/connectDb")
 const userRouter = require("./routes/userRoute")
 const productRouter = require("./routes/productRoute")
+const blogRouter = require("./routes/blogRoute")
 const { errorMiddleware } = require("./middlewares/errorMiddleware")
 
 const corsOptions = {
@@ -29,6 +30,7 @@ app.use(cookieParser())
 
 app.use("/api/v1/user", userRouter)
 app.use("/api/v1/product", productRouter)
+app.use("/api/v1/blog", blogRouter)
 
 connectDb()
 
