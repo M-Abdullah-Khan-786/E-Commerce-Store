@@ -1,4 +1,5 @@
 const Product = require("../models/productModel");
+const User = require("../models/userModel");
 const asyncHandler = require("express-async-handler");
 const { errorhandler } = require("../middlewares/errorMiddleware");
 const slugify = require('slugify');
@@ -110,6 +111,40 @@ exports.getAllProducts = asyncHandler(async (req, res, next) => {
         })
     } catch (error) {
         console.error("Error while getting products:", error);
+        return next(errorhandler(500, "Internal server error"))
+    }
+})
+
+
+// Add Wishlist
+exports.addWishlist = asyncHandler(async(req,res,next)=>{
+    const {_id} = req.user
+    const {productId} = req.body
+    try {
+        const user = await User.findById(_id)
+        const alreadyExist = user.wishlist.find((id)=>id.toString()=== productId)
+        if(alreadyExist){
+            let user = await User.findByIdAndUpdate(_id,{
+                $pull: { wishlist: productId }
+            },{
+                new: true
+            })
+            return res.status(200).json({
+                success: true,
+                user
+            })
+        }else{
+            let user = await User.findByIdAndUpdate(_id,{
+                $push: { wishlist: productId }
+            },{
+                new: true
+            })
+            return res.status(200).json({
+                success: true,
+                user
+            })
+        }
+    } catch (error) {
         return next(errorhandler(500, "Internal server error"))
     }
 })
