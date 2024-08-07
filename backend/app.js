@@ -14,6 +14,7 @@ const productRouter = require("./routes/productRoute")
 const blogRouter = require("./routes/blogRoute")
 const pCategoryRouter = require("./routes/productCategoryRoute")
 const bCategoryRouter = require("./routes/blogCategoryRoute")
+const brandRouter = require("./routes/brandRoute")
 const { errorMiddleware } = require("./middlewares/errorMiddleware")
 
 const corsOptions = {
@@ -35,6 +36,7 @@ app.use("/api/v1/product", productRouter)
 app.use("/api/v1/blog", blogRouter)
 app.use("/api/v1/product-category", pCategoryRouter)
 app.use("/api/v1/blog-category", bCategoryRouter)
+app.use("/api/v1/brand", brandRouter)
 
 connectDb()
 
