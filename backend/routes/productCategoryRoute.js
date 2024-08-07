@@ -1,13 +1,13 @@
 const express = require("express");
-const { createCateory, updateCateory, deleteCateory, singleCateory, getAllCateory } = require("../controllers/productCategoryController");
+const { createCategory, updateCategory, deleteCategory, singleCategory, getAllCategory } = require("../controllers/productCategoryController");
 const { authMiddleware, isAdmin } = require("../middlewares/authMiddleware");
 const router = express.Router();
 
 router
-    .post("/", authMiddleware, isAdmin, createCateory)
-    .put("/update/:id", authMiddleware, isAdmin, updateCateory)
-    .delete("/delete/:id", authMiddleware, isAdmin, deleteCateory)
-    .get("/:id", singleCateory)
-    .get("/", getAllCateory)
+    .post("/", authMiddleware, isAdmin, createCategory)
+    .put("/update/:id", authMiddleware, isAdmin, updateCategory)
+    .delete("/delete/:id", authMiddleware, isAdmin, deleteCategory)
+    .get("/:id", singleCategory)
+    .get("/", getAllCategory)
 
 module.exports = router;

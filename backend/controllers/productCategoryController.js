@@ -3,7 +3,7 @@ const asyncHandler = require("express-async-handler");
 const { errorhandler } = require("../middlewares/errorMiddleware");
 
 //  Create Category
-exports.createCateory = asyncHandler(async (req, res, next) => {
+exports.createCategory = asyncHandler(async (req, res, next) => {
   const { title } = req.body;
   if (!title) {
     return next(errorhandler(400, "Please provide a name for the category"));
@@ -17,7 +17,7 @@ exports.createCateory = asyncHandler(async (req, res, next) => {
 });
 
 //  Update Category
-exports.updateCateory = asyncHandler(async (req, res, next) => {
+exports.updateCategory = asyncHandler(async (req, res, next) => {
     const { id } = req.params;
     const findCategory = await PCategory.findById(id)
     if (!findCategory) {
@@ -35,7 +35,7 @@ exports.updateCateory = asyncHandler(async (req, res, next) => {
   });
 
   //  Delete Category
-exports.deleteCateory = asyncHandler(async (req, res, next) => {
+exports.deleteCategory = asyncHandler(async (req, res, next) => {
     const { id } = req.params;
     const findCategory = await PCategory.findById(id)
     if (!findCategory) {
@@ -50,7 +50,7 @@ exports.deleteCateory = asyncHandler(async (req, res, next) => {
   });
 
   //  Get Single Category
-exports.singleCateory = asyncHandler(async (req, res, next) => {
+exports.singleCategory = asyncHandler(async (req, res, next) => {
   const { id } = req.params;
   const findCategory = await PCategory.findById(id)
   if (!findCategory) {
@@ -63,7 +63,7 @@ exports.singleCateory = asyncHandler(async (req, res, next) => {
 });
 
  //  Get All Category
- exports.getAllCateory = asyncHandler(async (req, res, next) => {
+ exports.getAllCategory = asyncHandler(async (req, res, next) => {
   const allCategory = await PCategory.find()
   res.status(200).json({
     success: true,
