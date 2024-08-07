@@ -1,4 +1,4 @@
-const PCategory = require("../models/productCategoryModel");
+const BCategory = require("../models/blogCategoryModel");
 const asyncHandler = require("express-async-handler");
 const { errorhandler } = require("../middlewares/errorMiddleware");
 
@@ -8,10 +8,10 @@ exports.createCateory = asyncHandler(async (req, res, next) => {
   if (!title) {
     return next(errorhandler(400, "Please provide a name for the category"));
   }
-  const newCategory = await PCategory.create(req.body);
+  const newCategory = await BCategory.create(req.body);
   res.status(201).json({
     success: true,
-    message: "Product Category created successfully",
+    message: "Blog Category created successfully",
     newCategory,
   });
 });
@@ -19,17 +19,17 @@ exports.createCateory = asyncHandler(async (req, res, next) => {
 //  Update Category
 exports.updateCateory = asyncHandler(async (req, res, next) => {
     const { id } = req.params;
-    const findCategory = await PCategory.findById(id)
+    const findCategory = await BCategory.findById(id)
     if (!findCategory) {
-      return next(errorhandler(404, "Category not found"));
+      return next(errorhandler(404, "Blog Category not found"));
     }
-    const updateCategory = await PCategory.findByIdAndUpdate(id, req.body,{
+    const updateCategory = await BCategory.findByIdAndUpdate(id, req.body,{
         new: true,
         runValidators: true,
     })
     res.status(200).json({
       success: true,
-      message: "Product Category updated successfully",
+      message: "Blog Category updated successfully",
       updateCategory,
     });
   });
@@ -37,14 +37,14 @@ exports.updateCateory = asyncHandler(async (req, res, next) => {
   //  Delete Category
 exports.deleteCateory = asyncHandler(async (req, res, next) => {
     const { id } = req.params;
-    const findCategory = await PCategory.findById(id)
+    const findCategory = await BCategory.findById(id)
     if (!findCategory) {
       return next(errorhandler(404, "Category not found"));
     }
-    const deletedCategory = await PCategory.findByIdAndDelete(id)
+    const deletedCategory = await BCategory.findByIdAndDelete(id)
     res.status(200).json({
       success: true,
-      message: "Product Category deleted successfully",
+      message: "Blog Category deleted successfully",
       deletedCategory,
     });
   });
@@ -52,7 +52,7 @@ exports.deleteCateory = asyncHandler(async (req, res, next) => {
   //  Get Single Category
 exports.singleCateory = asyncHandler(async (req, res, next) => {
   const { id } = req.params;
-  const findCategory = await PCategory.findById(id)
+  const findCategory = await BCategory.findById(id)
   if (!findCategory) {
     return next(errorhandler(404, "Category not found"));
   }
@@ -64,7 +64,7 @@ exports.singleCateory = asyncHandler(async (req, res, next) => {
 
  //  Get All Category
  exports.getAllCateory = asyncHandler(async (req, res, next) => {
-  const allCategory = await PCategory.find()
+  const allCategory = await BCategory.find()
   res.status(200).json({
     success: true,
     allCategory,

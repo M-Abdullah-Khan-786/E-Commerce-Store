@@ -1,6 +1,6 @@
 const mongoose = require("mongoose"); // Erase if already required
 
-const productcategorySchema = new mongoose.Schema(
+const blogcategorySchema = new mongoose.Schema(
   {
     title: {
       type: String,
@@ -14,5 +14,5 @@ const productcategorySchema = new mongoose.Schema(
   }
 );
 
-const PCategory = mongoose.model("Product_Category", productcategorySchema);
-module.exports = PCategory;
+const BCategory = mongoose.model("Blog_Category", blogcategorySchema);
+module.exports = BCategory;
