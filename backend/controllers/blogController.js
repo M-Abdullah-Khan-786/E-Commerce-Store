@@ -7,7 +7,7 @@ const validateId = require("../utils/validateId");
 // Create Blog
 exports.createBlog = asyncHandler(async (req, res, next) => {
   try {
-    const { title, description, category, author } = req.body;
+    const { title, description, category } = req.body;
     if (!title || !description || !category) {
       return next(errorhandler(400, "Please fill all required fields"));
     }
