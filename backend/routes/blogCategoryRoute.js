@@ -4,7 +4,7 @@ const { authMiddleware, isAdmin } = require("../middlewares/authMiddleware");
 const router = express.Router();
 
 router
-    .post("/", authMiddleware, isAdmin, createCategory)
+    .post("/create", authMiddleware, isAdmin, createCategory)
     .put("/update/:id", authMiddleware, isAdmin, updateCategory)
     .delete("/delete/:id", authMiddleware, isAdmin, deleteCategory)
     .get("/:id", singleCategory)
