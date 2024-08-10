@@ -3,6 +3,8 @@ const User = require("../models/userModel");
 const asyncHandler = require("express-async-handler");
 const { errorhandler } = require("../middlewares/errorMiddleware");
 const slugify = require("slugify");
+const cloudinaryUploadImg = require("../utils/cloudinary")
+const fs = require("fs")
 
 // create Product
 exports.createProduct = asyncHandler(async (req, res, next) => {
@@ -218,3 +220,41 @@ exports.addRating = asyncHandler(async (req, res, next) => {
     }
   });
   
+// Upload Product Images
+exports.uploadImages = asyncHandler(async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const product = await Product.findById(id);
+
+    if (!product) {
+      return next({ status: 404, message: "Product not found" }); // Assuming you have a custom error handler
+    }
+
+    const uploader = (path) => cloudinaryUploadImg(path, "images");
+    const urls = []
+    const files = req.files
+    for (const file of files) {
+      const {path} = file
+      const newPath = await uploader(path);
+      urls.push(newPath);
+      console.log(file)
+      fs.unlinkSync(path)
+    }
+    const updateProduct = await Product.findByIdAndUpdate(
+      id,
+      { images: urls.map((file)=>{
+        return file
+      }) },
+      { new: true, runValidators: true }
+    );
+
+    res.status(200).json({
+      success: true,
+      message: "Product images uploaded successfully",
+      product: updateProduct,
+    });
+  } catch (error) {
+    console.error("Error during image upload or product update:", error);
+    next(error);
+  }
+});

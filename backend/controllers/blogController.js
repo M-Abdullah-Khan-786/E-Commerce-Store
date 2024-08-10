@@ -3,6 +3,8 @@ const User = require("../models/userModel");
 const asyncHandler = require("express-async-handler");
 const { errorhandler } = require("../middlewares/errorMiddleware");
 const validateId = require("../utils/validateId");
+const cloudinaryUploadImg = require("../utils/cloudinary");
+const fs = require("fs");
 
 // Create Blog
 exports.createBlog = asyncHandler(async (req, res, next) => {
@@ -25,7 +27,7 @@ exports.createBlog = asyncHandler(async (req, res, next) => {
 // Update Blog
 exports.updateBlog = asyncHandler(async (req, res, next) => {
   const { id } = req.params;
-  next (validateId(id))
+  next(validateId(id));
   const findBlog = await Blog.findById(id);
   if (!findBlog) {
     return next(errorhandler(404, "Blog not found"));
@@ -46,7 +48,7 @@ exports.updateBlog = asyncHandler(async (req, res, next) => {
 // Delete Blog
 exports.deleteBlog = asyncHandler(async (req, res, next) => {
   const { id } = req.params;
-  next (validateId(id))
+  next(validateId(id));
   const findBlog = await Blog.findById(id);
   if (!findBlog) {
     return next(errorhandler(404, "Blog not found"));
@@ -65,12 +67,17 @@ exports.deleteBlog = asyncHandler(async (req, res, next) => {
 exports.singleBlog = asyncHandler(async (req, res, next) => {
   const { id } = req.params;
   const findBlog = await Blog.findById(id);
- const updated =  await Blog.findByIdAndUpdate(id, {
-    $inc: {numViews: 1}
-  },
-{
-    new: true
-}).populate("likes").populate("dislikes")
+  const updated = await Blog.findByIdAndUpdate(
+    id,
+    {
+      $inc: { numViews: 1 },
+    },
+    {
+      new: true,
+    }
+  )
+    .populate("likes")
+    .populate("dislikes");
   if (!findBlog) {
     return next(errorhandler(404, "Blog not found"));
   }
@@ -80,119 +87,176 @@ exports.singleBlog = asyncHandler(async (req, res, next) => {
   });
 });
 
-
 // Get All Blogs
 exports.getAllBlogs = asyncHandler(async (req, res, next) => {
-    const blogs = await Blog.find();
+  const blogs = await Blog.find();
+  return res.status(200).json({
+    success: true,
+    blogs,
+  });
+});
+
+// Liked Blog
+exports.likedBlog = asyncHandler(async (req, res, next) => {
+  const { blogId } = req.body;
+  const findBlog = await Blog.findById(blogId);
+  if (!findBlog) {
+    return next(errorhandler(404, "Blog not found"));
+  }
+  const loginUserId = req.user._id;
+  const isLiked = findBlog?.isLiked;
+  const isDisliked = findBlog?.dislikes?.find(
+    (userId) => userId.toString() === loginUserId?.toString()
+  );
+
+  if (isDisliked) {
+    const blog = await Blog.findByIdAndUpdate(
+      blogId,
+      {},
+      {
+        $pull: { dislikes: loginUserId },
+        isDisliked: false,
+      }
+    );
     return res.status(200).json({
       success: true,
-      blogs,
+      blog,
     });
-  });
+  }
 
-  // Liked Blog
-  exports.likedBlog = asyncHandler(async (req, res, next) => {
-    const {blogId} = req.body;
-    const findBlog = await Blog.findById(blogId);
-    if (!findBlog) {
-      return next(errorhandler(404, "Blog not found"));
+  if (isLiked) {
+    const blog = await Blog.findByIdAndUpdate(
+      blogId,
+      {},
+      {
+        $pull: { likes: loginUserId },
+        isLiked: false,
+      },
+      {
+        new: true,
+      }
+    );
+    return res.status(200).json({
+      success: true,
+      blog,
+    });
+  } else {
+    const blog = await Blog.findByIdAndUpdate(
+      blogId,
+      {
+        $push: { likes: loginUserId },
+        isLiked: true,
+      },
+      {
+        new: true,
+      }
+    );
+    return res.status(200).json({
+      success: true,
+      blog,
+    });
+  }
+});
+
+// Disliked Blog
+exports.disLikedBlog = asyncHandler(async (req, res, next) => {
+  const { blogId } = req.body;
+  const findBlog = await Blog.findById(blogId);
+  if (!findBlog) {
+    return next(errorhandler(404, "Blog not found"));
+  }
+  const loginUserId = req.user._id;
+  const isDisliked = findBlog?.isDisliked;
+  const isLiked = findBlog?.likes?.find(
+    (userId) => userId.toString() === loginUserId?.toString()
+  );
+
+  if (isLiked) {
+    const blog = await Blog.findByIdAndUpdate(
+      blogId,
+      {},
+      {
+        $pull: { liked: loginUserId },
+        isLiked: false,
+      }
+    );
+    return res.status(200).json({
+      success: true,
+      blog,
+    });
+  }
+
+  if (isDisliked) {
+    const blog = await Blog.findByIdAndUpdate(
+      blogId,
+      {},
+      {
+        $pull: { dislikes: loginUserId },
+        isDisliked: false,
+      },
+      {
+        new: true,
+      }
+    );
+    return res.status(200).json({
+      success: true,
+      blog,
+    });
+  } else {
+    const blog = await Blog.findByIdAndUpdate(
+      blogId,
+      {
+        $push: { dislikes: loginUserId },
+        isDisliked: true,
+      },
+      {
+        new: true,
+      }
+    );
+    return res.status(200).json({
+      success: true,
+      blog,
+    });
+  }
+});
+
+// Upload Blog Images
+exports.uploadImages = asyncHandler(async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const blog = await Blog.findById(id);
+
+    if (!blog) {
+      return next({ status: 404, message: "Blog not found" }); // Assuming you have a custom error handler
     }
-    const loginUserId = req.user._id
-    const isLiked = findBlog?.isLiked
-    const isDisliked = findBlog?.dislikes?.find(
-      (userId)=> (userId.toString() === loginUserId?.toString())
-    )
 
-    if(isDisliked){
-      const blog = await Blog.findByIdAndUpdate(blogId,{
-      },{
-        $pull: {dislikes: loginUserId},
-        isDisliked: false
-      })
-      return res.status(200).json({
-        success: true,
-        blog
-      })
+    const uploader = (path) => cloudinaryUploadImg(path, "images");
+    const urls = [];
+    const files = req.files;
+    for (const file of files) {
+      const { path } = file;
+      const newPath = await uploader(path);
+      urls.push(newPath);
+      console.log(file)
+      // fs.unlinkSync(path);
     }
-    
-    if(isLiked){
-      const blog = await Blog.findByIdAndUpdate(blogId,{
+    const updateBlog = await Blog.findByIdAndUpdate(
+      id,
+      {
+        images: urls.map((file) => {
+          return file;
+        }),
+      },
+      { new: true, runValidators: true }
+    );
 
-      },{
-        $pull: {likes: loginUserId},
-        isLiked: false
-      },{
-        new: true
-      })
-      return res.status(200).json({
-        success: true,
-        blog
-      })
-    }else{
-      const blog = await Blog.findByIdAndUpdate(blogId,{
-        $push: {likes: loginUserId},
-        isLiked: true
-      },{
-        new: true
-      })
-      return res.status(200).json({
-        success: true,
-        blog
-      })
-    }
-
-  })
-
-
-  // Disliked Blog
-  exports.disLikedBlog = asyncHandler(async (req, res, next) => {
-    const {blogId} = req.body;
-    const findBlog = await Blog.findById(blogId);
-    if (!findBlog) {
-      return next(errorhandler(404, "Blog not found"));
-    }
-    const loginUserId = req.user._id
-    const isDisliked = findBlog?.isDisliked
-    const isLiked = findBlog?.likes?.find(
-      (userId)=> (userId.toString() === loginUserId?.toString())
-    )
-
-    if(isLiked){
-      const blog = await Blog.findByIdAndUpdate(blogId,{
-      },{
-        $pull: {liked: loginUserId},
-        isLiked: false
-      })
-      return res.status(200).json({
-        success: true,
-        blog
-      })
-    }
-    
-    if(isDisliked){
-      const blog = await Blog.findByIdAndUpdate(blogId,{
-
-      },{
-        $pull: {dislikes: loginUserId},
-        isDisliked: false
-      },{
-        new: true
-      })
-      return res.status(200).json({
-        success: true,
-        blog
-      })
-    }else{
-      const blog = await Blog.findByIdAndUpdate(blogId,{
-        $push: {dislikes: loginUserId},
-        isDisliked: true
-      },{
-        new: true
-      })
-      return res.status(200).json({
-        success: true,
-        blog
-      })
-    }
-
-  })
+    res.status(200).json({
+      success: true,
+      message: "Blog images uploaded successfully",
+      blog: updateBlog,
+    });
+  } catch (error) {
+    console.error("Error during image upload or product update:", error);
+    next(error);
+  }
+});
