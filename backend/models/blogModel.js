@@ -1,60 +1,60 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
-const blogSchema = new mongoose.Schema({
+const blogSchema = new mongoose.Schema(
+  {
     title: {
-        type: String,
-        required: true,
+      type: String,
+      required: true,
     },
     description: {
-        type: String,
-        required: true,
+      type: String,
+      required: true,
     },
-    images: {
-        type: String,
-        default: "https://images.pexels.com/photos/262508/pexels-photo-262508.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
-    },
+    images: [],
     category: {
-        type: String,
-        required: true,
+      type: String,
+      required: true,
     },
     numViews: {
-        type: Number,
-        default: 0
+      type: Number,
+      default: 0,
     },
     isLiked: {
-        type: Boolean,
-        default: false
+      type: Boolean,
+      default: false,
     },
     isDisliked: {
-        type: Boolean,
-        default: false
+      type: Boolean,
+      default: false,
     },
     likes: [
-        {
-            type: mongoose.Schema.ObjectId,
-            ref: 'User'
-        }
+      {
+        type: mongoose.Schema.ObjectId,
+        ref: "User",
+      },
     ],
     dislikes: [
-        {
-            type: mongoose.Schema.ObjectId,
-            ref: 'User'
-        }
+      {
+        type: mongoose.Schema.ObjectId,
+        ref: "User",
+      },
     ],
     author: {
-        type: String,
-        default: "Owner"
-    }
-}, {
+      type: String,
+      default: "Owner",
+    },
+  },
+  {
     toJSON: {
-        virtuals: true
+      virtuals: true,
     },
     toObject: {
-        virtuals: true
+      virtuals: true,
     },
-    timestamps: true
-});
+    timestamps: true,
+  }
+);
 
-const Blog = mongoose.model('Blog', blogSchema);
+const Blog = mongoose.model("Blog", blogSchema);
 
-module.exports = Blog
+module.exports = Blog;
