@@ -10,7 +10,8 @@ const {
   disLikedBlog,
   uploadImages,
 } = require("../controllers/blogController");
-const { uploadPhoto, blogImageResize } = require("../middlewares/uploadImage");
+const { uploadProductImages } = require("../utils/multer");
+
 const router = express.Router();
 
 router
@@ -19,8 +20,7 @@ router
     "/upload/:id",
     authMiddleware,
     isAdmin,
-    uploadPhoto.array("images", 10),
-    blogImageResize,
+    uploadProductImages.array("images", 10),
     uploadImages
   )
   .put("/update/:id", authMiddleware, isAdmin, updateBlog)

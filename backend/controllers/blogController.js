@@ -1,10 +1,7 @@
 const Blog = require("../models/blogModel");
-const User = require("../models/userModel");
 const asyncHandler = require("express-async-handler");
 const { errorhandler } = require("../middlewares/errorMiddleware");
 const validateId = require("../utils/validateId");
-const cloudinaryUploadImg = require("../utils/cloudinary");
-const fs = require("fs");
 
 // Create Blog
 exports.createBlog = asyncHandler(async (req, res, next) => {
@@ -222,41 +219,30 @@ exports.disLikedBlog = asyncHandler(async (req, res, next) => {
 
 // Upload Blog Images
 exports.uploadImages = asyncHandler(async (req, res, next) => {
+  const { id } = req.params;
+  const blog = await Blog.findById(id);
+
+  if (!blog) {
+    return next({ status: 404, message: "Blog not found" });
+  }
+  if (!req.files || Object.keys(req.files).length === 0) {
+    return next(errorhandler(400, "No files were uploaded."));
+  }
+
   try {
-    const { id } = req.params;
-    const blog = await Blog.findById(id);
-
-    if (!blog) {
-      return next({ status: 404, message: "Blog not found" }); // Assuming you have a custom error handler
-    }
-
-    const uploader = (path) => cloudinaryUploadImg(path, "images");
-    const urls = [];
-    const files = req.files;
-    for (const file of files) {
-      const { path } = file;
-      const newPath = await uploader(path);
-      urls.push(newPath);
-      console.log(file)
-      // fs.unlinkSync(path);
-    }
-    const updateBlog = await Blog.findByIdAndUpdate(
-      id,
-      {
-        images: urls.map((file) => {
-          return file;
-        }),
-      },
-      { new: true, runValidators: true }
-    );
-
-    res.status(200).json({
-      success: true,
-      message: "Blog images uploaded successfully",
-      blog: updateBlog,
+    const imageUrls = req.files.map((file) => file.path);
+    const updateImages = await Blog.findByIdAndUpdate(id, {
+      $push: { images: { $each: imageUrls } },
     });
+    const blogImages = await Blog.findById(id);
+    return res
+      .status(200)
+      .json({
+        success: true,
+        message: "Images uploaded and updated successfully",
+        blogImages,
+      });
   } catch (error) {
-    console.error("Error during image upload or product update:", error);
-    next(error);
+    return res.status(500).json({ error: error.message });
   }
 });
