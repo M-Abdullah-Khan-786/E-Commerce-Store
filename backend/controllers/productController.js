@@ -3,8 +3,6 @@ const User = require("../models/userModel");
 const asyncHandler = require("express-async-handler");
 const { errorhandler } = require("../middlewares/errorMiddleware");
 const slugify = require("slugify");
-const cloudinaryUploadImg = require("../utils/cloudinary")
-const fs = require("fs")
 
 // create Product
 exports.createProduct = asyncHandler(async (req, res, next) => {
@@ -161,100 +159,91 @@ exports.addWishlist = asyncHandler(async (req, res, next) => {
 
 // Add Rating
 exports.addRating = asyncHandler(async (req, res, next) => {
-    const { _id } = req.user;
-    const { productId, star, comment } = req.body;
-    try {
-      const product = await Product.findById(productId);
-      let alreadyRated = product.ratings.find(
-        (rating) => rating.postedBy.toString() === _id.toString()
-      );
-  
-      if (alreadyRated) {
-        await Product.updateOne(
-          { _id: productId, "ratings._id": alreadyRated._id },
-          {
-            $set: { "ratings.$.star": star, "ratings.$.comment": comment },
-          },
-          {
-            new: true,
-          }
-        );
-      } else {
-        await Product.findByIdAndUpdate(
-          productId,
-          {
-            $push: { ratings: { star: star, comment: comment, postedBy: _id } },
-          },
-          {
-            new: true,
-          }
-        );
-      }
-  
-      const getallRatings = await Product.findById(productId);
-      let totalRating = getallRatings.ratings.length;
-      let ratingSum = getallRatings.ratings
-        .map((item) => item.star)
-        .reduce((prev, curr) => prev + curr, 0);
-      let findRating = Math.round(ratingSum / totalRating);
-  
-      await Product.findByIdAndUpdate(
-        productId,
+  const { _id } = req.user;
+  const { productId, star, comment } = req.body;
+  try {
+    const product = await Product.findById(productId);
+    let alreadyRated = product.ratings.find(
+      (rating) => rating.postedBy.toString() === _id.toString()
+    );
+
+    if (alreadyRated) {
+      await Product.updateOne(
+        { _id: productId, "ratings._id": alreadyRated._id },
         {
-          totalratings: findRating,
+          $set: { "ratings.$.star": star, "ratings.$.comment": comment },
         },
         {
           new: true,
         }
       );
-
-      const updatedProduct = await Product.findById(productId)
-
-      return res.status(200).json({
-        success: true,
-        message: "Rating added successfully",
-        updatedProduct,
-      });
-    } catch (error) {
-      return next(errorhandler(500, "Internal server error"));
-    }
-  });
-  
-// Upload Product Images
-exports.uploadImages = asyncHandler(async (req, res, next) => {
-  try {
-    const { id } = req.params;
-    const product = await Product.findById(id);
-
-    if (!product) {
-      return next({ status: 404, message: "Product not found" }); // Assuming you have a custom error handler
+    } else {
+      await Product.findByIdAndUpdate(
+        productId,
+        {
+          $push: { ratings: { star: star, comment: comment, postedBy: _id } },
+        },
+        {
+          new: true,
+        }
+      );
     }
 
-    const uploader = (path) => cloudinaryUploadImg(path, "images");
-    const urls = []
-    const files = req.files
-    for (const file of files) {
-      const {path} = file
-      const newPath = await uploader(path);
-      urls.push(newPath);
-      console.log(file)
-      fs.unlinkSync(path)
-    }
-    const updateProduct = await Product.findByIdAndUpdate(
-      id,
-      { images: urls.map((file)=>{
-        return file
-      }) },
-      { new: true, runValidators: true }
+    const getallRatings = await Product.findById(productId);
+    let totalRating = getallRatings.ratings.length;
+    let ratingSum = getallRatings.ratings
+      .map((item) => item.star)
+      .reduce((prev, curr) => prev + curr, 0);
+    let findRating = Math.round(ratingSum / totalRating);
+
+    await Product.findByIdAndUpdate(
+      productId,
+      {
+        totalratings: findRating,
+      },
+      {
+        new: true,
+      }
     );
 
-    res.status(200).json({
+    const updatedProduct = await Product.findById(productId);
+
+    return res.status(200).json({
       success: true,
-      message: "Product images uploaded successfully",
-      product: updateProduct,
+      message: "Rating added successfully",
+      updatedProduct,
     });
   } catch (error) {
-    console.error("Error during image upload or product update:", error);
-    next(error);
+    return next(errorhandler(500, "Internal server error"));
+  }
+});
+
+// Upload Product Images
+exports.uploadImages = asyncHandler(async (req, res, next) => {
+  const { id } = req.params;
+  const product = await Product.findById(id);
+
+  if (!product) {
+    return next({ status: 404, message: "Product not found" });
+  }
+  if (!req.files || Object.keys(req.files).length === 0) {
+    return next(errorhandler(400, "No files were uploaded."));
+  }
+
+  try {
+    const imageUrls = req.files.map((file) => file.path);
+    const updateImages = await Product.findByIdAndUpdate(id, {
+      $push: { images: { $each: imageUrls } },
+    });
+    const productImages = await Product.findById(id);
+    return res
+      .status(200)
+      .json({
+        success: true,
+        message: "Images uploaded and updated successfully",
+        productImages,
+      });
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
   }
 });
