@@ -118,40 +118,25 @@ exports.getAllProducts = asyncHandler(async (req, res, next) => {
 exports.addWishlist = asyncHandler(async (req, res, next) => {
   const { _id } = req.user;
   const { productId } = req.body;
+
   try {
     const user = await User.findById(_id);
-    const alreadyExist = user.wishlist.find(
+    const alreadyExists = user.wishlist.find(
       (id) => id.toString() === productId
     );
-    if (alreadyExist) {
-      let user = await User.findByIdAndUpdate(
-        _id,
-        {
-          $pull: { wishlist: productId },
-        },
-        {
-          new: true,
-        }
-      );
-      return res.status(200).json({
-        success: true,
-        user,
-      });
-    } else {
-      let user = await User.findByIdAndUpdate(
-        _id,
-        {
-          $push: { wishlist: productId },
-        },
-        {
-          new: true,
-        }
-      );
-      return res.status(200).json({
-        success: true,
-        user,
-      });
-    }
+
+    const update = alreadyExists
+      ? { $pull: { wishlist: productId } }
+      : { $push: { wishlist: productId } };
+
+    const updatedUser = await User.findByIdAndUpdate(_id, update, {
+      new: true,
+    }).populate('wishlist'); // Populating the wishlist with Product details
+
+    return res.status(200).json({
+      success: true,
+      user: updatedUser,
+    });
   } catch (error) {
     return next(errorhandler(500, "Internal server error"));
   }
