@@ -355,3 +355,18 @@ exports.resetPassword = asyncHandler(async (req, res, next) => {
     user,
   });
 });
+
+// Get Wishlist
+exports.getWishlist = asyncHandler(async (req, res, next) => {
+  const { _id } = req.user;
+  try {
+    const findUser = await User.findById(_id).populate("wishlist");
+    return res.status(200).json({
+      success: true,
+      findUser,
+    });
+  } catch (error) {
+    console.log(error.message);
+    return next(errorhandler(500, "Internal server error"));
+  }
+});
