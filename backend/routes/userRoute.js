@@ -16,11 +16,11 @@ const {
   resetPassword,
   loginAdmin,
   getWishlist,
+  saveAddress,
 } = require("../controllers/userController");
 const { authMiddleware, isAdmin } = require("../middlewares/authMiddleware");
 
 router
-  .get("/wishlist", authMiddleware, getWishlist)
   .post("/register", registerUser)
   .post("/login", loginUser)
   .post("/login-admin", loginAdmin)
@@ -28,12 +28,14 @@ router
   .post("/reset-password/:token", resetPassword)
   .get("/refresh", handleToken)
   .get("/logout", logoutUser)
-  .get("/AllUsers", authMiddleware, isAdmin, getAllUsers)
+  .get("/wishlist", authMiddleware, getWishlist)
+  .get("/all-users", authMiddleware, isAdmin, getAllUsers)
   .get("/:id", getSingleUser)
-  .delete("/:id", deleteUser)
   .put("/update", authMiddleware, UpdateUser)
-  .put("/updatePassword", authMiddleware, updatePassword)
+  .put("/save-address", authMiddleware, saveAddress)
+  .put("/update-password", authMiddleware, updatePassword)
   .put("/block-user/:id", authMiddleware, isAdmin, blockUser)
-  .put("/unblock-user/:id", authMiddleware, isAdmin, unBlockUser);
+  .put("/unblock-user/:id", authMiddleware, isAdmin, unBlockUser)
+  .delete("/:id", deleteUser);
 
 module.exports = router;

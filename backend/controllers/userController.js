@@ -188,8 +188,8 @@ exports.getAllUsers = asyncHandler(async (req, res, next) => {
 
 // get single User
 exports.getSingleUser = asyncHandler(async (req, res, next) => {
-  const { id } = req.params;
-  next(validateId(id));
+  try {
+    const { id } = req.params;
   const user = await User.findById(id).select("-password");
   if (!user) {
     return next(errorhandler(404, "User not found"));
@@ -199,6 +199,9 @@ exports.getSingleUser = asyncHandler(async (req, res, next) => {
     success: true,
     user,
   });
+  } catch (error) {
+    console.log(error)
+  }
 });
 
 // update User
@@ -361,6 +364,26 @@ exports.getWishlist = asyncHandler(async (req, res, next) => {
   const { _id } = req.user;
   try {
     const findUser = await User.findById(_id).populate("wishlist");
+    return res.status(200).json({
+      success: true,
+      findUser,
+    });
+  } catch (error) {
+    console.log(error.message);
+    return next(errorhandler(500, "Internal server error"));
+  }
+});
+
+// Save User address
+exports.saveAddress = asyncHandler(async (req, res, next) => {
+  const { _id } = req.user;
+  const { address } = req.body;
+  try {
+    const findUser = await User.findByIdAndUpdate(
+      _id,
+      { address },
+      { new: true, runValidators: true }
+    ).populate("address");
     return res.status(200).json({
       success: true,
       findUser,
