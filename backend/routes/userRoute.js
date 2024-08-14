@@ -17,6 +17,13 @@ const {
   loginAdmin,
   getWishlist,
   saveAddress,
+  addCart,
+  getCart,
+  emptyCart,
+  applyCoupon,
+  createOrder,
+  getOrder,
+  updateOrder,
 } = require("../controllers/userController");
 const { authMiddleware, isAdmin } = require("../middlewares/authMiddleware");
 
@@ -29,6 +36,12 @@ router
   .get("/refresh", handleToken)
   .get("/logout", logoutUser)
   .get("/wishlist", authMiddleware, getWishlist)
+  .get("/cart", authMiddleware, getCart)
+  .get("/orders", authMiddleware, getOrder)
+  .post("/cart", authMiddleware, addCart)
+  .post("/cart/apply-coupon", authMiddleware, applyCoupon)
+  .post("/cart/create-order", authMiddleware, createOrder)
+  .delete("/empty-cart", authMiddleware, emptyCart)
   .get("/all-users", authMiddleware, isAdmin, getAllUsers)
   .get("/:id", getSingleUser)
   .put("/update", authMiddleware, UpdateUser)
@@ -36,6 +49,7 @@ router
   .put("/update-password", authMiddleware, updatePassword)
   .put("/block-user/:id", authMiddleware, isAdmin, blockUser)
   .put("/unblock-user/:id", authMiddleware, isAdmin, unBlockUser)
+  .put("/update-order/:id", authMiddleware, isAdmin, updateOrder)
   .delete("/:id", deleteUser);
 
 module.exports = router;
