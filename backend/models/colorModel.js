@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const blogcategorySchema = new mongoose.Schema(
+const colorSchema = new mongoose.Schema(
   {
     title: {
       type: String,
@@ -14,5 +14,5 @@ const blogcategorySchema = new mongoose.Schema(
   }
 );
 
-const BCategory = mongoose.model("Blog_Category", blogcategorySchema);
-module.exports = BCategory;
+const Color = mongoose.model("Color", colorSchema);
+module.exports = Color;
