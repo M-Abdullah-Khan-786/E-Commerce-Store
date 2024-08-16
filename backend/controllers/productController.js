@@ -3,6 +3,7 @@ const User = require("../models/userModel");
 const asyncHandler = require("express-async-handler");
 const { errorhandler } = require("../middlewares/errorMiddleware");
 const slugify = require("slugify");
+const cloudinary = require("cloudinary").v2;
 
 // create Product
 exports.createProduct = asyncHandler(async (req, res, next) => {
@@ -131,7 +132,7 @@ exports.addWishlist = asyncHandler(async (req, res, next) => {
 
     const updatedUser = await User.findByIdAndUpdate(_id, update, {
       new: true,
-    }).populate('wishlist'); // Populating the wishlist with Product details
+    }).populate("wishlist"); // Populating the wishlist with Product details
 
     return res.status(200).json({
       success: true,
@@ -221,13 +222,45 @@ exports.uploadImages = asyncHandler(async (req, res, next) => {
       $push: { images: { $each: imageUrls } },
     });
     const productImages = await Product.findById(id);
-    return res
-      .status(200)
-      .json({
-        success: true,
-        message: "Images uploaded and updated successfully",
-        productImages,
-      });
+    return res.status(200).json({
+      success: true,
+      message: "Images uploaded and updated successfully",
+      productImages,
+    });
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
+});
+
+// Delete Product Image
+exports.deleteImage = asyncHandler(async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const { imageUrl } = req.body;
+
+    const product = await Product.findById(id);
+    if (!product) return res.status(404).json({ error: "Product not found" });
+
+    const imageId = imageUrl.split("/").slice(-2).join("/").split(".")[0];
+
+    const result = await cloudinary.uploader.destroy(imageId, {
+      resource_type: "image",
+    });
+
+    if (result.result !== "ok") {
+      return res
+        .status(500)
+        .json({ error: "Failed to delete image from Cloudinary" });
+    }
+
+    product.images = product.images.filter((url) => url !== imageUrl);
+    await product.save();
+
+    return res.status(200).json({
+      success: true,
+      message: "Image deleted successfully",
+      product,
+    });
   } catch (error) {
     return res.status(500).json({ error: error.message });
   }
