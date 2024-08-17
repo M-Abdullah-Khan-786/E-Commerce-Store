@@ -2,6 +2,7 @@ const Blog = require("../models/blogModel");
 const asyncHandler = require("express-async-handler");
 const { errorhandler } = require("../middlewares/errorMiddleware");
 const validateId = require("../utils/validateId");
+const cloudinary = require("cloudinary").v2;
 
 // Create Blog
 exports.createBlog = asyncHandler(async (req, res, next) => {
@@ -242,6 +243,40 @@ exports.uploadImages = asyncHandler(async (req, res, next) => {
         message: "Images uploaded and updated successfully",
         blogImages,
       });
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
+});
+
+// Delete Blog Image
+exports.deleteImage = asyncHandler(async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const { imageUrl } = req.body;
+
+    const blog = await Blog.findById(id);
+    if (!blog) return res.status(404).json({ error: "Blog not found" });
+
+    const imageId = imageUrl.split("/").slice(-2).join("/").split(".")[0];
+
+    const result = await cloudinary.uploader.destroy(imageId, {
+      resource_type: "image",
+    });
+
+    if (result.result !== "ok") {
+      return res
+        .status(500)
+        .json({ error: "Failed to delete image from Cloudinary" });
+    }
+
+    blog.images = blog.images.filter((url) => url !== imageUrl);
+    await blog.save();
+
+    return res.status(200).json({
+      success: true,
+      message: "Image deleted successfully",
+      blog,
+    });
   } catch (error) {
     return res.status(500).json({ error: error.message });
   }
