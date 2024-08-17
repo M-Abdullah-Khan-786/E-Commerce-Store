@@ -248,7 +248,7 @@ exports.uploadImages = asyncHandler(async (req, res, next) => {
   }
 });
 
-// Delete Blog Image
+// Delete Blog Images
 exports.deleteImage = asyncHandler(async (req, res, next) => {
   try {
     const { id } = req.params;
