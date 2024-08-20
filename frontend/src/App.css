@@ -6,11 +6,35 @@
   box-sizing: border-box;
 }
 
+:root{
+  --color-131922: #131922;
+  --color-3b4150: #3b4150;
+  --color-232f3e: #232f3e;
+  --color-febd72: #febd72;
+}
+
 body {
   font-family: "Poppins", sans-serif;
 }
 
 a{
-  text-decoration: none;
   display: inline-block;
+  text-decoration: none;
+}
+
+.form-control :focus{
+box-shadow: none;
+border-color: inherit;
+}
+
+.gap-10{
+  gap: 10px;
+}
+
+.gap-15{
+  gap: 15px;
+}
+
+.gap-30{
+  gap: 30px;
 }
