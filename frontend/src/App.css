@@ -1,40 +1,54 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
 
-*{
+* {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
-:root{
+:root {
   --color-131922: #131922;
   --color-3b4150: #3b4150;
   --color-232f3e: #232f3e;
   --color-febd72: #febd72;
+  --color-f5f5f7: #f5f5f7;
+  --color-ededed: #ededed;
 }
 
 body {
   font-family: "Poppins", sans-serif;
 }
 
-a{
+a {
   display: inline-block;
   text-decoration: none;
 }
 
-.form-control :focus{
-box-shadow: none;
-border-color: inherit;
+.form-control :focus {
+  box-shadow: none;
+  border-color: inherit;
 }
 
-.gap-10{
+.gap-10 {
   gap: 10px;
 }
 
-.gap-15{
+.gap-15 {
   gap: 15px;
 }
 
-.gap-30{
+.gap-30 {
   gap: 30px;
+}
+
+.buttton {
+  background-color: black;
+  color: white;
+  font-size: 14px;
+  padding: 15px 35px;
+  border-radius: 22px;
+}
+
+.buttton:hover {
+  background-color: var(--color-febd72);
 }
