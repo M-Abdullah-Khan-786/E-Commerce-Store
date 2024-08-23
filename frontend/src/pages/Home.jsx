@@ -6,6 +6,7 @@ import { FaGift } from "react-icons/fa";
 import { MdOutlineSupportAgent } from "react-icons/md";
 import { RiDiscountPercentFill } from "react-icons/ri";
 import { FaRegCreditCard } from "react-icons/fa";
+import camera from "../assets/camera.jpg";
 
 const Home = () => {
   return (
@@ -124,6 +125,44 @@ const Home = () => {
                     <h6>Secue Payments</h6>
                     <p className="mb-0">100% Secure Transfer</p>
                   </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section className="home-wrapper-2 py-5">
+        <div className="container">
+          <div className="row">
+            <div className="col-12">
+              <div className="categories d-flex justify-content-between flex-wrap align-items-center">
+                <div className="d-flex gap-30 align-items-center">
+                  <div>
+                    <h5>Cameras</h5>
+                    <p>Discover the latest cameras</p>
+                  </div>
+                  <img src={camera} alt="camera" className="img-fluid category-img" />
+                </div>
+                <div className="d-flex gap-30 align-items-center">
+                  <div>
+                    <h5>Cameras</h5>
+                    <p>Discover the latest cameras</p>
+                  </div>
+                  <img src={camera} alt="camera" className="img-fluid category-img" />
+                </div>
+                <div className="d-flex gap-30 align-items-center">
+                  <div>
+                    <h5>Cameras</h5>
+                    <p>Discover the latest cameras</p>
+                  </div>
+                  <img src={camera} alt="camera" className="img-fluid category-img" />
+                </div>
+                <div className="d-flex gap-30 align-items-center">
+                  <div>
+                    <h5>Cameras</h5>
+                    <p>Discover the latest cameras</p>
+                  </div>
+                  <img src={camera} alt="camera" className="img-fluid category-img" />
                 </div>
               </div>
             </div>
