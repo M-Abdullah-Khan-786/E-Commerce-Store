@@ -14,6 +14,7 @@ import brand3 from "../assets/brand3.png";
 import brand4 from "../assets/brand4.png";
 import brand5 from "../assets/brand5.png";
 import brand6 from "../assets/brand6.png";
+import BlogCard from "../components/BlogCard";
 
 const Home = () => {
   return (
@@ -219,6 +220,23 @@ const Home = () => {
                 </Marquee>
               </div>
             </div>
+          </div>
+        </div>
+      </section>
+      <section className="blog-wrapper home-wrapper-2 py-5">
+        <div className="container">
+          <div className="row">
+            <div className="col-12">
+              <h3 className="section-heading">
+                Blogs
+              </h3>
+            </div>
+            <BlogCard/>
+            <BlogCard/>
+            <BlogCard/>
+            <BlogCard/>
+            <BlogCard/>
+            <BlogCard/>
           </div>
         </div>
       </section>
