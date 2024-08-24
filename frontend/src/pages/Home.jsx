@@ -1,5 +1,6 @@
 import "../CSS/Home.css";
 import { Link } from "react-router-dom";
+import Marquee from "react-fast-marquee";
 import image1 from "../assets/main-banner-1.jpg";
 import { FaShippingFast } from "react-icons/fa";
 import { FaGift } from "react-icons/fa";
@@ -7,6 +8,12 @@ import { MdOutlineSupportAgent } from "react-icons/md";
 import { RiDiscountPercentFill } from "react-icons/ri";
 import { FaRegCreditCard } from "react-icons/fa";
 import camera from "../assets/camera.jpg";
+import brand1 from "../assets/brand1.png";
+import brand2 from "../assets/brand2.png";
+import brand3 from "../assets/brand3.png";
+import brand4 from "../assets/brand4.png";
+import brand5 from "../assets/brand5.png";
+import brand6 from "../assets/brand6.png";
 
 const Home = () => {
   return (
@@ -141,29 +148,75 @@ const Home = () => {
                     <h5>Cameras</h5>
                     <p>Discover the latest cameras</p>
                   </div>
-                  <img src={camera} alt="camera" className="img-fluid category-img" />
+                  <img
+                    src={camera}
+                    alt="camera"
+                    className="img-fluid category-img"
+                  />
                 </div>
                 <div className="d-flex gap-30 align-items-center">
                   <div>
                     <h5>Cameras</h5>
                     <p>Discover the latest cameras</p>
                   </div>
-                  <img src={camera} alt="camera" className="img-fluid category-img" />
+                  <img
+                    src={camera}
+                    alt="camera"
+                    className="img-fluid category-img"
+                  />
                 </div>
                 <div className="d-flex gap-30 align-items-center">
                   <div>
                     <h5>Cameras</h5>
                     <p>Discover the latest cameras</p>
                   </div>
-                  <img src={camera} alt="camera" className="img-fluid category-img" />
+                  <img
+                    src={camera}
+                    alt="camera"
+                    className="img-fluid category-img"
+                  />
                 </div>
                 <div className="d-flex gap-30 align-items-center">
                   <div>
                     <h5>Cameras</h5>
                     <p>Discover the latest cameras</p>
                   </div>
-                  <img src={camera} alt="camera" className="img-fluid category-img" />
+                  <img
+                    src={camera}
+                    alt="camera"
+                    className="img-fluid category-img"
+                  />
                 </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section className="marquee-wrapper home-wrapper-2 py-5">
+        <div className="container">
+          <div className="row">
+            <div className="col-12">
+              <div className="marquee-inner-wrapper card-wrapper">
+                <Marquee className="d-flex">
+                  <div className="mx-4 w-25">
+                    <img src={brand1} alt="brand-Images" className="img-fluid" />
+                  </div>
+                  <div className="mx-4 w-25">
+                    <img src={brand2} alt="brand-Images" className="img-fluid" />
+                  </div>
+                  <div className="mx-4 w-25">
+                    <img src={brand3} alt="brand-Images" className="img-fluid" />
+                  </div>
+                  <div className="mx-4 w-25">
+                    <img src={brand4} alt="brand-Images" className="img-fluid" />
+                  </div>
+                  <div className="mx-4 w-25">
+                    <img src={brand5} alt="brand-Images" className="img-fluid" />
+                  </div>
+                  <div className="mx-4 w-25">
+                    <img src={brand6} alt="brand-Images" className="img-fluid" />
+                  </div>
+                </Marquee>
               </div>
             </div>
           </div>

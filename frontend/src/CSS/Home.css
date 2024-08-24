@@ -100,3 +100,9 @@
 .categories>div:nth-child(3){
     border-right: 1px solid var(--color-ededed);
 }
+
+.card-wrapper{
+    background-color: white;
+    box-shadow: 0 0 10px #0000001a;
+    padding: 15px;
+}
