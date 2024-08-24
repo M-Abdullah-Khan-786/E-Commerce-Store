@@ -13,6 +13,8 @@
   --color-febd72: #febd72;
   --color-f5f5f7: #f5f5f7;
   --color-ededed: #ededed;
+  --color-777777: #777777;
+  --color-131921: #131921;
 }
 
 body {
@@ -51,4 +53,10 @@ a {
 
 .buttton:hover {
   background-color: var(--color-febd72);
+}
+
+.section-heading{
+  font-size: 26px;
+  line-height: 32px;
+  font-weight: 500;
 }
