@@ -18,7 +18,9 @@ const BlogCard = () => {
               pariatur non minima, iste id, ut repellendus possimus, placeat
               nostrum sit. Vel!
             </p>
-            <Link to="/" className="buttton text-decoration-none">Read more</Link>
+            <Link to="/" className="buttton text-decoration-none">
+              Read more
+            </Link>
           </div>
         </div>
       </div>
