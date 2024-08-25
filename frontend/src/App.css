@@ -15,6 +15,8 @@
   --color-ededed: #ededed;
   --color-777777: #777777;
   --color-131921: #131921;
+  --color-bf4800: #bf4800;
+  --color-1c1c1b: #1c1c1b;
 }
 
 body {
@@ -55,7 +57,7 @@ a {
   background-color: var(--color-febd72);
 }
 
-.section-heading{
+.section-heading {
   font-size: 26px;
   line-height: 32px;
   font-weight: 500;
