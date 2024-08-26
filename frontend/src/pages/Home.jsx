@@ -11,6 +11,7 @@ import camera from "../assets/camera.jpg";
 import brand1 from "../assets/brand1.png";
 import BlogCard from "../components/BlogCard";
 import ProductCard from "../components/ProductCard";
+import SpecialProduct from "../components/SpecialProduct";
 
 const Home = () => {
   return (
@@ -29,7 +30,7 @@ const Home = () => {
                   <h4 className="text-white">SUPERCHARGED</h4>
                   <h5 className="text-white">FOR ALL PRODUCTS</h5>
                   <p className="text-white">From Rs 10,000</p>
-                  <Link to="/" className="buttton text-decoration-none">
+                  <Link to="/" className="button text-decoration-none">
                     BUY NOW
                   </Link>
                 </div>
@@ -189,6 +190,36 @@ const Home = () => {
           </div>
         </div>
       </section>
+      <section className="feature-wrapper home-wrapper-2 py-5">
+        <div className="container">
+          <div className="row">
+            <div className="col-12">
+              <h3 className="section-heading">Featured Collections</h3>
+            </div>
+            <ProductCard />
+            <ProductCard />
+            <ProductCard />
+            <ProductCard />
+          </div>
+        </div>
+      </section>
+      <section className="special-wrapper home-wrapper-2 py-5">
+        <div className="container">
+          <div className="row">
+            <div className="col-12">
+              <h3 className="section-heading">Special Products</h3>
+            </div>
+          </div>
+          <div className="row">
+            <SpecialProduct/>
+            <SpecialProduct/>
+            <SpecialProduct/>
+            <SpecialProduct/>
+            <SpecialProduct/>
+            <SpecialProduct/>
+          </div>
+        </div>
+      </section>
       <section className="marquee-wrapper home-wrapper-2 py-5">
         <div className="container">
           <div className="row">
@@ -196,28 +227,60 @@ const Home = () => {
               <div className="marquee-inner-wrapper card-wrapper">
                 <Marquee className="d-flex">
                   <div className="mx-4 w-25">
-                    <img src={brand1} alt="brand-Images" className="img-fluid" />
+                    <img
+                      src={brand1}
+                      alt="brand-Images"
+                      className="img-fluid"
+                    />
                   </div>
                   <div className="mx-4 w-25">
-                    <img src={brand1} alt="brand-Images" className="img-fluid" />
+                    <img
+                      src={brand1}
+                      alt="brand-Images"
+                      className="img-fluid"
+                    />
                   </div>
                   <div className="mx-4 w-25">
-                    <img src={brand1} alt="brand-Images" className="img-fluid" />
+                    <img
+                      src={brand1}
+                      alt="brand-Images"
+                      className="img-fluid"
+                    />
                   </div>
                   <div className="mx-4 w-25">
-                    <img src={brand1} alt="brand-Images" className="img-fluid" />
+                    <img
+                      src={brand1}
+                      alt="brand-Images"
+                      className="img-fluid"
+                    />
                   </div>
                   <div className="mx-4 w-25">
-                    <img src={brand1} alt="brand-Images" className="img-fluid" />
+                    <img
+                      src={brand1}
+                      alt="brand-Images"
+                      className="img-fluid"
+                    />
                   </div>
                   <div className="mx-4 w-25">
-                    <img src={brand1} alt="brand-Images" className="img-fluid" />
+                    <img
+                      src={brand1}
+                      alt="brand-Images"
+                      className="img-fluid"
+                    />
                   </div>
                   <div className="mx-4 w-25">
-                    <img src={brand1} alt="brand-Images" className="img-fluid" />
+                    <img
+                      src={brand1}
+                      alt="brand-Images"
+                      className="img-fluid"
+                    />
                   </div>
                   <div className="mx-4 w-25">
-                    <img src={brand1} alt="brand-Images" className="img-fluid" />
+                    <img
+                      src={brand1}
+                      alt="brand-Images"
+                      className="img-fluid"
+                    />
                   </div>
                 </Marquee>
               </div>
@@ -225,35 +288,18 @@ const Home = () => {
           </div>
         </div>
       </section>
-      <section className="feature-wrapper home-wrapper-2 py-5">
-        <div className="container">
-          <div className="row">
-            <div className="col-12">
-              <h3 className="section-heading">
-                Featured Collections
-              </h3>
-            </div>
-            <ProductCard/>
-            <ProductCard/>
-            <ProductCard/>
-            <ProductCard/>
-          </div>
-        </div>
-      </section>
       <section className="blog-wrapper home-wrapper-2 py-5">
         <div className="container">
           <div className="row">
             <div className="col-12">
-              <h3 className="section-heading">
-                Blogs
-              </h3>
+              <h3 className="section-heading">Blogs</h3>
             </div>
-            <BlogCard/>
-            <BlogCard/>
-            <BlogCard/>
-            <BlogCard/>
-            <BlogCard/>
-            <BlogCard/>
+            <BlogCard />
+            <BlogCard />
+            <BlogCard />
+            <BlogCard />
+            <BlogCard />
+            <BlogCard />
           </div>
         </div>
       </section>

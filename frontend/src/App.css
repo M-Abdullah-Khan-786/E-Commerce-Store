@@ -45,7 +45,7 @@ a {
   gap: 30px;
 }
 
-.buttton {
+.button {
   background-color: black;
   color: white;
   font-size: 14px;
@@ -53,7 +53,7 @@ a {
   border-radius: 22px;
 }
 
-.buttton:hover {
+.button:hover {
   background-color: var(--color-febd72);
 }
 
