@@ -5,7 +5,7 @@ import blog from "../assets/blog.jpeg";
 const BlogCard = () => {
   return (
     <>
-      <div className="col-3">
+      <div className="col-3 mb-3">
         <div className="blog-card">
           <div className="blog-img">
             <img src={blog} alt="Blog Image" className="img-fluid" />
@@ -18,7 +18,7 @@ const BlogCard = () => {
               pariatur non minima, iste id, ut repellendus possimus, placeat
               nostrum sit. Vel!
             </p>
-            <Link to="/" className="buttton text-decoration-none">
+            <Link to="/" className="button text-decoration-none">
               Read more
             </Link>
           </div>
