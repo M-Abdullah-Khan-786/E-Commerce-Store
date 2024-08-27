@@ -2,6 +2,7 @@ import "../CSS/Home.css";
 import { Link } from "react-router-dom";
 import Marquee from "react-fast-marquee";
 import image1 from "../assets/main-banner-1.jpg";
+import product from "../assets/product.png";
 import { FaShippingFast } from "react-icons/fa";
 import { FaGift } from "react-icons/fa";
 import { MdOutlineSupportAgent } from "react-icons/md";
@@ -203,6 +204,52 @@ const Home = () => {
           </div>
         </div>
       </section>
+      <section className="feature-wrapper home-wrapper-2 py-5">
+        <div className="container">
+          <div className="row">
+            <div className="col-3">
+              <div className="famous-card bg-dark position-relative">
+                <img src={product} alt="Famous Images" className="img-fluid" />
+                <div className="famous-content position-absolute">
+                <h5>Noise Cancellation</h5>
+                <h6>Wireless Headphone</h6>
+                <p>2000 Rs</p>
+                </div>
+              </div>
+            </div>
+            <div className="col-3">
+              <div className="famous-card bg-dark position-relative">
+                <img src={product} alt="Famous Images" className="img-fluid" />
+                <div className="famous-content position-absolute">
+                <h5>Noise Cancellation</h5>
+                <h6>Wireless Headphone</h6>
+                <p>2000 Rs</p>
+                </div>
+              </div>
+            </div>
+            <div className="col-3">
+              <div className="famous-card bg-dark position-relative">
+                <img src={product} alt="Famous Images" className="img-fluid" />
+                <div className="famous-content position-absolute">
+                <h5>Noise Cancellation</h5>
+                <h6>Wireless Headphone</h6>
+                <p>2000 Rs</p>
+                </div>
+              </div>
+            </div>
+            <div className="col-3">
+              <div className="famous-card bg-dark position-relative">
+                <img src={product} alt="Famous Images" className="img-fluid" />
+                <div className="famous-content position-absolute">
+                <h5>Noise Cancellation</h5>
+                <h6>Wireless Headphone</h6>
+                <p>2000 Rs</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
       <section className="special-wrapper home-wrapper-2 py-5">
         <div className="container">
           <div className="row">
@@ -211,12 +258,31 @@ const Home = () => {
             </div>
           </div>
           <div className="row">
-            <SpecialProduct/>
-            <SpecialProduct/>
-            <SpecialProduct/>
-            <SpecialProduct/>
-            <SpecialProduct/>
-            <SpecialProduct/>
+            <SpecialProduct />
+            <SpecialProduct />
+            <SpecialProduct />
+            <SpecialProduct />
+            <SpecialProduct />
+            <SpecialProduct />
+          </div>
+        </div>
+      </section>
+      <section className="popular-wrapper home-wrapper-2 py-5">
+        <div className="container">
+          <div className="row">
+            <div className="col-12">
+              <h3 className="section-heading">Our Popular Products</h3>
+            </div>
+
+            <div className="row">
+              <ProductCard />
+              <ProductCard />
+              <ProductCard />
+              <ProductCard />
+              <ProductCard />
+              <ProductCard />
+
+            </div>
           </div>
         </div>
       </section>

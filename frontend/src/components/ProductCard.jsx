@@ -10,7 +10,7 @@ import { MdCompareArrows } from "react-icons/md";
 const ProductCard = () => {
   return (
     <>
-      <div className="col-3">
+      <div className="col-3 mb-3">
         <div className="Product-card position-relative">
           <div className="wishlist-icon position-absolute">
             <Link to="/">
