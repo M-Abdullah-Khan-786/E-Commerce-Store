@@ -1,0 +1,37 @@
+.filter-card{
+    background-color: white;
+    border-radius: 10px;
+    padding: 10px 15px;
+}
+
+.filter-title{
+    font-size: 16px;
+    line-height:20px ;
+    font-weight: 600;
+    color: var(--color-1c1c1b);
+}
+
+.filter-card ul, .filter-card .form-check label{
+    list-style: none;
+    font-size: 13px;
+    line-height: 30px;
+    cursor: pointer;
+    color: var(--color-777777);
+}
+
+.filter-card .form-check-input:checked{
+    box-shadow: none;
+    border-color: rgba(0, 0, 0, 22);
+}
+
+.filter-card .form-check-input:checked{
+    background-color: var(--color-febd72);
+    border-color: var(--color-febd72);
+}
+
+.sub-title{
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--color-1c1c1b);
+    margin-bottom: 15px;
+}
