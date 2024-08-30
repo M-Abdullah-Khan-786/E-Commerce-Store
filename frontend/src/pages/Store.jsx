@@ -8,7 +8,7 @@ import { CiGrid2H } from "react-icons/ci";
 import { CiGrid2V } from "react-icons/ci";
 import { useState } from "react";
 const Store = () => {
-  const [grid, setGrid] = useState(4)
+  const [grid, setGrid] = useState(3)
   const changeGrid = (value) => {
     setGrid(value)
   }
