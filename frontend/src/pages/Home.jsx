@@ -13,10 +13,12 @@ import brand1 from "../assets/brand1.png";
 import BlogCard from "../components/BlogCard";
 import ProductCard from "../components/ProductCard";
 import SpecialProduct from "../components/SpecialProduct";
+import Meta from "../components/Meta";
 
 const Home = () => {
   return (
     <>
+      <Meta title="Home" />
       <section className="home-wrapper-1 py-5">
         <div className="container">
           <div className="row">
@@ -211,9 +213,9 @@ const Home = () => {
               <div className="famous-card bg-dark position-relative">
                 <img src={product} alt="Famous Images" className="img-fluid" />
                 <div className="famous-content position-absolute">
-                <h5>Noise Cancellation</h5>
-                <h6>Wireless Headphone</h6>
-                <p>2000 Rs</p>
+                  <h5>Noise Cancellation</h5>
+                  <h6>Wireless Headphone</h6>
+                  <p>2000 Rs</p>
                 </div>
               </div>
             </div>
@@ -221,9 +223,9 @@ const Home = () => {
               <div className="famous-card bg-dark position-relative">
                 <img src={product} alt="Famous Images" className="img-fluid" />
                 <div className="famous-content position-absolute">
-                <h5>Noise Cancellation</h5>
-                <h6>Wireless Headphone</h6>
-                <p>2000 Rs</p>
+                  <h5>Noise Cancellation</h5>
+                  <h6>Wireless Headphone</h6>
+                  <p>2000 Rs</p>
                 </div>
               </div>
             </div>
@@ -231,9 +233,9 @@ const Home = () => {
               <div className="famous-card bg-dark position-relative">
                 <img src={product} alt="Famous Images" className="img-fluid" />
                 <div className="famous-content position-absolute">
-                <h5>Noise Cancellation</h5>
-                <h6>Wireless Headphone</h6>
-                <p>2000 Rs</p>
+                  <h5>Noise Cancellation</h5>
+                  <h6>Wireless Headphone</h6>
+                  <p>2000 Rs</p>
                 </div>
               </div>
             </div>
@@ -241,9 +243,9 @@ const Home = () => {
               <div className="famous-card bg-dark position-relative">
                 <img src={product} alt="Famous Images" className="img-fluid" />
                 <div className="famous-content position-absolute">
-                <h5>Noise Cancellation</h5>
-                <h6>Wireless Headphone</h6>
-                <p>2000 Rs</p>
+                  <h5>Noise Cancellation</h5>
+                  <h6>Wireless Headphone</h6>
+                  <p>2000 Rs</p>
                 </div>
               </div>
             </div>
@@ -281,7 +283,6 @@ const Home = () => {
               <ProductCard />
               <ProductCard />
               <ProductCard />
-
             </div>
           </div>
         </div>
