@@ -62,3 +62,7 @@ a {
   line-height: 32px;
   font-weight: 500;
 }
+
+.pointer{
+  cursor: pointer;
+}

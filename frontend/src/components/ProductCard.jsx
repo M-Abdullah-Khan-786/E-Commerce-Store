@@ -1,16 +1,19 @@
 import "../CSS/ProductCard.css";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import product from "../assets/product.png";
 import product1 from "../assets/product1.png";
 import ReactStars from "react-rating-stars-component";
 import { CiHeart } from "react-icons/ci";
 import { FaEye } from "react-icons/fa";
 import { MdCompareArrows } from "react-icons/md";
+import PropTypes from "prop-types";
 
-const ProductCard = () => {
+const ProductCard = ({ grid }) => {
+  let location = useLocation();
+  const gridClass = location.pathname === "/store" ? `gr-${grid}` : '';
   return (
     <>
-      <div className="col-3 mb-3">
+      <div className={`${gridClass} col-3 mb-3`}>
         <div className="Product-card position-relative">
           <div className="wishlist-icon position-absolute">
             <Link to="/">
@@ -31,6 +34,9 @@ const ProductCard = () => {
               edit={false}
               activeColor="#ffd700"
             />
+            <p className={`desc ${grid===12? "d-block": "d-none"}`}>
+              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Aspernatur nemo explicabo architecto dolores harum? Rem delectus aut, voluptate odio voluptates quisquam dolor.
+            </p>
             <p className="price">Rs 1200</p>
           </div>
           <div className="action-bar position-absolute">
@@ -50,6 +56,10 @@ const ProductCard = () => {
       </div>
     </>
   );
+};
+
+ProductCard.propTypes = {
+  grid: PropTypes.string.isRequired,
 };
 
 export default ProductCard;

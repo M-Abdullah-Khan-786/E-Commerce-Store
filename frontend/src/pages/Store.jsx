@@ -1,10 +1,17 @@
 import BreadCrumb from "../components/BreadCrumb";
+import ProductCard from "../components/ProductCard";
 import Meta from "../components/Meta";
 import "../CSS/Store.css";
 import ReactStars from "react-rating-stars-component";
 import product from "../assets/product.png";
-
+import { CiGrid2H } from "react-icons/ci";
+import { CiGrid2V } from "react-icons/ci";
+import { useState } from "react";
 const Store = () => {
+  const [grid, setGrid] = useState(4)
+  const changeGrid = (value) => {
+    setGrid(value)
+  }
   return (
     <>
       <Meta title="Store" />
@@ -218,7 +225,41 @@ const Store = () => {
                 </div>
               </div>
             </div>
-            <div className="col-9">main</div>
+            <div className="col-9">
+              <div className="filter-sort-grid mb-4">
+                <div className="d-flex justify-content-between align-items-center">
+                  <div className="d-flex align-items-center gap-10">
+                    <p className="mb-0 d-block" style={{"width":"100px"}}>Sort By:</p>
+                    <select name="" className="form-control form-select" id="">
+                      <option value="">Best Selling</option>
+                      <option value="">Price: Low to High</option>
+                      <option value="">Price: High to Low</option>
+                      <option value="">Date: Old to New</option>
+                      <option value="">Date: New to Old</option>
+                    </select>
+                  </div>
+                  <div className="d-flex align-items-center gap-10">
+                    <p className="totalProducts mb-0">22 Products</p>
+                    <div className="d-flex-gap-10 align-items-center">
+                      <CiGrid2H onClick={()=>changeGrid(3)} className="grid pointer"/>
+                      <CiGrid2V onClick={()=>changeGrid(4)} className="grid pointer"/>
+                      <CiGrid2H onClick={()=>changeGrid(6)} className="grid pointer"/>
+                      <CiGrid2V onClick={()=>changeGrid(12)} className="grid pointer"/>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="products-list pb-5">
+               <div className="d-flex gap-10 flex-wrap">
+               <ProductCard grid={grid}/>
+                <ProductCard grid={grid}/>
+                <ProductCard grid={grid}/>
+                <ProductCard grid={grid}/>
+                <ProductCard grid={grid}/>
+                <ProductCard grid={grid}/>
+               </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>

@@ -3,6 +3,13 @@
     background-color: white;
     border-radius: 12px;
     overflow: hidden;
+    width: 100%;
+}
+
+.Product-card p.desc{
+    font-size: 13px;
+    color: var(--color-777777);
+    margin-right: 20px;
 }
 
 .Product-card:hover .action-bar{
@@ -53,4 +60,43 @@
 .wishlist-icon{
     top: 6%;
     right: 8px;
+}
+
+.gr-12{
+    width: 100%;
+}
+
+.gr-12 .Product-card{
+    display: flex;
+    gap: 20px;
+}
+
+.gr-12 .Product-card .product-img{
+   width: 270px;
+   height: auto;
+}
+
+.gr-12 .action-bar{
+    top: 22%;
+ }
+
+.gr-6{
+    width: 49%;
+}
+
+.gr-6 .product-img{
+    width: 100%;
+}
+
+.gr-6 .product-img img{
+   margin: auto;
+   display: block;
+}
+
+.gr-4{
+    width: 32%;
+}
+
+.gr-3{
+    width: 24%;
 }
