@@ -7,6 +7,7 @@ import product from "../assets/product.png";
 import { CiGrid2H } from "react-icons/ci";
 import { CiGrid2V } from "react-icons/ci";
 import { useState } from "react";
+import Color from "../components/Color";
 const Store = () => {
   const [grid, setGrid] = useState(3)
   const changeGrid = (value) => {
@@ -83,30 +84,7 @@ const Store = () => {
                 </div>
                 <h5 className="sub-title">Colors</h5>
                 <div>
-                  <ul className="colors ps-0">
-                    <li></li>
-                    <li></li>
-                    <li></li>
-                    <li></li>
-                    <li></li>
-                    <li></li>
-                    <li></li>
-                    <li></li>
-                    <li></li>
-                    <li></li>
-                    <li></li>
-                    <li></li>
-                    <li></li>
-                    <li></li>
-                    <li></li>
-                    <li></li>
-                    <li></li>
-                    <li></li>
-                    <li></li>
-                    <li></li>
-                    <li></li>
-                    <li></li>
-                  </ul>
+                  <Color/>
                 </div>
                 <h5 className="sub-title">Size</h5>
                 <div>
