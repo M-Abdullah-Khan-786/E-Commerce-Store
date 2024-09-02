@@ -59,7 +59,7 @@ const Header = () => {
             <div className="col-5">
               <div className="header-mid-links d-flex align-items-center justify-content-between">
                 <div>
-                  <Link className="text-decoration-none text-white d-flex align-items-center gap-10">
+                  <Link to="/compare-product" className="text-decoration-none text-white d-flex align-items-center gap-10">
                     <MdOutlineCompareArrows className="text-white links" />
                     <p className="mb-0">
                       Compare <br /> Products
@@ -67,7 +67,7 @@ const Header = () => {
                   </Link>
                 </div>
                 <div>
-                  <Link className="text-decoration-none text-white d-flex align-items-center gap-10">
+                  <Link to="/wishlist" className="text-decoration-none text-white d-flex align-items-center gap-10">
                     <FaHeart className="text-white links" />
                     <p className="mb-0">
                       Favourite <br /> Wishlist
@@ -75,7 +75,7 @@ const Header = () => {
                   </Link>
                 </div>
                 <div>
-                  <Link className="text-decoration-none text-white d-flex align-items-center gap-10">
+                  <Link to="/login" className="text-decoration-none text-white d-flex align-items-center gap-10">
                     <FaRegUser className="text-white links" />
                     <p className="mb-0">
                       Log in <br /> My Account
@@ -83,7 +83,7 @@ const Header = () => {
                   </Link>
                 </div>
                 <div>
-                  <Link className="text-decoration-none text-white d-flex align-items-center gap-10">
+                  <Link to="/cart" className="text-decoration-none text-white d-flex align-items-center gap-10">
                     <LiaCartArrowDownSolid className="text-white links" />
                     <div className="d-flex flex-column">
                       <span className="badge bg-white text-dark">0</span>

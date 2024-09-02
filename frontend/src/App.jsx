@@ -8,6 +8,7 @@ import About from './pages/About'
 import Contact from './pages/Contact'
 import Store from './pages/Store';
 import Blog from './pages/blog';
+import CompareProduct from './pages/CompareProduct';
 
 const App = () => {
   return (
@@ -20,6 +21,7 @@ const App = () => {
       <Route path='store' element={<Store/>}/>
       <Route path='blogs' element={<Blog/>}/>
       <Route path='contact' element={<Contact/>}/>
+      <Route path='compare-product' element={<CompareProduct/>}/>
      </Route>
     </Routes>
     </BrowserRouter>
