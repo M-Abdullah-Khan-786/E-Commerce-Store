@@ -14,6 +14,7 @@ import Login from './pages/Login';
 import ForgotPassword from './pages/ForgotPassword';
 import SignUp from './pages/SignUp';
 import ResetPasssword from './pages/ResetPasssword';
+import SingleBlog from './pages/SingleBlog';
 
 const App = () => {
   return (
@@ -25,6 +26,7 @@ const App = () => {
       <Route path='about' element={<About/>}/>
       <Route path='store' element={<Store/>}/>
       <Route path='blogs' element={<Blog/>}/>
+      <Route path='blog/:id' element={<SingleBlog/>}/>
       <Route path='contact' element={<Contact/>}/>
       <Route path='compare-product' element={<CompareProduct/>}/>
       <Route path='wishlist' element={<Wishlist/>}/>
