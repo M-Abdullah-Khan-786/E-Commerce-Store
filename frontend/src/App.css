@@ -67,3 +67,8 @@ a {
 .pointer{
   cursor: pointer;
 }
+
+.policy{
+  background-color: white;
+  padding: 30px;
+}
