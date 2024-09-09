@@ -14,7 +14,7 @@ const ProductCard = ({ grid }) => {
   return (
     <>
       <div className={`${gridClass} col-3 mb-3`}>
-        <div className="Product-card position-relative">
+        <Link to="/product/:id" className="Product-card position-relative">
           <div className="wishlist-icon position-absolute">
             <Link to="/">
               <CiHeart />
@@ -52,7 +52,7 @@ const ProductCard = ({ grid }) => {
               </Link>
             </div>
           </div>
-        </div>
+        </Link>
       </div>
     </>
   );
