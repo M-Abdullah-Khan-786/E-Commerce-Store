@@ -3,16 +3,19 @@ import "../CSS/SingleProduct.css";
 import ReactStars from "react-rating-stars-component";
 import BreadCrumb from "../components/BreadCrumb";
 import Meta from "../components/Meta";
+import Color from "../components/Color";
 import ProductCard from "../components/ProductCard";
 import ReactImageZoom from "react-image-zoom";
+import { MdCompareArrows } from "react-icons/md";
+import { CiHeart } from "react-icons/ci";
 
 const SingleProduct = () => {
   const [orderProduct, setOrderProduct] = useState(true);
 
   const props = {
     width: 400,
-    height: 500,
-    zoomWidth: 500,
+    height: 600,
+    zoomWidth: 600,
     img: "https://images.unsplash.com/photo-1599012307530-d163bd04ecab?q=80&w=1374&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
   };
 
@@ -64,7 +67,7 @@ const SingleProduct = () => {
                 </div>
               </div>
             </div>
-            <div className="col-6">
+            <div className="col-6 py-10">
               <div className="main-product-details">
                 <div className="border-bottom">
                   <h3 className="title">Polo T-Shirts</h3>
@@ -72,16 +75,85 @@ const SingleProduct = () => {
                 <div className="border-bottom py-3">
                   <p className="price">Rs 2200</p>
                   <div className="d-flex align-items-center gap-10">
-                  <ReactStars
-                        count={5}
-                        size={24}
-                        value="4.5"
-                        edit={false}
-                        activeColor="#ffd700"
-                      />
-                      <p className="mb-0">4.5 out of 5</p>
+                    <ReactStars
+                      count={5}
+                      size={24}
+                      value="4.5"
+                      edit={false}
+                      activeColor="#ffd700"
+                    />
+                    <p className="mb-0 review-text">4.5 out of 5</p>
                   </div>
-                  <a href="#review">Write a Review</a>
+                  <a href="#review" className="review-btn">
+                    Write a Review
+                  </a>
+                </div>
+                <div className="border-bottom py-3">
+                  <div className="my-2 d-flex gap-10 align-items-center">
+                    <h3 className="mb-0 product-head">Type : </h3>
+                    <p className="mb-0 product-content">T-Shirt</p>
+                  </div>
+                  <div className="my-2 d-flex gap-10 align-items-center">
+                    <h3 className="mb-0 product-head">Brand : </h3>
+                    <p className="mb-0 product-content">POLO</p>
+                  </div>
+                  <div className="my-2 d-flex gap-10 align-items-center">
+                    <h3 className="mb-0 product-head">Category : </h3>
+                    <p className="mb-0 product-content">Clothes</p>
+                  </div>
+                  <div className="my-2 d-flex gap-10 align-items-center">
+                    <h3 className="mb-0 product-head">Tags : </h3>
+                    <p className="mb-0 product-content">Dress, Clothes</p>
+                  </div>
+                  <div className="my-2 d-flex gap-10 align-items-center">
+                    <h3 className="mb-0 product-head">Availability : </h3>
+                    <p className="mb-0 product-content">In Stock</p>
+                  </div>
+                  <div className="mt-2 mb-3 d-flex flex-column gap-10">
+                    <h3 className="mb-0 product-head">Size : </h3>
+                    <div className="d-flex flex-wrap gap-10">
+                      <span className="badge border border-1 bg-white text-dark border-secondary">
+                        SM
+                      </span>
+                      <span className="badge border border-1 bg-white text-dark border-secondary">
+                        XL
+                      </span>
+                      <span className="badge border border-1 bg-white text-dark border-secondary">
+                        XXL
+                      </span>
+                    </div>
+                  </div>
+                  <div className="mt-2 mb-3 d-flex flex-column gap-10">
+                    <h3 className="mb-0 product-head">Color : </h3>
+                    <Color />
+                  </div>
+                  <div className="mt-2 mb-3 d-flex flex-row gap-15 align-items-center">
+                    <h3 className="mb-0 product-head">Quantity : </h3>
+                    <div>
+                      <input
+                        type="number"
+                        name=""
+                        min={1}
+                        max={10}
+                        defaultValue={1}
+                        className="form-control"
+                        style={{ width: "65px" }}
+                        id=""
+                      />
+                    </div>
+                    <div className="d-flex align-items-center gap-10 ms-5">
+                      <button className="button border-0" type="submit">
+                        Add to Cart
+                      </button>
+                      <button className="button">
+                        Buy Now
+                      </button>
+                    </div>
+                  </div>
+                  <div className="d-flex align-items-center gap-15">
+                    <div><a href=""><MdCompareArrows className="fs-5" /> Add to Compare</a></div>
+                    <div><a href=""><CiHeart className="fs-5" /> Add to Wishlist</a></div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -109,7 +181,7 @@ const SingleProduct = () => {
         <div className="container">
           <div className="row">
             <div className="col-12">
-              <h4  id="review">Reviews</h4>
+              <h4 id="review">Reviews</h4>
               <div className="review-inner-wrapper">
                 <div className="review-head d-flex justify-content-between align-items-end">
                   <div>
