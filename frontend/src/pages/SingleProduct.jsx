@@ -19,6 +19,15 @@ const SingleProduct = () => {
     img: "https://images.unsplash.com/photo-1599012307530-d163bd04ecab?q=80&w=1374&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
   };
 
+  const copyToClipboard = (text) => {
+    var textField = document.createElement('textarea')
+    textField.innerText = text
+    document.body.appendChild(textField)
+    textField.select()
+    document.execCommand('copy')
+    textField.remove()
+  }
+
   return (
     <>
       <Meta title="Product" />
@@ -153,6 +162,15 @@ const SingleProduct = () => {
                   <div className="d-flex align-items-center gap-15">
                     <div><a href=""><MdCompareArrows className="fs-5" /> Add to Compare</a></div>
                     <div><a href=""><CiHeart className="fs-5" /> Add to Wishlist</a></div>
+                  </div>
+                  <div className="my-3 d-flex flex-column gap-10">
+                    <h3 className="mb-0 product-head">Shipping & Returns</h3>
+                    <p className="mb-0 product-content">Free return of the product. <br/>
+                    30 days of reflection after receiving the product.</p>
+                  </div>
+                  <div className="my-2 d-flex align-items-center gap-10">
+                    <h3 className="mb-0 product-head">Product Link : </h3>
+                    <a href="javascript:void(0)" onClick={()=>copyToClipboard("https://images.unsplash.com/photo-1599012307530-d163bd04ecab?q=80&w=1374&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D")} >Copy Link</a>
                   </div>
                 </div>
               </div>
