@@ -1,0 +1,14 @@
+.checkout-badge{
+    top: -8px;
+    right: 5px;
+}
+
+.checkout-wrapper .total{
+    font-size: 14px;
+    color: var(--color-1c1c1b);
+}
+
+.checkout-wrapper .total-price{
+    font-size: 16px;
+    color: var(--color-777777);
+}
