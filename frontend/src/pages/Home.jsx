@@ -3,17 +3,13 @@ import { Link } from "react-router-dom";
 import Marquee from "react-fast-marquee";
 import image1 from "../assets/main-banner-1.jpg";
 import product from "../assets/product.png";
-import { FaShippingFast } from "react-icons/fa";
-import { FaGift } from "react-icons/fa";
-import { MdOutlineSupportAgent } from "react-icons/md";
-import { RiDiscountPercentFill } from "react-icons/ri";
-import { FaRegCreditCard } from "react-icons/fa";
 import camera from "../assets/camera.jpg";
 import brand1 from "../assets/brand1.png";
 import BlogCard from "../components/BlogCard";
 import ProductCard from "../components/ProductCard";
 import SpecialProduct from "../components/SpecialProduct";
 import Meta from "../components/Meta";
+import { services } from "../utils/Data";
 
 const Home = () => {
   return (
@@ -99,41 +95,17 @@ const Home = () => {
           <div className="row">
             <div className="col-12">
               <div className="services d-flex align-items-center justify-content-between">
-                <div className="d-flex align-items-center gap-15">
-                  <FaShippingFast className="services-icon" />
-                  <div>
-                    <h6>Free Shipping</h6>
-                    <p className="mb-0">From All Orders over Rs 2000</p>
+                {services.map((service, id)=>{
+                  return(
+                    <div className="d-flex align-items-center gap-15" key={id}>
+                    <service.icon className="services-icon" />
+                    <div>
+                      <h6>{service.title}</h6>
+                      <p className="mb-0">{service.tagline}</p>
+                    </div>
                   </div>
-                </div>
-                <div className="d-flex align-items-center gap-15">
-                  <FaGift className="services-icon" />
-                  <div>
-                    <h6>Daily Gifts offer</h6>
-                    <p className="mb-0">Save upto 30%</p>
-                  </div>
-                </div>
-                <div className="d-flex align-items-center gap-15">
-                  <MdOutlineSupportAgent className="services-icon" />
-                  <div>
-                    <h6>Support 24/7</h6>
-                    <p className="mb-0">Shop with an Expert</p>
-                  </div>
-                </div>
-                <div className="d-flex align-items-center gap-15">
-                  <RiDiscountPercentFill className="services-icon" />
-                  <div>
-                    <h6>Affordable Prices</h6>
-                    <p className="mb-0">Factory Default Prices</p>
-                  </div>
-                </div>
-                <div className="d-flex align-items-center gap-15">
-                  <FaRegCreditCard className="services-icon" />
-                  <div>
-                    <h6>Secue Payments</h6>
-                    <p className="mb-0">100% Secure Transfer</p>
-                  </div>
-                </div>
+                  )
+                })}
               </div>
             </div>
           </div>
