@@ -1,6 +1,6 @@
 import "../CSS/SpecialProduct.css";
 import { Link } from "react-router-dom";
-import ReactStars from "react-rating-stars-component";
+import CustomReactStars from "../components/CustomReactStars";
 import product from "../assets/product1.png";
 
 const SpecialProduct = () => {
@@ -17,10 +17,10 @@ const SpecialProduct = () => {
               <h6 className="title">
                 Wireless Headpones with noise Cancellation
               </h6>
-              <ReactStars
+              <CustomReactStars
                 count={5}
                 size={24}
-                value="5"
+                value={5}
                 edit={false}
                 activeColor="#ffd700"
               />

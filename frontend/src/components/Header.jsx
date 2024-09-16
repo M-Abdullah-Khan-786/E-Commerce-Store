@@ -23,12 +23,12 @@ const Header = () => {
             </div>
             <div className="col-6">
               <p className="text-end text-white mb-0">
-                Toll Free:{" "}
+                Toll Free:
                 <a
                   className="text-white text-decoration-none"
                   href="tel:+92421111111"
                 >
-                  <p>+92421111111</p>
+                  <span>+92421111111</span>
                 </a>
               </p>
             </div>
@@ -122,7 +122,7 @@ const Header = () => {
                 <div className="menu-links">
                   <div className="d-flex align-items-center gap-15">
                     <NavLink to="/">Home</NavLink>
-                    <NavLink to="/store">Our Store</NavLink>
+                    <NavLink to="/products">Our Store</NavLink>
                     <NavLink to="/blogs">Blogs</NavLink>
                     <NavLink to="/cart">Cart</NavLink>
                     <NavLink to="/contact">Contact</NavLink>

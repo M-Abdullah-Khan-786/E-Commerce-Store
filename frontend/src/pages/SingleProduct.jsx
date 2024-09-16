@@ -1,6 +1,6 @@
 import { useState } from "react";
 import "../CSS/SingleProduct.css";
-import ReactStars from "react-rating-stars-component";
+import CustomReactStars from "../components/CustomReactStars";
 import BreadCrumb from "../components/BreadCrumb";
 import Meta from "../components/Meta";
 import Color from "../components/Color";
@@ -84,10 +84,10 @@ const SingleProduct = () => {
                 <div className="border-bottom py-3">
                   <p className="price">Rs 2200</p>
                   <div className="d-flex align-items-center gap-10">
-                    <ReactStars
+                    <CustomReactStars
                       count={5}
                       size={24}
-                      value="4.5"
+                      value={4.5}
                       edit={false}
                       activeColor="#ffd700"
                     />
@@ -170,7 +170,7 @@ const SingleProduct = () => {
                   </div>
                   <div className="my-2 d-flex align-items-center gap-10">
                     <h3 className="mb-0 product-head">Product Link : </h3>
-                    <a href="javascript:void(0)" onClick={()=>copyToClipboard("https://images.unsplash.com/photo-1599012307530-d163bd04ecab?q=80&w=1374&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D")} >Copy Link</a>
+                    <a href="#" onClick={()=>copyToClipboard("https://images.unsplash.com/photo-1599012307530-d163bd04ecab?q=80&w=1374&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D")} >Copy Link</a>
                   </div>
                 </div>
               </div>
@@ -205,10 +205,10 @@ const SingleProduct = () => {
                   <div>
                     <h4 className="mb-2">Customer Reviews</h4>
                     <div className="d-flex align-items-center gap-10">
-                      <ReactStars
+                      <CustomReactStars
                         count={5}
                         size={24}
-                        value="4.5"
+                        value={4.5}
                         edit={false}
                         activeColor="#ffd700"
                       />
@@ -230,10 +230,10 @@ const SingleProduct = () => {
                   <form action="" className="d-flex flex-column gap-15">
                     <h4>Write a Review</h4>
                     <div>
-                      <ReactStars
+                      <CustomReactStars
                         count={5}
                         size={24}
-                        value="5"
+                        value={5}
                         edit={true}
                         activeColor="#ffd700"
                       />
@@ -259,10 +259,10 @@ const SingleProduct = () => {
                   <div className="review">
                     <div className="d-flex gap-10 align-items-center">
                       <h6 className="mb-0">buyer</h6>
-                      <ReactStars
+                      <CustomReactStars
                         count={5}
                         size={24}
-                        value="4.5"
+                        value={4.5}
                         edit={false}
                         activeColor="#ffd700"
                       />

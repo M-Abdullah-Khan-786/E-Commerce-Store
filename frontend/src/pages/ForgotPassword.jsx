@@ -1,31 +1,30 @@
 import "../CSS/Auth.css";
-import BreadCrumb from "../components/BreadCrumb"
-import Meta from "../components/Meta"
+import BreadCrumb from "../components/BreadCrumb";
+import Meta from "../components/Meta";
+import CustomInput from "../components/CustomInput";
 
 const ForgotPassword = () => {
   return (
     <>
-       <Meta title="Forgot Password" />
-       <BreadCrumb title="Forgot Password" />
-       <div className="auth-wrapper home-wrapper-2">
+      <Meta title="Forgot Password" />
+      <BreadCrumb title="Forgot Password" />
+      <div className="auth-wrapper home-wrapper-2">
         <div className="container">
           <div className="row">
             <div className="col-12">
               <div className="auth-card">
                 <h3 className="text-center mb-3">Forgot Password</h3>
                 <form action="" className="d-flex flex-column gap-15">
-                  <div>
-                    <input
-                      type="email"
-                      name="email"
-                      id=""
-                      placeholder="Email Address"
-                      className="form-control"
-                    />
-                  </div>
+                  <CustomInput
+                    type="email"
+                    name="email"
+                    placeholder="Email Address"
+                  />
                   <div>
                     <div className="mt-2 d-flex flex-column justify-content-center align-items-center gap-15">
-                      <button className="button border-0" type="submit" >Submit</button>
+                      <button className="button border-0" type="submit">
+                        Submit
+                      </button>
                     </div>
                   </div>
                 </form>
@@ -35,7 +34,7 @@ const ForgotPassword = () => {
         </div>
       </div>
     </>
-  )
-}
+  );
+};
 
-export default ForgotPassword
+export default ForgotPassword;

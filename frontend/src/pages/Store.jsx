@@ -2,14 +2,14 @@ import BreadCrumb from "../components/BreadCrumb";
 import ProductCard from "../components/ProductCard";
 import Meta from "../components/Meta";
 import "../CSS/Store.css";
-import ReactStars from "react-rating-stars-component";
+import CustomReactStars from "../components/CustomReactStars";
 import product from "../assets/product.png";
 import { CiGrid2H } from "react-icons/ci";
 import { CiGrid2V } from "react-icons/ci";
 import { useState } from "react";
 import Color from "../components/Color";
 const Store = () => {
-  const [grid, setGrid] = useState(3)
+  const [grid, setGrid] = useState("3")
   const changeGrid = (value) => {
     setGrid(value)
   }
@@ -174,10 +174,10 @@ const Store = () => {
                     </div>
                     <div className="w-50">
                       <h5>Wireless Headphones</h5>
-                      <ReactStars
+                      <CustomReactStars
                         count={5}
                         size={24}
-                        value="5"
+                        value={5}
                         edit={false}
                         activeColor="#ffd700"
                       />
@@ -190,10 +190,10 @@ const Store = () => {
                     </div>
                     <div className="w-50">
                       <h5>Wireless Headphones</h5>
-                      <ReactStars
+                      <CustomReactStars
                         count={5}
                         size={24}
-                        value="5"
+                        value={5}
                         edit={false}
                         activeColor="#ffd700"
                       />
@@ -219,10 +219,10 @@ const Store = () => {
                   <div className="d-flex align-items-center gap-10">
                     <p className="totalProducts mb-0">22 Products</p>
                     <div className="d-flex-gap-10 align-items-center">
-                      <CiGrid2H onClick={()=>changeGrid(3)} className="grid pointer"/>
-                      <CiGrid2V onClick={()=>changeGrid(4)} className="grid pointer"/>
-                      <CiGrid2H onClick={()=>changeGrid(6)} className="grid pointer"/>
-                      <CiGrid2V onClick={()=>changeGrid(12)} className="grid pointer"/>
+                      <CiGrid2H onClick={()=>changeGrid("3")} className="grid pointer"/>
+                      <CiGrid2V onClick={()=>changeGrid("4")} className="grid pointer"/>
+                      <CiGrid2H onClick={()=>changeGrid("6")} className="grid pointer"/>
+                      <CiGrid2V onClick={()=>changeGrid("12")} className="grid pointer"/>
                     </div>
                   </div>
                 </div>
