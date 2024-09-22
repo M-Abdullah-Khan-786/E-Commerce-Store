@@ -13,6 +13,7 @@ import { MdCategory } from "react-icons/md";
 import { AiOutlineBgColors } from "react-icons/ai";
 import { ImBlogger } from "react-icons/im";
 import { MdOutlineContactPhone } from "react-icons/md";
+import { RiNotification2Fill } from "react-icons/ri";
 
 const MainLayout = () => {
   const navigate = useNavigate();
@@ -137,7 +138,7 @@ const MainLayout = () => {
       </Sider>
       <Layout>
         <Header
-        className="d-flex justify-content-between ps-3 pe-5"
+          className="d-flex justify-content-between ps-3 pe-5"
           style={{
             padding: 0,
             background: colorBgContainer,
@@ -153,8 +154,29 @@ const MainLayout = () => {
               height: 64,
             }}
           />
-          <div className="d-flex gap-3 align-items-center" >
-            <h1>Admin</h1>
+          <div className="d-flex gap-3 align-items-center">
+            <div className="position-relative">
+              <RiNotification2Fill className="fs-4" />
+              <span className="badge bg-warning rounded-circle p-1 position-absolute">
+                22
+              </span>
+            </div>
+            <div>
+              <div className="d-flex align-items-center gap-3">
+                <div>
+                  <img
+                    src="https://via.placeholder.com/32"
+                    alt="user-profile"
+                    className="rounded-circle"
+                    style={{ width: 32, height: 32 }}
+                  />
+                </div>
+                <div>
+                <h5 className="mb-0">Admin</h5>
+                <p className="mb-0">adminuser@gmail.com</p>
+                </div>
+              </div>
+            </div>
           </div>
         </Header>
         <Content
@@ -166,7 +188,7 @@ const MainLayout = () => {
             borderRadius: borderRadiusLG,
           }}
         >
-          <Outlet/>
+          <Outlet />
         </Content>
       </Layout>
     </Layout>
