@@ -1,7 +1,46 @@
 import "../CSS/Dashboard.css";
 import { FiArrowDownRight } from "react-icons/fi";
-
+import { Column } from "@ant-design/plots";
+const data = [
+  { type: "Jan", value: 0.16 },
+  { type: "Feb", value: 0.125 },
+  { type: "Mar", value: 0.24 },
+  { type: "Apr", value: 0.19 },
+  { type: "May", value: 0.22 },
+  { type: "June", value: 0.05 },
+  { type: "July", value: 0.01 },
+  { type: "Aug", value: 0.015 },
+  { type: "Sep", value: 0.015 },
+  { type: "Oct", value: 0.015 },
+  { type: "Nov", value: 0.015 },
+  { type: "Dec", value: 0.015 },
+];
 const Dashboard = () => {
+  const config = {
+    data,
+    xField: "type",
+    yField: "value",
+    style: {
+      fill: ({ type }) => {
+        if (type === "10-30分" || type === "30+分") {
+          return "#22CBCC";
+        }
+        return "#2989FF";
+      },
+    },
+    label: {
+      text: (originData) => {
+        const val = parseFloat(originData.value);
+        if (val < 0.05) {
+          return (val * 100).toFixed(1) + "%";
+        }
+        return "";
+      },
+      offset: 10,
+    },
+    legend: false,
+  };
+
   return (
     <>
       <h3 className="mb-4">Dashboard</h3>
@@ -38,6 +77,18 @@ const Dashboard = () => {
             </h6>
             <p className="mb-0">Compare to Last Month</p>
           </div>
+        </div>
+      </div>
+      <div className="mt-4">
+        <h3 className="mb-4">Income Stats</h3>
+        <div>
+          <Column {...config} />
+        </div>
+      </div>
+      <div className="mt-4">
+        <h3 className="mb-4">Recent Orders</h3>
+        <div>
+
         </div>
       </div>
     </>

@@ -1,4 +1,9 @@
 main{
+    height: 86vh;
     overflow-y: scroll;
     background-color: transparent !important;
+}
+
+main::-webkit-scrollbar{
+    width: 0px;
 }
