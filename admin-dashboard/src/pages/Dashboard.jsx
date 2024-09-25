@@ -1,6 +1,35 @@
 import "../CSS/Dashboard.css";
 import { FiArrowDownRight } from "react-icons/fi";
 import { Column } from "@ant-design/plots";
+import { Table } from "antd";
+
+const columns = [
+  {
+    title: "Sr No",
+    dataIndex: "key",
+  },
+  {
+    title: "Name",
+    dataIndex: "name",
+  },
+  {
+    title: "Product",
+    dataIndex: "product",
+  },
+  {
+    title: "Status",
+    dataIndex: "status",
+  },
+];
+const dataSource = Array.from({
+  length: 46,
+}).map((_, i) => ({
+  key: i+1,
+  name: `Edward King ${i}`,
+  product: `London, Park Lane no. ${i}`,
+  status: 32,
+}));
+
 const data = [
   { type: "Jan", value: 0.16 },
   { type: "Feb", value: 0.125 },
@@ -88,8 +117,14 @@ const Dashboard = () => {
       <div className="mt-4">
         <h3 className="mb-4">Recent Orders</h3>
         <div>
-
+          <Table columns={columns} dataSource={dataSource} />
         </div>
+      </div>
+      <div className="my-4">
+        <h3 className="mb-4">
+          Recent Reviews
+        </h3>
+        <div></div>
       </div>
     </>
   );
