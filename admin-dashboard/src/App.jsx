@@ -7,6 +7,8 @@ import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
 import MainLayout from "./components/MainLayout";
 import Dashboard from "./pages/Dashboard";
+import Inquiries from "./pages/Inquiries";
+import Bloglist from "./pages/Bloglist";
 
 const App = () => {
   return (
@@ -18,6 +20,8 @@ const App = () => {
           <Route path="/reset-password" element={<ResetPassword />} />
           <Route path="/admin" element={<MainLayout />}>
             <Route index element={<Dashboard />} />
+          <Route path="inquiries" element={<Inquiries />} />
+          <Route path="blogs-list" element={<Bloglist />} />
           </Route>
         </Routes>
       </Router>
