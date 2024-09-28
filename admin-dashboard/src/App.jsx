@@ -15,6 +15,8 @@ import Customers from "./pages/Customers";
 import Colorlist from "./pages/Colorlist";
 import Categorylist from "./pages/Categorylist";
 import Brandlist from "./pages/Brandlist";
+import Productlist from "./pages/Productlist";
+import AddBlog from "./pages/AddBlog";
 
 const App = () => {
   return (
@@ -27,10 +29,12 @@ const App = () => {
           <Route path="/admin" element={<MainLayout />}>
             <Route index element={<Dashboard />} />
           <Route path="customers" element={<Customers />} />
+          <Route path="product-list" element={<Productlist/>} />
           <Route path="brand-list" element={<Brandlist />} />
           <Route path="color-list" element={<Colorlist />} />
           <Route path="category-list" element={<Categorylist />} />
           <Route path="orders" element={<Orders />} />
+          <Route path="blog" element={<AddBlog />} />
           <Route path="blogs-list" element={<Bloglist />} />
           <Route path="blogs-category-list" element={<BlogCategoryList />} />
           <Route path="inquiries" element={<Inquiries />} />
