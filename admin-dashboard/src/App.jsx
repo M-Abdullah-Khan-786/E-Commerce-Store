@@ -17,6 +17,7 @@ import Categorylist from "./pages/Categorylist";
 import Brandlist from "./pages/Brandlist";
 import Productlist from "./pages/Productlist";
 import AddBlog from "./pages/AddBlog";
+import AddBlogCategory from "./pages/AddBlogCategory";
 
 const App = () => {
   return (
@@ -35,6 +36,7 @@ const App = () => {
           <Route path="category-list" element={<Categorylist />} />
           <Route path="orders" element={<Orders />} />
           <Route path="blog" element={<AddBlog />} />
+          <Route path="blog-category" element={<AddBlogCategory />} />
           <Route path="blogs-list" element={<Bloglist />} />
           <Route path="blogs-category-list" element={<BlogCategoryList />} />
           <Route path="inquiries" element={<Inquiries />} />
