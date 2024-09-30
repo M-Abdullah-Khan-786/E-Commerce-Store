@@ -18,6 +18,9 @@ import Brandlist from "./pages/Brandlist";
 import Productlist from "./pages/Productlist";
 import AddBlog from "./pages/AddBlog";
 import AddBlogCategory from "./pages/AddBlogCategory";
+import AddColor from "./pages/AddColor";
+import AddProductCategory from "./pages/AddProductCategory";
+import AddBrand from "./pages/AddBrand";
 
 const App = () => {
   return (
@@ -31,8 +34,11 @@ const App = () => {
             <Route index element={<Dashboard />} />
           <Route path="customers" element={<Customers />} />
           <Route path="product-list" element={<Productlist/>} />
+          <Route path="brand" element={<AddBrand />} />
           <Route path="brand-list" element={<Brandlist />} />
+          <Route path="color" element={<AddColor/>} />
           <Route path="color-list" element={<Colorlist />} />
+          <Route path="category" element={<AddProductCategory />} />
           <Route path="category-list" element={<Categorylist />} />
           <Route path="orders" element={<Orders />} />
           <Route path="blog" element={<AddBlog />} />
