@@ -9,3 +9,12 @@
 body {
   font-family: "Roboto", sans-serif;
 }
+
+.form-control{
+  box-shadow: none;
+  border-color: gray;
+}
+
+.title{
+  font-size: 28px;
+}

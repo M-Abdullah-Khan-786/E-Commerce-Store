@@ -14,7 +14,7 @@ const AddBlog = () => {
 
   return (
     <>
-      <h3 className="mb-4">Add Blogs</h3>
+      <h3 className="mb-4 title">Add Blogs</h3>
       <div>
         <form action="">
           <UploadImage />

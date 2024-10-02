@@ -10,7 +10,7 @@ const Login = () => {
         <br />
         <br />
         <div className="my-5 w-25 bg-white rounded-3 mx-auto p-4">
-          <h3 className="text-center">LogIn</h3>
+          <h3 className="text-center title">LogIn</h3>
           <p className="text-center">Login now to continue</p>
           <form action="">
             <CustomInput

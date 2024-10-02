@@ -31,7 +31,7 @@ const Orders = () => {
   return (
     <>
       <div>
-        <h3 className="mb-4">Orders List</h3>
+        <h3 className="mb-4 title">Orders List</h3>
         <div>
           <Table columns={columns} dataSource={dataSource} />
         </div>

@@ -72,7 +72,7 @@ const Dashboard = () => {
 
   return (
     <>
-      <h3 className="mb-4">Dashboard</h3>
+      <h3 className="mb-4 title">Dashboard</h3>
       <div className="d-flex justify-content-between align-items-center gap-3">
         <div className="d-flex justify-content-between align-items-center flex-grow-1 bg-white p-3 rounded-3">
           <div>
