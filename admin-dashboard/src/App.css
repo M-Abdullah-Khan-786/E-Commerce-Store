@@ -16,5 +16,13 @@ body {
 }
 
 .title{
-  font-size: 28px;
+  font: 28px !important;
+}
+
+.sub-title{
+  font: 24px !important;
+}
+
+.content{
+  font: 14px !important;
 }
