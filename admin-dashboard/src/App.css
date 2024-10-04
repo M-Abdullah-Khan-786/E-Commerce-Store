@@ -26,3 +26,7 @@ body {
 .content{
   font: 14px !important;
 }
+
+.pointer{
+  cursor: pointer;
+}

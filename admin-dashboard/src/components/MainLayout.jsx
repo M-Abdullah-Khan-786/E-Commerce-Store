@@ -171,9 +171,32 @@ const MainLayout = () => {
                     style={{ width: 32, height: 32 }}
                   />
                 </div>
-                <div>
-                <h5 className="mb-0">Admin</h5>
-                <p className="mb-0">adminuser@gmail.com</p>
+                <div className="dropdown">
+                  <div
+                    className="pointer d-flex align-items-center"
+                    id="dropdownMenuButton"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false"
+                  >
+                    <h5 className="mb-0">Admin</h5>
+                    <p className="mb-0 ms-2">adminuser@gmail.com</p>
+                  </div>
+
+                  <ul
+                    className="dropdown-menu"
+                    aria-labelledby="dropdownMenuButton"
+                  >
+                    <li className="text-center">
+                      <a className="dropdown-item" href="#">
+                        Settings
+                      </a>
+                    </li>
+                    <li className="text-center">
+                      <a className="dropdown-item" href="#">
+                        Logout
+                      </a>
+                    </li>
+                  </ul>
                 </div>
               </div>
             </div>
