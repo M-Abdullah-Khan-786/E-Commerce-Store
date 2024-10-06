@@ -1,9 +1,14 @@
-main{
-    height: 86vh;
-    overflow-y: scroll;
-    background-color: transparent !important;
+main {
+  height: 86vh;
+  overflow-y: scroll;
+  background-color: transparent !important;
 }
 
-main::-webkit-scrollbar{
-    width: 0px;
+main::-webkit-scrollbar {
+  width: 0px;
+}
+
+.error {
+  color: red;
+  font-size: 12px;
 }

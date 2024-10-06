@@ -20,17 +20,17 @@ const colorRouter = require("./routes/colorRoute")
 const inquiryRouter = require("./routes/inquiryRoute")
 const { errorMiddleware } = require("./middlewares/errorMiddleware")
 
-const corsOptions = {
-    origin: process.env.FRONTEND_URI,
-    methods: ["GET", "POST", "PUT", "DELETE"],
-    Credential: true,
-    optionsSuccessStatus: 200
-}
+// const corsOptions = {
+//     origin: process.env.FRONTEND_URI,
+//     methods: ["GET", "POST", "PUT", "DELETE"],
+//     Credential: true,
+//     optionsSuccessStatus: 200
+// }
 
 app.use(morgan("dev"))
 app.use(bodyparser.json())
 app.use(bodyparser.urlencoded({ extended: false }))
-app.use(cors(corsOptions))
+app.use(cors())
 app.use(cookieParser())
 
 
