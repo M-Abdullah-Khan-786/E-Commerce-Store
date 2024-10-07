@@ -42,7 +42,7 @@ router
   .post("/cart/apply-coupon", authMiddleware, applyCoupon)
   .post("/cart/create-order", authMiddleware, createOrder)
   .delete("/empty-cart", authMiddleware, emptyCart)
-  .get("/all-users", authMiddleware, isAdmin, getAllUsers)
+  .get("/all-users", getAllUsers)
   .get("/:id", getSingleUser)
   .put("/update", authMiddleware, UpdateUser)
   .put("/save-address", authMiddleware, saveAddress)

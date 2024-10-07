@@ -34,10 +34,8 @@ const Login = () => {
   );
 
   useEffect(() => {
-    if ( user !== null && isSuccess) {
+    if (isSuccess) {
       navigate("admin");
-    }else{
-      alert(message);
     }
       // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user, loading, isError, isSuccess, message]);
@@ -82,6 +80,9 @@ const Login = () => {
             </div>
             <div className="mb-3 text-end">
               <Link to="/forgot-password">Forgot Password?</Link>
+            </div>
+            <div className="error text-center">
+              {message.message==="Rejected" ? "Only Admin Allowed":""}
             </div>
             <button
               className="button border-0 px-3 py-2 text-white fw-bold w-100 fs-5 text-center text-decoration-none"
