@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import customer from './customer'
+import customerService from './customerService'
 
 const initialState = {
     customers:[],
@@ -13,7 +13,7 @@ export const getUsers= createAsyncThunk(
     "customer/get-customers",
     async (thunkAPI) => {
       try {
-        return await customer.getUsers()
+        return await customerService.getUsers()
       } catch (error) {
         return thunkAPI.rejectWithValue(error.response.data);
       }

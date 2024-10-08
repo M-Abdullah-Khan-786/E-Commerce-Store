@@ -6,7 +6,7 @@ const { uploadProductImages } = require("../utils/multer")
 
 router
     .get("/:id", authMiddleware, getsingleProduct)
-    .get("/", authMiddleware, getAllProducts)
+    .get("/", getAllProducts)
     .put("/wishlist", authMiddleware, addWishlist)
     .put("/ratings", authMiddleware, addRating)
     .post("/create", authMiddleware, isAdmin, createProduct)
