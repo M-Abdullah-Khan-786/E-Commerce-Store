@@ -13,7 +13,7 @@ export const getPoducts= createAsyncThunk(
     "product/get-products",
     async (thunkAPI) => {
       try {
-        return await productService.getPoducts()
+        return await productService.getProducts()
       } catch (error) {
         return thunkAPI.rejectWithValue(error.response.data);
       }

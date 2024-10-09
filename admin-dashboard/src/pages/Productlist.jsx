@@ -1,4 +1,10 @@
 import { Table } from "antd";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { getPoducts } from "../features/product/productSlice";
+import { Link } from "react-router-dom";
+import { CiEdit } from "react-icons/ci";
+import { MdDeleteOutline } from "react-icons/md";
 
 const columns = [
   {
@@ -7,27 +13,70 @@ const columns = [
   },
   {
     title: "Name",
-    dataIndex: "name",
+    dataIndex: "title",
+    sorter: (a, b) => a.title.length - b.title.length,
+    sortDirections: ["descend"],
   },
   {
-    title: "Product",
-    dataIndex: "product",
+    title: "Category",
+    dataIndex: "category",
+    sorter: (a, b) => a.category.length - b.category.length,
+    sortDirections: ["descend"],
   },
   {
-    title: "Status",
-    dataIndex: "status",
+    title: "Brand",
+    dataIndex: "brand",
+    sorter: (a, b) => a.brand.length - b.brand.length,
+    sortDirections: ["descend"],
+  },
+  {
+    title: "Color",
+    dataIndex: "color",
+    sorter: (a, b) => a.color.length - b.color.length,
+    sortDirections: ["descend"],
+  },
+  {
+    title: "Price",
+    dataIndex: "price",
+    sorter: (a, b) => a.price.length - b.price.length,
+    sortDirections: ["descend"],
+  },
+  {
+    title: "Action",
+    dataIndex: "action",
   },
 ];
-const dataSource = Array.from({
-  length: 46,
-}).map((_, i) => ({
-  key: i + 1,
-  name: `Edward King ${i}`,
-  product: `London, Park Lane no. ${i}`,
-  status: 32,
-}));
 
 const Productlist = () => {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getPoducts());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const { getAllproducts } = useSelector((state) => state.product.products);
+
+  const dataSource = Array.from({
+    length: getAllproducts?.length || 0, // Ensure length is defined
+  }).map((_, i) => ({
+    key: i + 1,
+    title: getAllproducts[i]?.title || "N/A",
+    category: getAllproducts[i]?.category || "N/A",
+    brand: getAllproducts[i]?.brand || "N/A",
+    color: getAllproducts[i]?.color || "N/A",
+    price: getAllproducts[i]?.price || "N/A",
+    action: (
+      <>
+        <Link to="/edit" className="fs-3 text-danger">
+          <CiEdit />
+        </Link>
+        <Link to="/delete" className="ms-3 fs-3 text-danger" >
+          <MdDeleteOutline />
+        </Link>
+      </>
+    ),
+  }));
   return (
     <>
       <div>
@@ -37,7 +86,7 @@ const Productlist = () => {
         </div>
       </div>
     </>
-  )
-}
+  );
+};
 
-export default Productlist
+export default Productlist;
