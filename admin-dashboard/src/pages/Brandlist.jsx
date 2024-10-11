@@ -34,7 +34,7 @@ const Brandlist = () => {
   const {allBrand} = useSelector((state) => state.brand.brands);
 
   const dataSource = Array.from({
-    length: allBrand?.length || 0, // Ensure length is defined
+    length: allBrand?.length || 0,
   }).map((_, i) => ({
     key: i + 1,
     title: allBrand[i]?.title || "N/A",
