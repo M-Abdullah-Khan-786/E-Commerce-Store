@@ -1,19 +1,19 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import brandService from './brandService'
+import colorService from './colorService'
 
 const initialState = {
-    brands:[],
+    colors:[],
     loading: false,
     isError: false,
     isSuccess: false,
     message: "",
   };
 
-export const getBrands= createAsyncThunk(
-    "/get-brands",
+export const getColors= createAsyncThunk(
+    "/get-colors",
     async (thunkAPI) => {
       try {
-        return await brandService.getBrands()
+        return await colorService.getColors()
       } catch (error) {
         return thunkAPI.rejectWithValue(error.response.data);
       }
@@ -21,24 +21,24 @@ export const getBrands= createAsyncThunk(
   );
 
   export const brandSlice = createSlice({
-    name: "brands",
+    name: "colors",
     initialState,
     reducers: {},
     extraReducers: (builder) => {
       builder
-        .addCase(getBrands.pending, (state) => {
+        .addCase(getColors.pending, (state) => {
           state.loading = true;
         })
-        .addCase(getBrands.fulfilled, (state, action) => {
+        .addCase(getColors.fulfilled, (state, action) => {
             state.loading = false;
             state.isSuccess = true;
-            state.brands = action.payload;
+            state.colors = action.payload;
         })
-        .addCase(getBrands.rejected, (state, action) => {
+        .addCase(getColors.rejected, (state, action) => {
           state.loading = false;
           state.isError = true;
           state.isSuccess = false;
-          state.brands = null;
+          state.colors = null;
           state.message=action.error
         });
     },

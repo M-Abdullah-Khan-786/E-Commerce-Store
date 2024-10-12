@@ -1,4 +1,10 @@
 import { Table } from "antd";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { getColors } from "../features/color/colorSlice";
+import { Link } from "react-router-dom";
+import { CiEdit } from "react-icons/ci";
+import { MdDeleteOutline } from "react-icons/md";
 
 const columns = [
   {
@@ -7,27 +13,44 @@ const columns = [
   },
   {
     title: "Name",
-    dataIndex: "name",
+    dataIndex: "title",
+    sorter: (a, b) => a.title.length - b.title.length,
+    sortDirections: ["descend"],
   },
   {
-    title: "Product",
-    dataIndex: "product",
-  },
-  {
-    title: "Status",
-    dataIndex: "status",
+    title: "Action",
+    dataIndex: "action",
   },
 ];
-const dataSource = Array.from({
-  length: 46,
-}).map((_, i) => ({
-  key: i + 1,
-  name: `Edward King ${i}`,
-  product: `London, Park Lane no. ${i}`,
-  status: 32,
-}));
 
 const Colorlist = () => {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getColors());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+
+  const {allColor} = useSelector((state) => state.color.colors);
+
+
+  const dataSource = Array.from({
+    length: allColor?.length || 0,
+  }).map((_, i) => ({
+    key: i + 1,
+    title: allColor[i]?.title || "N/A",
+    action: (
+      <>
+        <Link to="/edit" className="fs-3 text-danger">
+          <CiEdit />
+        </Link>
+        <Link to="/delete" className="ms-3 fs-3 text-danger" >
+          <MdDeleteOutline />
+        </Link>
+      </>
+    )
+  }));
   return (
     <>
       <div>
