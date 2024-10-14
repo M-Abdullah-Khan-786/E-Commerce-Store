@@ -58,7 +58,7 @@ const Productlist = () => {
   const { getAllproducts } = useSelector((state) => state.product.products);
 
   const dataSource = Array.from({
-    length: getAllproducts?.length || 0, // Ensure length is defined
+    length: getAllproducts?.length || 0,
   }).map((_, i) => ({
     key: i + 1,
     title: getAllproducts[i]?.title || "N/A",
