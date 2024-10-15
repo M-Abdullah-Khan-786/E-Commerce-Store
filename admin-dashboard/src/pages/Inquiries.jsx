@@ -1,4 +1,10 @@
 import { Table } from "antd";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { getInquiry } from "../features/Inquiry/inquirySlice";
+import { Link } from "react-router-dom";
+import { CiEdit } from "react-icons/ci";
+import { MdDeleteOutline } from "react-icons/md";
 
 const columns = [
   {
@@ -10,24 +16,58 @@ const columns = [
     dataIndex: "name",
   },
   {
-    title: "Product",
-    dataIndex: "product",
+    title: "Email",
+    dataIndex: "email",
+  },
+  {
+    title: "Phone",
+    dataIndex: "phone",
+  },
+  {
+    title: "Comment",
+    dataIndex: "comment",
   },
   {
     title: "Status",
     dataIndex: "status",
   },
+  {
+    title: "Action",
+    dataIndex: "action",
+  },
 ];
-const dataSource = Array.from({
-  length: 46,
-}).map((_, i) => ({
-  key: i + 1,
-  name: `Edward King ${i}`,
-  product: `London, Park Lane no. ${i}`,
-  status: 32,
-}));
 
 const Inquiries = () => {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getInquiry());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const { allInquiry } = useSelector((state) => state.inquiry.inquiry);
+
+  const dataSource = Array.from({
+    length: allInquiry?.length || 0,
+  }).map((_, i) => ({
+    key: i + 1,
+    name: allInquiry[i]?.name || "N/A",
+    email: allInquiry[i]?.email || "N/A",
+    phone: allInquiry[i]?.phone || "N/A",
+    comment: allInquiry[i]?.comment || "N/A",
+    status: allInquiry[i]?.status || "N/A",
+    action: (
+      <>
+        <Link to="/edit" className="fs-3 text-danger">
+          <CiEdit />
+        </Link>
+        <Link to="/delete" className="ms-3 fs-3 text-danger">
+          <MdDeleteOutline />
+        </Link>
+      </>
+    ),
+  }));
+
   return (
     <>
       <div>
