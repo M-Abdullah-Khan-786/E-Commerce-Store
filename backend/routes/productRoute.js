@@ -1,7 +1,7 @@
 const express = require("express")
 const router = express.Router()
 const { authMiddleware, isAdmin } = require("../middlewares/authMiddleware")
-const { createProduct, getsingleProduct, getAllProducts, updateProduct, deleteProduct, addWishlist, addRating, uploadImages, deleteImage, updateImage } = require("../controllers/productController")
+const { createProduct, getsingleProduct, getAllProducts, updateProduct, deleteProduct, addWishlist, addRating, uploadImages, deleteImage } = require("../controllers/productController")
 const { uploadProductImages } = require("../utils/multer")
 
 router

@@ -14,6 +14,8 @@ const columns = [
   {
     title: "Name",
     dataIndex: "name",
+    sorter: (a, b) => a.name.length - b.name.length,
+    sortDirections: ["descend"],
   },
   {
     title: "Email",
@@ -55,7 +57,16 @@ const Inquiries = () => {
     email: allInquiry[i]?.email || "N/A",
     phone: allInquiry[i]?.phone || "N/A",
     comment: allInquiry[i]?.comment || "N/A",
-    status: allInquiry[i]?.status || "N/A",
+    status: (
+      <>
+      <select name="" id="" className="form-control form-select" >
+        <option value={allInquiry[i]?.status}>Select Status</option>
+        <option value="Pending">Pending</option>
+        <option value="Resolved">Resolved</option>
+        <option value="Closed">Closed</option>
+      </select>
+      </>
+    ),
     action: (
       <>
         <Link to="/edit" className="fs-3 text-danger">
