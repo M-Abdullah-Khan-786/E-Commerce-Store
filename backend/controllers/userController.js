@@ -527,6 +527,7 @@ exports.createOrder = asyncHandler(async (req, res, next) => {
   try {
     if (!COD) return next(errorhandler(400, "Create cash order failed"));
     const user = await User.findById(_id);
+    console.log(user);
     let userCart = await Cart.findOne({ orderby: user._id });
     let finalAmount = 0;
     if (couponApplied && userCart.totalafterdiscount) {
@@ -535,7 +536,7 @@ exports.createOrder = asyncHandler(async (req, res, next) => {
       finalAmount = userCart.carttotal * 100;
     }
     const newOrder = await new Order({
-      orderby: user._id,
+      orderby: user,
       products: userCart.products,
       paymentintent: {
         id: uuidv4(),
@@ -545,7 +546,6 @@ exports.createOrder = asyncHandler(async (req, res, next) => {
         status: "Cash on Delivery",
         created: Date.now(),
       },
-      orderby: user._id,
       orderstatus: "Cash on Delivery",
     }).save();
 
@@ -576,6 +576,21 @@ exports.getOrder = asyncHandler(async (req, res, next) => {
     const order = await Order.findOne({ orderby: _id }).populate(
       "products.product"
     );
+    if (!order)
+      return res
+        .status(404)
+        .json({ success: false, message: "Order not found" });
+    return res.status(200).json({ success: true, order });
+  } catch (error) {
+    console.log(error);
+    return next(errorhandler(500, "Internal server error"));
+  }
+});
+
+// Get All Order by Admin
+exports.getAllOrder = asyncHandler(async (req, res, next) => {
+  try {
+    const order = await Order.find()
     if (!order)
       return res
         .status(404)

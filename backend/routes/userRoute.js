@@ -24,6 +24,7 @@ const {
   createOrder,
   getOrder,
   updateOrder,
+  getAllOrder,
 } = require("../controllers/userController");
 const { authMiddleware, isAdmin } = require("../middlewares/authMiddleware");
 
@@ -38,6 +39,7 @@ router
   .get("/wishlist", authMiddleware, getWishlist)
   .get("/cart", authMiddleware, getCart)
   .get("/orders", authMiddleware, getOrder)
+  .get("/all-orders", authMiddleware,isAdmin, getAllOrder)
   .post("/cart", authMiddleware, addCart)
   .post("/cart/apply-coupon", authMiddleware, applyCoupon)
   .post("/cart/create-order", authMiddleware, createOrder)

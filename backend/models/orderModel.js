@@ -17,10 +17,7 @@ const orderSchema = new mongoose.Schema({
     default: "pending",
     enum: ["pending", "processing", "shipped", "Cash on Delivery", "delivered", "cancelled"]
   },
-  orderby:{
-    type: mongoose.Schema.ObjectId,
-    ref: "User",
-  }
+  orderby:{}
 },{
     timestamps: true,
 });
