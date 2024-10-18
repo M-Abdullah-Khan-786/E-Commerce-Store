@@ -527,8 +527,11 @@ exports.createOrder = asyncHandler(async (req, res, next) => {
   try {
     if (!COD) return next(errorhandler(400, "Create cash order failed"));
     const user = await User.findById(_id);
-    console.log(user);
-    let userCart = await Cart.findOne({ orderby: user._id });
+    let userCart = await Cart.findOne({ orderby: user._id })
+    .populate({
+      path: "products.product",
+      model: "Product"
+    });
     let finalAmount = 0;
     if (couponApplied && userCart.totalafterdiscount) {
       finalAmount = userCart.totalafterdiscount * 100;
@@ -573,9 +576,10 @@ exports.createOrder = asyncHandler(async (req, res, next) => {
 exports.getOrder = asyncHandler(async (req, res, next) => {
   const { _id } = req.user;
   try {
-    const order = await Order.findOne({ orderby: _id }).populate(
-      "products.product"
-    );
+    const order = await Order.findOne({ orderby: _id }).populate({
+      path: "products.product",
+      model: "Product"
+    });
     if (!order)
       return res
         .status(404)
@@ -590,7 +594,10 @@ exports.getOrder = asyncHandler(async (req, res, next) => {
 // Get All Order by Admin
 exports.getAllOrder = asyncHandler(async (req, res, next) => {
   try {
-    const order = await Order.find()
+    const order = await Order.find().populate({
+      path: "products.product",
+      model: "Product"
+    });
     if (!order)
       return res
         .status(404)
