@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import RichTextEditor from "react-rte";
 import CustomInput from "../components/CustomInput";
-import UploadImage from "../components/UploadImage";
+import Dropzone from "react-dropzone";
 import { useFormik } from "formik";
 import { array, number, object, string } from "yup";
 import { useDispatch, useSelector } from "react-redux";
@@ -22,7 +22,9 @@ const AddProduct = () => {
     price: number().required("Price is required"),
     category: string().required("Category is required"),
     brand: string().required("Brand is required"),
-    color: array().min(1, "At least one color is required").required("Colors is required"),
+    color: array()
+      .min(1, "At least one color is required")
+      .required("Colors is required"),
     quantity: number().required("Quantity is required"),
   });
 
@@ -154,7 +156,7 @@ const AddProduct = () => {
               textField="color"
               placeholder="Select Color"
               data={colors}
-              onChange={(e) => formik.setFieldValue("color", e)} 
+              onChange={(e) => formik.setFieldValue("color", e)}
               onBlur={formik.handleBlur("color")}
               className=" mt-3 mb-3"
             />
@@ -180,7 +182,20 @@ const AddProduct = () => {
             {formik.touched.brand && formik.errors.brand && (
               <div className="error">{formik.errors.brand}</div>
             )}
-            <UploadImage />
+            <div className="bg-white border-1 p-5 text-center">
+              <Dropzone onDrop={(acceptedFiles) => console.log(acceptedFiles)}>
+                {({ getRootProps, getInputProps }) => (
+                  <section>
+                    <div {...getRootProps()}>
+                      <input {...getInputProps()} />
+                      <p>
+                        Drag n drop some files here, or click to select files
+                      </p>
+                    </div>
+                  </section>
+                )}
+              </Dropzone>
+            </div>
             <button
               className="btn btn-warning border-0 rounded-3 my-4 float-end me-4"
               type="submit"
