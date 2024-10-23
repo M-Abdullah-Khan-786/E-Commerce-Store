@@ -7,12 +7,22 @@ const cloudinary = require("cloudinary").v2;
 
 // create Product
 exports.createProduct = asyncHandler(async (req, res, next) => {
-  const newProduct = await Product.create(req.body);
+ try {
+  const imageUrls = req.files.map(file => ({
+    url: file.path, 
+    public_id: file.filename
+}));
+  const newProduct = await Product.create({ ...req.body, images: imageUrls });
   res.status(201).json({
     success: true,
     message: "Product created successfully",
     newProduct,
   });
+ } catch (error) {
+  return next(
+    errorhandler(500, "Error to Add Products")
+  );
+ }
 });
 
 // get a single Product
@@ -35,29 +45,41 @@ exports.deleteProduct = asyncHandler(async (req, res, next) => {
   if (!findProduct) {
     return next(errorhandler(404, "Product not found"));
   }
-  const deleted = await Product.findByIdAndDelete(id);
-  return res.status(200).json({
-    success: true,
-    message: "Product deleted successfully",
-    deleted,
+
+  const imagePublicIds = findProduct.images.map((image) => {
+    const segments = image.split("/");
+    const publicIdSegment = segments[segments.length - 1].split(".")[0];
+    return publicIdSegment;
   });
+
+  try {
+    await Promise.all(
+      imagePublicIds.map((publicId) => cloudinary.uploader.destroy(publicId))
+    );
+
+    const deleted = await Product.findByIdAndDelete(id);
+    return res.status(200).json({
+      success: true,
+      message: "Product deleted successfully",
+      deleted,
+    });
+  } catch (error) {
+    return next(
+      errorhandler(500, "Error deleting product images from Cloudinary")
+    );
+  }
 });
 
 // update Product
 exports.updateProduct = asyncHandler(async (req, res, next) => {
   const { id } = req.params;
-  const findProduct = await Product.findById(id);
-  if (!findProduct) {
-    return next(errorhandler(404, "Product not found"));
-  }
-  if (req.body.title) {
-    req.body.slug = slugify(req.body.title, { lower: true, strict: true });
-  }
-  const updatedProduct = await Product.findByIdAndUpdate(id, req.body, {
-    new: true,
-    runValidators: true,
-  });
-  return res.status(200).json({
+  const images = req.files.map((file) => file.path);
+  const updatedProduct = await Product.findByIdAndUpdate(
+    id,
+    { ...req.body, images },
+    { new: true, runValidators: true }
+  );
+  res.status(200).json({
     success: true,
     message: "Product updated successfully",
     updatedProduct,
@@ -201,67 +223,5 @@ exports.addRating = asyncHandler(async (req, res, next) => {
     });
   } catch (error) {
     return next(errorhandler(500, "Internal server error"));
-  }
-});
-
-// Upload Product Images
-exports.uploadImages = asyncHandler(async (req, res, next) => {
-  const { id } = req.params;
-  const product = await Product.findById(id);
-
-  if (!product) {
-    return next({ status: 404, message: "Product not found" });
-  }
-  if (!req.files || Object.keys(req.files).length === 0) {
-    return next(errorhandler(400, "No files were uploaded."));
-  }
-
-  try {
-    const imageUrls = req.files.map((file) => file.path);
-    const updateImages = await Product.findByIdAndUpdate(id, {
-      $push: { images: { $each: imageUrls } },
-    });
-    const productImages = await Product.findById(id);
-    return res.status(200).json({
-      success: true,
-      message: "Images uploaded and updated successfully",
-      productImages,
-    });
-  } catch (error) {
-    return res.status(500).json({ error: error.message });
-  }
-});
-
-// Delete Product Image
-exports.deleteImage = asyncHandler(async (req, res, next) => {
-  try {
-    const { id } = req.params;
-    const { imageUrl } = req.body;
-
-    const product = await Product.findById(id);
-    if (!product) return res.status(404).json({ error: "Product not found" });
-
-    const imageId = imageUrl.split("/").slice(-2).join("/").split(".")[0];
-
-    const result = await cloudinary.uploader.destroy(imageId, {
-      resource_type: "image",
-    });
-
-    if (result.result !== "ok") {
-      return res
-        .status(500)
-        .json({ error: "Failed to delete image from Cloudinary" });
-    }
-
-    product.images = product.images.filter((url) => url !== imageUrl);
-    await product.save();
-
-    return res.status(200).json({
-      success: true,
-      message: "Image deleted successfully",
-      product,
-    });
-  } catch (error) {
-    return res.status(500).json({ error: error.message });
   }
 });

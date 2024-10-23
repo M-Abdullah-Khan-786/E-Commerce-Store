@@ -8,18 +8,27 @@ const {
   getAllBlogs,
   likedBlog,
   disLikedBlog,
-  uploadImages,
-  deleteImage,
 } = require("../controllers/blogController");
 const { uploadBlogImages } = require("../utils/multer");
 
 const router = express.Router();
 
 router
-  .post("/create", authMiddleware, isAdmin, createBlog)
-  .put("/upload-image/:id",authMiddleware,isAdmin,uploadBlogImages.array("images", 10),uploadImages)
-  .delete("/delete-image/:id", authMiddleware, isAdmin, deleteImage)
-  .put("/update/:id", authMiddleware, isAdmin, updateBlog)
+  .post(
+    "/create",
+    authMiddleware,
+    isAdmin,
+    uploadBlogImages.array("images", 10),
+    createBlog
+  )
+  .put(
+    "/update/:id",
+    authMiddleware,
+    isAdmin,
+    isAdmin,
+    uploadBlogImages.array("images", 10),
+    updateBlog
+  )
   .delete("/delete/:id", authMiddleware, isAdmin, deleteBlog)
   .put("/like", authMiddleware, likedBlog)
   .put("/dislike", authMiddleware, disLikedBlog)

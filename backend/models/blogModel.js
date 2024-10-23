@@ -10,7 +10,12 @@ const blogSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    images: [],
+    images: [
+      {
+        url: String,
+        public_id: String,
+      },
+    ],
     category: {
       type: String,
       required: true,
