@@ -9,14 +9,19 @@ import { getBrands } from "../features/brand/brandSlice";
 import { getCpoducts } from "../features/product-category/pcategorySlice";
 import { getColors } from "../features/color/colorSlice";
 import Multiselect from "react-widgets/Multiselect";
+import { createProduct } from "../features/product/productSlice";
 
 const AddProduct = () => {
   const [brand, setBrand] = useState([]);
   const [cProduct, setcProduct] = useState([]);
+  const [images, setImages] = useState([]); // State for images
+  const [descriptionValue, setDescriptionValue] = useState(
+    RichTextEditor.createEmptyValue()
+  );
 
   const dispatch = useDispatch();
 
-  let userSchema = object({
+  const userSchema = object({
     title: string().required("Title is required"),
     description: string().required("Description is required"),
     price: number().required("Price is required"),
@@ -39,8 +44,29 @@ const AddProduct = () => {
       quantity: "",
     },
     validationSchema: userSchema,
-    onSubmit: (values) => {
-      alert(JSON.stringify(values, null, 2));
+    onSubmit: async (values) => {
+      const formData = new FormData();
+      formData.append("title", values.title);
+      formData.append("description", values.description);
+      formData.append("price", values.price);
+      formData.append("category", values.category);
+      formData.append("brand", values.brand);
+      formData.append("quantity", values.quantity);
+      values.color.forEach((color) => {
+        formData.append("color", color._id);
+      });
+      images.forEach((image) => {
+        formData.append("images", image.file);
+      });
+      try {
+        await dispatch(createProduct(formData));
+        formik.resetForm();
+        setDescriptionValue(RichTextEditor.createEmptyValue());
+        setImages([]);
+        formik.setFieldValue("color", []);
+      } catch (error) {
+        console.error(error);
+      }
     },
   });
 
@@ -61,12 +87,14 @@ const AddProduct = () => {
   );
   const { allColor } = useSelector((state) => state.color.colors);
 
-  if (allBrand && allBrand.length !== brand.length) {
-    setBrand(allBrand);
-  }
-  if (allCategory && allCategory.length !== cProduct.length) {
-    setcProduct(allCategory);
-  }
+  useEffect(() => {
+    if (allBrand) {
+      setBrand(allBrand);
+    }
+    if (allCategory) {
+      setcProduct(allCategory);
+    }
+  }, [allBrand, allCategory]);
 
   const colors = [];
   if (allColor && Array.isArray(allColor)) {
@@ -77,9 +105,6 @@ const AddProduct = () => {
       });
     });
   }
-  const [descriptionValue, setDescriptionValue] = useState(
-    RichTextEditor.createEmptyValue()
-  );
 
   return (
     <>
@@ -139,13 +164,11 @@ const AddProduct = () => {
               className="form-control p-3 mt-3 mb-3"
             >
               <option value="">Select Category</option>
-              {cProduct.map((cProduct, index) => {
-                return (
-                  <option key={index} value={cProduct.title}>
-                    {cProduct.title}
-                  </option>
-                );
-              })}
+              {cProduct.map((cProduct, index) => (
+                <option key={index} value={cProduct.title}>
+                  {cProduct.title}
+                </option>
+              ))}
             </select>
             {formik.touched.category && formik.errors.category && (
               <div className="error">{formik.errors.category}</div>
@@ -158,7 +181,7 @@ const AddProduct = () => {
               data={colors}
               onChange={(e) => formik.setFieldValue("color", e)}
               onBlur={formik.handleBlur("color")}
-              className=" mt-3 mb-3"
+              className="mt-3 mb-3"
             />
             {formik.touched.color && formik.errors.color && (
               <div className="error">{formik.errors.color}</div>
@@ -171,30 +194,58 @@ const AddProduct = () => {
               className="form-control p-3 mt-3 mb-3"
             >
               <option value="">Select Brand</option>
-              {brand.map((brand, index) => {
-                return (
-                  <option key={index} value={brand.title}>
-                    {brand.title}
-                  </option>
-                );
-              })}
+              {brand.map((brand, index) => (
+                <option key={index} value={brand.title}>
+                  {brand.title}
+                </option>
+              ))}
             </select>
             {formik.touched.brand && formik.errors.brand && (
               <div className="error">{formik.errors.brand}</div>
             )}
             <div className="bg-white border-1 p-5 text-center">
-              <Dropzone onDrop={(acceptedFiles) => console.log(acceptedFiles)}>
+              <Dropzone
+                onDrop={(acceptedFiles) => {
+                  const newImages = acceptedFiles.map((file) => ({
+                    file,
+                    preview: URL.createObjectURL(file), // Create a preview URL for each file
+                  }));
+                  setImages((prevImages) => [...prevImages, ...newImages]);
+                }}
+              >
                 {({ getRootProps, getInputProps }) => (
                   <section>
-                    <div {...getRootProps()}>
+                    <div {...getRootProps()} className="dropzone">
                       <input {...getInputProps()} />
                       <p>
-                        Drag n drop some files here, or click to select files
+                        Drag n drop some image files here, or click to select
+                        files
                       </p>
                     </div>
                   </section>
                 )}
               </Dropzone>
+              {images.length > 0 && (
+                <div>
+                  <h4>Selected Images:</h4>
+                  <div className="image-previews">
+                    {images.map((image, index) => (
+                      <div key={index} className="image-preview">
+                        <img
+                          src={image.preview}
+                          alt={`preview ${index}`}
+                          style={{
+                            width: "100px",
+                            height: "auto",
+                            margin: "5px",
+                          }}
+                        />
+                        <p>{image.file.name}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
             <button
               className="btn btn-warning border-0 rounded-3 my-4 float-end me-4"
@@ -208,5 +259,4 @@ const AddProduct = () => {
     </>
   );
 };
-
 export default AddProduct;
