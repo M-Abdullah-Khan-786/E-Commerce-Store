@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import RichTextEditor from "react-rte";
 import CustomInput from "../components/CustomInput";
-import Dropzone from "react-dropzone";
 import { useFormik } from "formik";
 import { array, number, object, string } from "yup";
 import { useDispatch, useSelector } from "react-redux";
@@ -14,14 +13,14 @@ import { createProduct } from "../features/product/productSlice";
 const AddProduct = () => {
   const [brand, setBrand] = useState([]);
   const [cProduct, setcProduct] = useState([]);
-  const [images, setImages] = useState([]); // State for images
+  const [images, setImages] = useState([]);
   const [descriptionValue, setDescriptionValue] = useState(
     RichTextEditor.createEmptyValue()
   );
 
   const dispatch = useDispatch();
 
-  const userSchema = object({
+  const productSchema = object({
     title: string().required("Title is required"),
     description: string().required("Description is required"),
     price: number().required("Price is required"),
@@ -29,7 +28,11 @@ const AddProduct = () => {
     brand: string().required("Brand is required"),
     color: array()
       .min(1, "At least one color is required")
-      .required("Colors is required"),
+      .when('$isReset', {
+        is: false,
+        then: (schema) => schema.required("Colors is required"),
+        otherwise: (schema) => schema.notRequired(),
+      }),
     quantity: number().required("Quantity is required"),
   });
 
@@ -40,10 +43,10 @@ const AddProduct = () => {
       price: "",
       category: "",
       brand: "",
-      color: "",
+      color: [],
       quantity: "",
     },
-    validationSchema: userSchema,
+    validationSchema: productSchema,
     onSubmit: async (values) => {
       const formData = new FormData();
       formData.append("title", values.title);
@@ -52,17 +55,26 @@ const AddProduct = () => {
       formData.append("category", values.category);
       formData.append("brand", values.brand);
       formData.append("quantity", values.quantity);
+
       values.color.forEach((color) => {
-        formData.append("color", color._id);
+        formData.append("colors", color._id);
       });
+
       images.forEach((image) => {
-        formData.append("images", image.file);
+        if (image.file) {
+          formData.append("images", image.file);
+        }
       });
+
+
       try {
         await dispatch(createProduct(formData));
         formik.resetForm();
         setDescriptionValue(RichTextEditor.createEmptyValue());
+        formik.setFieldValue("color", []);
+        formik.context.isReset = true;
         setImages([]);
+        formik.setFieldTouched("color", false);
         formik.setFieldValue("color", []);
       } catch (error) {
         console.error(error);
@@ -105,6 +117,20 @@ const AddProduct = () => {
       });
     });
   }
+
+  const handleImageChange = (event) => {
+    const files = Array.from(event.target.files);
+    const newImages = files.map((file) => ({
+      file: file,
+      preview: URL.createObjectURL(file),
+    }));
+  
+    setImages((prevImages) => {
+      const updatedImages = [...prevImages, ...newImages];
+      return updatedImages;
+    });
+  };
+  
 
   return (
     <>
@@ -179,7 +205,12 @@ const AddProduct = () => {
               textField="color"
               placeholder="Select Color"
               data={colors}
-              onChange={(e) => formik.setFieldValue("color", e)}
+              onChange={(e) => {
+                formik.setFieldValue("color", e);
+                if (e.length === 0) {
+                  formik.setFieldValue("color", null);
+                }
+              }}
               onBlur={formik.handleBlur("color")}
               className="mt-3 mb-3"
             />
@@ -204,27 +235,13 @@ const AddProduct = () => {
               <div className="error">{formik.errors.brand}</div>
             )}
             <div className="bg-white border-1 p-5 text-center">
-              <Dropzone
-                onDrop={(acceptedFiles) => {
-                  const newImages = acceptedFiles.map((file) => ({
-                    file,
-                    preview: URL.createObjectURL(file), // Create a preview URL for each file
-                  }));
-                  setImages((prevImages) => [...prevImages, ...newImages]);
-                }}
-              >
-                {({ getRootProps, getInputProps }) => (
-                  <section>
-                    <div {...getRootProps()} className="dropzone">
-                      <input {...getInputProps()} />
-                      <p>
-                        Drag n drop some image files here, or click to select
-                        files
-                      </p>
-                    </div>
-                  </section>
-                )}
-              </Dropzone>
+              <input
+                type="file"
+                accept="image/*"
+                multiple
+                onChange={handleImageChange}
+                className="form-control mb-3"
+              />
               {images.length > 0 && (
                 <div>
                   <h4>Selected Images:</h4>
@@ -259,4 +276,5 @@ const AddProduct = () => {
     </>
   );
 };
+
 export default AddProduct;

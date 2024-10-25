@@ -11,7 +11,7 @@ exports.createProduct = asyncHandler(async (req, res, next) => {
   const imageUrls = Array.isArray(req.files) ? req.files.map(file => ({
     url: file.path, 
     public_id: file.filename
-  })) : [];
+})) : [];
   
   const newProduct = await Product.create({ ...req.body, images: imageUrls });
   res.status(201).json({
