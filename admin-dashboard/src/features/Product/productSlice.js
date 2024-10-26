@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import productService from "./ProductService";
+import {getProducts, createProducts} from "./ProductService"
 
 const initialState = {
   products: [],
@@ -13,7 +13,7 @@ export const getPoducts = createAsyncThunk(
   "product/get-products",
   async (thunkAPI) => {
     try {
-      return await productService.getProducts();
+      return await getProducts();
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response.data);
     }
@@ -24,7 +24,7 @@ export const createProduct = createAsyncThunk(
   "product/create-product",
   async (data, thunkAPI) => {
     try {
-      return await productService.createProduct(data);
+      return await createProducts(data);
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response.data);
     }
@@ -58,7 +58,7 @@ export const productSlice = createSlice({
       .addCase(createProduct.fulfilled, (state, action) => {
         state.loading = false;
         state.isSuccess = true;
-        state.products.push(action.payload.newProduct);
+        state.products = action.payload;
         state.message = "Product created successfully";
       })
       .addCase(createProduct.rejected, (state, action) => {

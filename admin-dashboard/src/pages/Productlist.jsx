@@ -5,6 +5,7 @@ import { getPoducts } from "../features/product/productSlice";
 import { Link } from "react-router-dom";
 import { CiEdit } from "react-icons/ci";
 import { MdDeleteOutline } from "react-icons/md";
+import { deleteProduct } from "../features/product/ProductService";
 
 const columns = [
   {
@@ -52,8 +53,16 @@ const Productlist = () => {
 
   useEffect(() => {
     dispatch(getPoducts());
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [dispatch]);
+
+  const handleDelete = async (id) => {
+    try {
+      // window.location.reload()
+      await dispatch(deleteProduct(id));
+    } catch (error) {
+      console.error("Error deleting product:", error);
+    }
+  };
 
   const { getAllproducts } = useSelector((state) => state.product.products);
 
@@ -71,7 +80,12 @@ const Productlist = () => {
         <Link to="/edit" className="fs-3 text-danger">
           <CiEdit />
         </Link>
-        <Link to="/delete" className="ms-3 fs-3 text-danger" >
+        <Link
+          onClick={() => {
+            handleDelete(getAllproducts[i]?._id);
+          }}
+          className="ms-3 fs-3 text-danger"
+        >
           <MdDeleteOutline />
         </Link>
       </>

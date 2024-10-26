@@ -9,6 +9,7 @@ import { getCpoducts } from "../features/product-category/pcategorySlice";
 import { getColors } from "../features/color/colorSlice";
 import Multiselect from "react-widgets/Multiselect";
 import { createProduct } from "../features/product/productSlice";
+import { useNavigate } from "react-router-dom";
 
 const AddProduct = () => {
   const [brand, setBrand] = useState([]);
@@ -19,6 +20,7 @@ const AddProduct = () => {
   );
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const productSchema = object({
     title: string().required("Title is required"),
@@ -28,7 +30,7 @@ const AddProduct = () => {
     brand: string().required("Brand is required"),
     color: array()
       .min(1, "At least one color is required")
-      .when('$isReset', {
+      .when("$isReset", {
         is: false,
         then: (schema) => schema.required("Colors is required"),
         otherwise: (schema) => schema.notRequired(),
@@ -66,16 +68,17 @@ const AddProduct = () => {
         }
       });
 
-
       try {
-        await dispatch(createProduct(formData));
-        formik.resetForm();
-        setDescriptionValue(RichTextEditor.createEmptyValue());
-        formik.setFieldValue("color", []);
-        formik.context.isReset = true;
-        setImages([]);
-        formik.setFieldTouched("color", false);
-        formik.setFieldValue("color", []);
+        const resultAction = await dispatch(createProduct(formData));
+        if (createProduct.fulfilled.match(resultAction)) {
+          formik.resetForm();
+          setDescriptionValue(RichTextEditor.createEmptyValue());
+          formik.setFieldValue("color", []);
+          setImages([]);
+          navigate("/admin/product-list");
+        } else {
+          console.error("Failed to create product:", resultAction.error);
+        }
       } catch (error) {
         console.error(error);
       }
@@ -124,13 +127,18 @@ const AddProduct = () => {
       file: file,
       preview: URL.createObjectURL(file),
     }));
-  
+
     setImages((prevImages) => {
       const updatedImages = [...prevImages, ...newImages];
       return updatedImages;
     });
   };
-  
+
+  const handleRemoveImage = (index) => {
+    setImages((prevImages) =>
+      prevImages.filter((_, imgIndex) => imgIndex !== index)
+    );
+  };
 
   return (
     <>
@@ -258,6 +266,13 @@ const AddProduct = () => {
                           }}
                         />
                         <p>{image.file.name}</p>
+                        <button
+                          type="button"
+                          onClick={() => handleRemoveImage(index)}
+                          className="btn btn-danger btn-sm"
+                        >
+                          Remove
+                        </button>
                       </div>
                     ))}
                   </div>
@@ -276,5 +291,4 @@ const AddProduct = () => {
     </>
   );
 };
-
 export default AddProduct;

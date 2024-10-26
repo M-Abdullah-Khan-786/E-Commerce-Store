@@ -48,10 +48,11 @@ exports.deleteProduct = asyncHandler(async (req, res, next) => {
   }
 
   const imagePublicIds = findProduct.images.map((image) => {
-    const segments = image.split("/");
+    const segments = image.url.split("/");
     const publicIdSegment = segments[segments.length - 1].split(".")[0];
     return publicIdSegment;
   });
+  
 
   try {
     await Promise.all(
