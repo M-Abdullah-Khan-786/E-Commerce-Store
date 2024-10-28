@@ -14,6 +14,8 @@ import { AiOutlineBgColors } from "react-icons/ai";
 import { ImBlogger } from "react-icons/im";
 import { MdOutlineContactPhone } from "react-icons/md";
 import { RiNotification2Fill } from "react-icons/ri";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const MainLayout = () => {
   const navigate = useNavigate();
@@ -214,6 +216,18 @@ const MainLayout = () => {
           <Outlet />
         </Content>
       </Layout>
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="dark"
+      />
     </Layout>
   );
 };

@@ -10,6 +10,7 @@ import { getColors } from "../features/color/colorSlice";
 import Multiselect from "react-widgets/Multiselect";
 import { createProduct } from "../features/product/productSlice";
 import { useNavigate } from "react-router-dom";
+import {  toast } from 'react-toastify';
 
 const AddProduct = () => {
   const [brand, setBrand] = useState([]);
@@ -75,8 +76,10 @@ const AddProduct = () => {
           setDescriptionValue(RichTextEditor.createEmptyValue());
           formik.setFieldValue("color", []);
           setImages([]);
+          toast.success("Product created successfully");
           navigate("/admin/product-list");
         } else {
+          toast.error("Failed to create product");
           console.error("Failed to create product:", resultAction.error);
         }
       } catch (error) {

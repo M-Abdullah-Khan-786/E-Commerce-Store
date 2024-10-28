@@ -4,12 +4,15 @@ import { base_url } from "../../utils/base_url";
 const getToken = localStorage.getItem("user")
   ? JSON.parse(localStorage.getItem("user"))
   : null;
-const config = {
-  headers: {
-    Authorization: `Bearer ${getToken.token}`,
-    "Content-Type": "multipart/form-data",
-  },
-};
+
+const config = getToken
+  ? {
+      headers: {
+        Authorization: `Bearer ${getToken.token}`,
+        "Content-Type": "multipart/form-data",
+      },
+    }
+  : {};
 
 export const getProducts = async () => {
   try {
@@ -29,7 +32,7 @@ export const createProducts = async (data) => {
   }
 };
 
-export const deleteProduct = async (id) => {
+export const deleteProducts = async (id) => {
   try {
     const response = await axios.delete(`${base_url}/product/delete/${id}`, config);
     return response.data;

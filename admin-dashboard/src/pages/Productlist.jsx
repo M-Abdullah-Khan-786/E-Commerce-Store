@@ -1,11 +1,14 @@
 import { Table } from "antd";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getPoducts } from "../features/product/productSlice";
+import {
+  getPoducts,
+  deleteProductById,
+} from "../features/product/productSlice";
 import { Link } from "react-router-dom";
 import { CiEdit } from "react-icons/ci";
 import { MdDeleteOutline } from "react-icons/md";
-import { deleteProduct } from "../features/product/ProductService";
+import { toast } from "react-toastify";
 
 const columns = [
   {
@@ -57,10 +60,12 @@ const Productlist = () => {
 
   const handleDelete = async (id) => {
     try {
-      // window.location.reload()
-      await dispatch(deleteProduct(id));
+      await dispatch(deleteProductById(id));
+      dispatch(getPoducts());
+      toast.success("Product deleted successfully!");
     } catch (error) {
-      console.error("Error deleting product:", error);
+      toast.error("Error deleting product!");
+      console.error(error);
     }
   };
 
