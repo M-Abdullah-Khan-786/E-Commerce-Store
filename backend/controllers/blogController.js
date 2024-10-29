@@ -7,11 +7,17 @@ const cloudinary = require("cloudinary").v2;
 // Create Blog
 exports.createBlog = asyncHandler(async (req, res, next) => {
   try {
+    const imageUrls = Array.isArray(req.files)
+      ? req.files.map((file) => ({
+          url: file.path,
+          public_id: file.filename,
+        }))
+      : [];
     const { title, description, category } = req.body;
     if (!title || !description || !category) {
       return next(errorhandler(400, "Please fill all required fields"));
     }
-    const newBlog = await Blog.create(req.body);
+    const newBlog = await Blog.create({ ...req.body, images: imageUrls });
     return res.json({
       success: true,
       message: "Blog created successfully",
@@ -25,16 +31,21 @@ exports.createBlog = asyncHandler(async (req, res, next) => {
 // Update Blog
 exports.updateBlog = asyncHandler(async (req, res, next) => {
   const { id } = req.params;
+  const images = req.files.map((file) => file.path);
   next(validateId(id));
   const findBlog = await Blog.findById(id);
   if (!findBlog) {
     return next(errorhandler(404, "Blog not found"));
   }
 
-  const updateBlog = await Blog.findByIdAndUpdate(id, req.body, {
-    new: true,
-    runValidators: true,
-  });
+  const updateBlog = await Blog.findByIdAndUpdate(
+    id,
+    { ...req.body, images },
+    {
+      new: true,
+      runValidators: true,
+    }
+  );
 
   return res.status(200).json({
     success: true,
@@ -52,13 +63,29 @@ exports.deleteBlog = asyncHandler(async (req, res, next) => {
     return next(errorhandler(404, "Blog not found"));
   }
 
-  const deleteBlog = await Blog.findByIdAndDelete(id);
-
-  return res.status(200).json({
-    success: true,
-    message: "Blog deleted successfully",
-    deleteBlog,
+  const imagePublicIds = findProduct.images.map((image) => {
+    const segments = image.url.split("/");
+    const publicIdSegment = segments[segments.length - 1].split(".")[0];
+    return publicIdSegment;
   });
+
+  try {
+    await Promise.all(
+      imagePublicIds.map((publicId) => cloudinary.uploader.destroy(publicId))
+    );
+
+    const deleteBlog = await Blog.findByIdAndDelete(id);
+
+    return res.status(200).json({
+      success: true,
+      message: "Blog deleted successfully",
+      deleteBlog,
+    });
+  } catch (error) {
+    return next(
+      errorhandler(500, "Error deleting blog images from Cloudinary")
+    );
+  }
 });
 
 // Get Single Blog

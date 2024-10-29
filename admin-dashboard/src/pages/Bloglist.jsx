@@ -1,7 +1,7 @@
 import { Table } from "antd";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getBlogs } from "../features/blog/blogSlice";
+import { getBlog } from "../features/blog/blogSlice";
 import { Link } from "react-router-dom";
 import { CiEdit } from "react-icons/ci";
 import { MdDeleteOutline } from "react-icons/md";
@@ -33,7 +33,7 @@ const Bloglist = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getBlogs());
+    dispatch(getBlog());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
