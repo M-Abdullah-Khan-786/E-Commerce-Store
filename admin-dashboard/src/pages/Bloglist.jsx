@@ -1,10 +1,11 @@
 import { Table } from "antd";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getBlog } from "../features/blog/blogSlice";
+import { getBlog, deleteBlogById } from "../features/blog/blogSlice";
 import { Link } from "react-router-dom";
 import { CiEdit } from "react-icons/ci";
 import { MdDeleteOutline } from "react-icons/md";
+import { toast } from "react-toastify";
 
 const columns = [
   {
@@ -37,6 +38,17 @@ const Bloglist = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const handleDelete = async (id) => {
+    try {
+      await dispatch(deleteBlogById(id));
+      dispatch(getBlog());
+      toast.success("Blog deleted successfully!");
+    } catch (error) {
+      toast.error("Error deleting blog!");
+      console.error(error);
+    }
+  };
+
   const {blogs} = useSelector((state) => state.blog.blogs);
 
   const dataSource = Array.from({
@@ -50,7 +62,9 @@ const Bloglist = () => {
         <Link to="/edit" className="fs-3 text-danger">
           <CiEdit />
         </Link>
-        <Link to="/delete" className="ms-3 fs-3 text-danger" >
+        <Link onClick={() => {
+            handleDelete(blogs[i]?._id);
+          }} className="ms-3 fs-3 text-danger" >
           <MdDeleteOutline />
         </Link>
       </>

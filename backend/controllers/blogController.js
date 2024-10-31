@@ -57,13 +57,12 @@ exports.updateBlog = asyncHandler(async (req, res, next) => {
 // Delete Blog
 exports.deleteBlog = asyncHandler(async (req, res, next) => {
   const { id } = req.params;
-  next(validateId(id));
   const findBlog = await Blog.findById(id);
   if (!findBlog) {
     return next(errorhandler(404, "Blog not found"));
   }
 
-  const imagePublicIds = findProduct.images.map((image) => {
+  const imagePublicIds = findBlog.images.map((image) => {
     const segments = image.url.split("/");
     const publicIdSegment = segments[segments.length - 1].split(".")[0];
     return publicIdSegment;
