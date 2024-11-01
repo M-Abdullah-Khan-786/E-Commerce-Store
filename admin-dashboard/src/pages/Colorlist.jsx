@@ -1,10 +1,11 @@
 import { Table } from "antd";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getColors } from "../features/color/colorSlice";
+import { getColors, deleteColor } from "../features/color/colorSlice";
 import { Link } from "react-router-dom";
 import { CiEdit } from "react-icons/ci";
 import { MdDeleteOutline } from "react-icons/md";
+import { toast } from "react-toastify";
 
 const columns = [
   {
@@ -31,9 +32,18 @@ const Colorlist = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const handleDelete = async (id) => {
+    try {
+      await dispatch(deleteColor(id));
+      dispatch(getColors());
+      toast.success("Color deleted successfully!");
+    } catch (error) {
+      toast.error("Error deleting color!");
+      console.error(error);
+    }
+  };
 
-  const {allColor} = useSelector((state) => state.color.colors);
-
+  const { allColor } = useSelector((state) => state.color.colors);
 
   const dataSource = Array.from({
     length: allColor?.length || 0,
@@ -45,11 +55,16 @@ const Colorlist = () => {
         <Link to="/edit" className="fs-3 text-danger">
           <CiEdit />
         </Link>
-        <Link to="/delete" className="ms-3 fs-3 text-danger" >
+        <Link
+          onClick={() => {
+            handleDelete(allColor[i]?._id);
+          }}
+          className="ms-3 fs-3 text-danger"
+        >
           <MdDeleteOutline />
         </Link>
       </>
-    )
+    ),
   }));
   return (
     <>
@@ -60,7 +75,7 @@ const Colorlist = () => {
         </div>
       </div>
     </>
-  )
-}
+  );
+};
 
-export default Colorlist
+export default Colorlist;
