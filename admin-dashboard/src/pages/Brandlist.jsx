@@ -1,10 +1,11 @@
 import { Table } from "antd";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getBrands } from "../features/brand/brandSlice";
+import { getBrands,deletebrand } from "../features/brand/brandSlice";
 import { Link } from "react-router-dom";
 import { CiEdit } from "react-icons/ci";
 import { MdDeleteOutline } from "react-icons/md";
+import { toast } from "react-toastify";
 
 const columns = [
   {
@@ -31,6 +32,17 @@ const Brandlist = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const handleDelete = async (id) => {
+    try {
+      await dispatch(deletebrand(id));
+      dispatch(getBrands());
+      toast.success("Brand deleted successfully!");
+    } catch (error) {
+      toast.error("Error deleting brand!");
+      console.error(error);
+    }
+  };
+
   const {allBrand} = useSelector((state) => state.brand.brands);
 
   const dataSource = Array.from({
@@ -43,7 +55,9 @@ const Brandlist = () => {
         <Link to="/edit" className="fs-3 text-danger">
           <CiEdit />
         </Link>
-        <Link to="/delete" className="ms-3 fs-3 text-danger" >
+        <Link onClick={() => {
+            handleDelete(allBrand[i]?._id);
+          }} className="ms-3 fs-3 text-danger" >
           <MdDeleteOutline />
         </Link>
       </>
