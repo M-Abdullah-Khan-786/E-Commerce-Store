@@ -1,19 +1,59 @@
+import { useFormik } from "formik";
+import * as Yup from "yup";
 import CustomInput from "../components/CustomInput";
+import { useDispatch } from "react-redux";
+import { createNewColor } from "../features/color/colorSlice";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const AddColor = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const validationSchema = Yup.object({
+    title: Yup.string()
+      .min(2, "Color name should be at least 2 characters")
+      .required("Color name is required"),
+  });
+
+  const formik = useFormik({
+    initialValues: {
+      title: "",
+    },
+    validationSchema,
+    onSubmit: async (values, { resetForm }) => {
+      try {
+        await dispatch(createNewColor(values));
+        resetForm();
+        toast.success("Color created successfully");
+        navigate("/admin/color-list");
+      } catch (error) {
+        toast.error("Failed to create color");
+        console.error(error);
+      }
+    },
+  });
+
   return (
     <>
       <div>
         <h3 className="mb-4 title">Add Color</h3>
 
         <div>
-          <form action="">
+          <form onSubmit={formik.handleSubmit}>
             <div className="mt-4">
               <CustomInput
-                type="color"
+                type="text"
                 placeholder="Color"
-                className="w-100 p-2 border-0"
+                className="w-100 p-3 border-0"
+                name="title"
+                value={formik.values.title}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
               />
+              {formik.touched.title && formik.errors.title ? (
+                <div className="text-danger">{formik.errors.title}</div>
+              ) : null}
             </div>
             <button
               className="btn btn-warning border-0 rounded-3 my-4 float-end me-4"
