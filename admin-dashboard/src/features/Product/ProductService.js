@@ -41,3 +41,20 @@ export const deleteProducts = async (id) => {
   }
 };
 
+export const updateProduct = async (id, data) => {
+  try {
+    const response = await axios.put(`${base_url}/product/update/${id}`, data, config);
+    return response.data;
+  } catch (error) {
+    throw new Error(`Error editing product: ${error.response ? error.response.data : error.message}`);
+  }
+};
+
+export const getProductById = async (id) => {
+  try {
+    const response = await axios.get(`${base_url}/product/${id}`, config);
+    return response.data;
+  } catch (error) {
+    throw new Error(`Error fetching product by ID: ${error.response ? error.response.data : error.message}`);
+  }
+};

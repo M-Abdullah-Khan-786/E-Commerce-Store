@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { getProducts, createProducts, deleteProducts } from "./ProductService";
+import { getProducts, createProducts, deleteProducts, updateProduct,getProductById } from "./ProductService";
 
 const initialState = {
   products: [],
@@ -38,6 +38,28 @@ export const deleteProductById = createAsyncThunk(
       return await deleteProducts(id);
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response?.data || error.message);
+    }
+  }
+);
+
+export const updateProductById = createAsyncThunk(
+  "product/update-product",
+  async ({ id, data }, thunkAPI) => {
+    try {
+      return await updateProduct(id, data);
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response.data);
+    }
+  }
+);
+
+export const getProductByIds = createAsyncThunk(
+  "product/get-product-by-id",
+  async (id, thunkAPI) => {
+    try {
+      return await getProductById(id);
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response.data);
     }
   }
 );
@@ -94,6 +116,38 @@ export const productSlice = createSlice({
         state.isError = true;
         state.isSuccess = false;
         state.message = action.payload || "Error deleting product";
+      })
+      .addCase(updateProductById.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(updateProductById.fulfilled, (state, action) => {
+        state.loading = false;
+        state.isSuccess = true;
+        state.products = state.products.map(product =>
+          product.id === action.payload.id ? action.payload : product
+        );
+        state.message = "Product updated successfully";
+      })
+      .addCase(updateProductById.rejected, (state, action) => {
+        state.loading = false;
+        state.isError = true;
+        state.isSuccess = false;
+        state.message = action.payload || "Error updating product";
+      })
+      .addCase(getProductById.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(getProductById.fulfilled, (state, action) => {
+        state.loading = false;
+        state.isSuccess = true;
+        state.singleProduct = action.payload;
+        state.message = "Product fetched successfully";
+      })
+      .addCase(getProductById.rejected, (state, action) => {
+        state.loading = false;
+        state.isError = true;
+        state.isSuccess = false;
+        state.message = action.payload || "Error fetching product";
       });
   },
 });
