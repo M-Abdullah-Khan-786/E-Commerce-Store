@@ -2,7 +2,7 @@ import { Table } from "antd";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  getPoducts,
+  getProducts,
   deleteProductById,
 } from "../features/product/productSlice";
 import { Link } from "react-router-dom";
@@ -55,13 +55,13 @@ const Productlist = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getPoducts());
+    dispatch(getProducts());
   }, [dispatch]);
 
   const handleDelete = async (id) => {
     try {
       await dispatch(deleteProductById(id));
-      dispatch(getPoducts());
+      dispatch(getProducts());
       toast.success("Product deleted successfully!");
     } catch (error) {
       toast.error("Error deleting product!");
@@ -82,7 +82,7 @@ const Productlist = () => {
     price: getAllproducts[i]?.price || "N/A",
     action: (
       <>
-        <Link to="/edit" className="fs-3 text-danger">
+        <Link to={`/admin/product/update/${getAllproducts[i]?._id}`} className="fs-3 text-danger">
           <CiEdit />
         </Link>
         <Link

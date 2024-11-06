@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { getProducts, createProducts, deleteProducts, updateProduct,getProductById } from "./ProductService";
+import { getProduct, createProducts, deleteProducts, updateProduct, getProductById } from "./productService";
 
 const initialState = {
   products: [],
@@ -7,13 +7,14 @@ const initialState = {
   isError: false,
   isSuccess: false,
   message: "",
+  singleProduct: null
 };
 
-export const getPoducts = createAsyncThunk(
+export const getProducts = createAsyncThunk(
   "product/get-products",
   async (thunkAPI) => {
     try {
-      return await getProducts();
+      return await getProduct();
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response.data);
     }
@@ -70,20 +71,20 @@ export const productSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(getPoducts.pending, (state) => {
+      .addCase(getProducts.pending, (state) => {
         state.loading = true;
       })
-      .addCase(getPoducts.fulfilled, (state, action) => {
+      .addCase(getProducts.fulfilled, (state, action) => {
         state.loading = false;
         state.isSuccess = true;
         state.products = action.payload;
       })
-      .addCase(getPoducts.rejected, (state, action) => {
+      .addCase(getProducts.rejected, (state, action) => {
         state.loading = false;
         state.isError = true;
         state.isSuccess = false;
         state.products = [];
-        state.message = action.error;
+        state.message = action.error.message;
       })
       .addCase(createProduct.pending, (state) => {
         state.loading = true;
@@ -91,7 +92,9 @@ export const productSlice = createSlice({
       .addCase(createProduct.fulfilled, (state, action) => {
         state.loading = false;
         state.isSuccess = true;
-        state.products = [...(state.products || []), action.payload];
+        if (Array.isArray(state.products)) {
+          state.products.push(action.payload.product);
+        }
         state.message = "Product created successfully";
       })
       .addCase(createProduct.rejected, (state, action) => {
@@ -106,7 +109,7 @@ export const productSlice = createSlice({
       .addCase(deleteProductById.fulfilled, (state, action) => {
         state.loading = false;
         state.isSuccess = true;
-        state.products = (Array.isArray(state.products) ? state.products : []).filter(
+        state.products = state.products.filter(
           (product) => product.id !== action.meta.arg
         );
         state.message = "Product deleted successfully";
@@ -134,16 +137,16 @@ export const productSlice = createSlice({
         state.isSuccess = false;
         state.message = action.payload || "Error updating product";
       })
-      .addCase(getProductById.pending, (state) => {
+      .addCase(getProductByIds.pending, (state) => {
         state.loading = true;
       })
-      .addCase(getProductById.fulfilled, (state, action) => {
+      .addCase(getProductByIds.fulfilled, (state, action) => {
         state.loading = false;
         state.isSuccess = true;
         state.singleProduct = action.payload;
         state.message = "Product fetched successfully";
       })
-      .addCase(getProductById.rejected, (state, action) => {
+      .addCase(getProductByIds.rejected, (state, action) => {
         state.loading = false;
         state.isError = true;
         state.isSuccess = false;

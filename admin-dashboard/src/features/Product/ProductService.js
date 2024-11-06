@@ -14,7 +14,7 @@ const config = getToken
     }
   : {};
 
-export const getProducts = async () => {
+export const getProduct = async () => {
   try {
     const response = await axios.get(`${base_url}/product`);
     return response.data;

@@ -23,6 +23,7 @@ import AddColor from "./pages/AddColor";
 import AddProductCategory from "./pages/AddProductCategory";
 import AddBrand from "./pages/AddBrand";
 import AddProduct from "./pages/AddProduct";
+import UpdateProduct from "./pages/UpdateProduct";
 
 const App = () => {
   return (
@@ -36,6 +37,7 @@ const App = () => {
             <Route index element={<Dashboard />} />
           <Route path="customers" element={<Customers />} />
           <Route path="product" element={<AddProduct/>} />
+          <Route path="product/update/:id" element={<UpdateProduct/>} />
           <Route path="product-list" element={<Productlist/>} />
           <Route path="brand" element={<AddBrand />} />
           <Route path="brand-list" element={<Brandlist />} />
