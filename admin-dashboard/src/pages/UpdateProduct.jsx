@@ -13,7 +13,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { toast } from 'react-toastify';
 
 const UpdateProduct = () => {
-  const { id } = useParams(); // Get the product ID from the URL
+  const { id } = useParams();
   const [brand, setBrand] = useState([]);
   const [cProduct, setcProduct] = useState([]);
   const [images, setImages] = useState([]);
@@ -89,29 +89,6 @@ const UpdateProduct = () => {
     formik.setFieldValue("description", value.toString("html"));
   };
 
-  useEffect(() => {
-    // Fetch product details by ID
-    dispatch(getProductByIds(id)).then((action) => {
-      if (action.meta.requestStatus === 'fulfilled') {
-        const product = action.payload;
-        formik.setValues({
-          title: product.title,
-          description: product.description,
-          price: product.price,
-          category: product.category,
-          brand: product.brand,
-          color: product.colors,
-          quantity: product.quantity,
-        });
-        setDescriptionValue(RichTextEditor.createValueFromString(product.description, 'html'));
-      }
-    });
-
-    dispatch(getBrands());
-    dispatch(getCpoducts());
-    dispatch(getColors());
-  }, [dispatch, id]); // Added id as a dependency
-
   const { allBrand } = useSelector((state) => state.brand.brands);
   const { allCategory } = useSelector((state) => state.productCategory.productsCategory);
   const { allColor } = useSelector((state) => state.color.colors);
@@ -124,6 +101,45 @@ const UpdateProduct = () => {
       setcProduct(allCategory);
     }
   }, [allBrand, allCategory]);
+
+  useEffect(() => {
+    dispatch(getProductByIds(id)).then((action) => {
+      if (action.meta.requestStatus === 'fulfilled') {
+        const product = action.payload.product;
+
+        const selectedColors = allColor.filter(color => product.colors.includes(color._id))
+        .map(color => ({
+          _id: color._id,
+          color: color.title,
+        }));
+
+        formik.setValues({
+          title: product.title,
+          description: product.description,
+          price: product.price,
+          category: product.category,
+          brand: product.brand,
+          color: selectedColors,
+          quantity: product.quantity,
+        });
+        setDescriptionValue(RichTextEditor.createValueFromString(product.description, 'html'));
+        if (product.images && product.images.length > 0) {
+          const productImages = product.images.map((img) => ({
+            url: img.url,
+            public_id: img.public_id,
+            preview: img.url, 
+          }));
+          setImages(productImages);
+        }
+      }
+    });
+
+    dispatch(getBrands());
+    dispatch(getCpoducts());
+    dispatch(getColors());
+  }, [dispatch, id]);
+
+
 
   const colors = [];
   if (allColor && Array.isArray(allColor)) {
@@ -222,6 +238,7 @@ const UpdateProduct = () => {
               textField="color"
               placeholder="Select Color"
               data={colors}
+              value={formik.values.color} 
               onChange={(e) => {
                 formik.setFieldValue("color", e);
                 if (e.length === 0) {

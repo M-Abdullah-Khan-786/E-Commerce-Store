@@ -109,7 +109,7 @@ export const productSlice = createSlice({
       .addCase(deleteProductById.fulfilled, (state, action) => {
         state.loading = false;
         state.isSuccess = true;
-        state.products = state.products.filter(
+        state.products = (Array.isArray(state.products) ? state.products : []).filter(
           (product) => product.id !== action.meta.arg
         );
         state.message = "Product deleted successfully";
@@ -126,9 +126,13 @@ export const productSlice = createSlice({
       .addCase(updateProductById.fulfilled, (state, action) => {
         state.loading = false;
         state.isSuccess = true;
-        state.products = state.products.map(product =>
-          product.id === action.payload.id ? action.payload : product
-        );
+        if (Array.isArray(state.products)) {
+          state.products = state.products.map(product =>
+            product.id === action.payload.id ? action.payload : product
+          );
+        } else {
+          state.products = [action.payload];
+        }      
         state.message = "Product updated successfully";
       })
       .addCase(updateProductById.rejected, (state, action) => {
