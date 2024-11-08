@@ -44,6 +44,7 @@ const UpdateProduct = () => {
       brand: "",
       color: [],
       quantity: "",
+      removeImages: []
     },
     validationSchema: productSchema,
     onSubmit: async (values) => {
@@ -64,6 +65,8 @@ const UpdateProduct = () => {
           formData.append("images", image.file);
         }
       });
+
+      (formik.values.removeImages || []).forEach((id) => formData.append("removeImages", id));
 
       try {
         const resultAction = await dispatch(updateProductById({ id, data: formData }));
@@ -125,12 +128,12 @@ const UpdateProduct = () => {
         setDescriptionValue(RichTextEditor.createValueFromString(product.description, 'html'));
         if (product.images && product.images.length > 0) {
           const productImages = product.images.map((img) => ({
-            url: img.url,
-            public_id: img.public_id,
-            preview: img.url, 
+              url: img.url,
+              public_id: img.public_id,
+              preview: img.url,
           }));
           setImages(productImages);
-        }
+      }
       }
     });
 
@@ -150,19 +153,31 @@ const UpdateProduct = () => {
       });
     });
   }
-
   const handleImageChange = (event) => {
     const files = Array.from(event.target.files);
-    const newImages = files.map((file) => ({
-      file: file,
-      preview: URL.createObjectURL(file),
-    }));
-
+    const newImages = files.map((file) => {
+      const previewURL = URL.createObjectURL(file);
+      return {
+        file: file,
+        preview: previewURL,
+      };
+    });
+  
     setImages((prevImages) => [...prevImages, ...newImages]);
   };
+  
 
   const handleRemoveImage = (index) => {
-    setImages((prevImages) => prevImages.filter((_, imgIndex) => imgIndex !== index));
+    setImages((prevImages) => {
+      const removedImage = prevImages[index];
+      if (removedImage.public_id) {
+        formik.setFieldValue("removeImages", [
+          ...(formik.values.removeImages || []),
+          removedImage.public_id,
+        ]);
+      }
+      return prevImages.filter((_, imgIndex) => imgIndex !== index);
+    });
   };
 
   return (
