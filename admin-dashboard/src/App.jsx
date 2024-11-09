@@ -24,6 +24,7 @@ import AddProductCategory from "./pages/AddProductCategory";
 import AddBrand from "./pages/AddBrand";
 import AddProduct from "./pages/AddProduct";
 import UpdateProduct from "./pages/UpdateProduct";
+import UpdateBrand from "./pages/UpdateBrand";
 
 const App = () => {
   return (
@@ -35,22 +36,23 @@ const App = () => {
           <Route path="/reset-password" element={<ResetPassword />} />
           <Route path="/admin" element={<MainLayout />}>
             <Route index element={<Dashboard />} />
-          <Route path="customers" element={<Customers />} />
-          <Route path="product" element={<AddProduct/>} />
-          <Route path="product/update/:id" element={<UpdateProduct/>} />
-          <Route path="product-list" element={<Productlist/>} />
-          <Route path="brand" element={<AddBrand />} />
-          <Route path="brand-list" element={<Brandlist />} />
-          <Route path="color" element={<AddColor/>} />
-          <Route path="color-list" element={<Colorlist />} />
-          <Route path="category" element={<AddProductCategory />} />
-          <Route path="category-list" element={<Categorylist />} />
-          <Route path="orders" element={<Orders />} />
-          <Route path="blog" element={<AddBlog />} />
-          <Route path="blog-category" element={<AddBlogCategory />} />
-          <Route path="blogs-list" element={<Bloglist />} />
-          <Route path="blogs-category-list" element={<BlogCategoryList />} />
-          <Route path="inquiries" element={<Inquiries />} />
+            <Route path="customers" element={<Customers />} />
+            <Route path="product" element={<AddProduct />} />
+            <Route path="product/update/:id" element={<UpdateProduct />} />
+            <Route path="product-list" element={<Productlist />} />
+            <Route path="brand" element={<AddBrand />} />
+            <Route path="brand/update/:id" element={<UpdateBrand />} />
+            <Route path="brand-list" element={<Brandlist />} />
+            <Route path="color" element={<AddColor />} />
+            <Route path="color-list" element={<Colorlist />} />
+            <Route path="category" element={<AddProductCategory />} />
+            <Route path="category-list" element={<Categorylist />} />
+            <Route path="orders" element={<Orders />} />
+            <Route path="blog" element={<AddBlog />} />
+            <Route path="blog-category" element={<AddBlogCategory />} />
+            <Route path="blogs-list" element={<Bloglist />} />
+            <Route path="blogs-category-list" element={<BlogCategoryList />} />
+            <Route path="inquiries" element={<Inquiries />} />
           </Route>
         </Routes>
       </Router>

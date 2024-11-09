@@ -52,7 +52,7 @@ const Brandlist = () => {
     title: allBrand[i]?.title || "N/A",
     action: (
       <>
-        <Link to="/edit" className="fs-3 text-danger">
+        <Link to= {`/admin/brand/update/${allBrand[i]?._id}`} className="fs-3 text-danger">
           <CiEdit />
         </Link>
         <Link onClick={() => {

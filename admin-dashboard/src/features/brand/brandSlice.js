@@ -1,8 +1,9 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { getBrand, deleteBrandById, createBrand } from "./brandService";
+import { getBrand, deleteBrandById, createBrand, getSingleBrand, updateBrand } from "./brandService";
 
 const initialState = {
   brands: [],
+  singleBrand: null,
   loading: false,
   isError: false,
   isSuccess: false,
@@ -33,6 +34,29 @@ export const createNewBrand = createAsyncThunk(
   async (brandData, thunkAPI) => {
     try {
       return await createBrand(brandData);
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response.data);
+    }
+  }
+);
+
+export const updateExistingBrand = createAsyncThunk(
+  "/update-brand",
+  async ({ id, brandData }, thunkAPI) => {
+    try {
+      return await updateBrand(id, brandData);
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response.data);
+    }
+  }
+);
+
+export const fetchSingleBrand = createAsyncThunk(
+  "/get-single-brand",
+  async (id, thunkAPI) => {
+    try {
+      const response = await getSingleBrand(id);
+      return response;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response.data);
     }
@@ -87,6 +111,39 @@ export const brandSlice = createSlice({
         }
       })
       .addCase(createNewBrand.rejected, (state, action) => {
+        state.loading = false;
+        state.isError = true;
+        state.message = action.payload;
+      })
+      .addCase(updateExistingBrand.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(updateExistingBrand.fulfilled, (state, action) => {
+        state.loading = false;
+        state.isSuccess = true;
+        if (Array.isArray(state.brands)) {
+          state.brands = state.brands.map(brand =>
+            brand.id === action.payload.id ? action.payload : brand
+          );
+        } else {
+          state.brands = [action.payload];
+        }      
+        state.message = "Brand updated successfully";
+      })
+      .addCase(updateExistingBrand.rejected, (state, action) => {
+        state.loading = false;
+        state.isError = true;
+        state.message = action.payload || "Error updating brand";
+      })
+      .addCase(fetchSingleBrand.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(fetchSingleBrand.fulfilled, (state, action) => {
+        state.loading = false;
+        state.isSuccess = true;
+        state.singleBrand = action.payload || null;
+      })
+      .addCase(fetchSingleBrand.rejected, (state, action) => {
         state.loading = false;
         state.isError = true;
         state.message = action.payload;

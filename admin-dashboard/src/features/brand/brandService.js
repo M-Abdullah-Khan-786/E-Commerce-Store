@@ -29,3 +29,13 @@ export const createBrand = async (brandData) => {
   const response = await axios.post(`${base_url}/brand/create`, brandData, config);
   return response.data;
 };
+
+export const updateBrand = async (id, brandData) => {
+  const response = await axios.put(`${base_url}/brand/update/${id}`, brandData, config);
+  return response.data;
+};
+
+export const getSingleBrand = async (id) => {
+  const response = await axios.get(`${base_url}/brand/${id}`);
+  return response.data;
+};

@@ -75,42 +75,40 @@ exports.deleteProduct = asyncHandler(async (req, res, next) => {
 // update Product
 exports.updateProduct = asyncHandler(async (req, res, next) => {
   const { id } = req.params;
-  const payloadImages = req.body.images || [];
 
-  const newImages = req.files ? req.files.map((file) => ({ url: file.path, public_id: file.filename })) : [];
+  const existingImages = req.body.images || [];
+  const newImages = req.files ? req.files.map(file => ({ url: file.path, public_id: file.filename })) : [];
+  const removeImages = Array.isArray(req.body.removeImages) ? req.body.removeImages : [];
 
   const product = await Product.findById(id);
-  
   if (!product) {
     return res.status(404).json({ success: false, message: "Product not found" });
   }
 
-  const removeImages = Array.isArray(req.body.removeImages) ? req.body.removeImages : [];
-
   if (removeImages.length > 0) {
-    await Promise.all(
-      removeImages.map(async (publicId) => {
-        await cloudinary.uploader.destroy(publicId);
-      })
-    );
+    await Promise.all(removeImages.map(async (publicId) => {
+      await cloudinary.uploader.destroy(publicId);
+    }));
   }
-  
+
   const finalImages = [
-    ...payloadImages.map((img) => ({ ...img, public_id: img.public_id || '' })),
-    ...newImages,   
-  ].filter(img => img.public_id && !removeImages.includes(img.public_id));
+    ...existingImages.filter(img => img.public_id && !removeImages.includes(img.public_id)),
+    ...newImages,
+  ];
 
   const updatedProduct = await Product.findByIdAndUpdate(
     id,
-    { ...req.body, images:finalImages },
+    { ...req.body, images: finalImages },
     { new: true, runValidators: true }
   );
+
   res.status(200).json({
     success: true,
     message: "Product updated successfully",
     updatedProduct,
   });
 });
+
 
 // get all Products
 exports.getAllProducts = asyncHandler(async (req, res, next) => {
