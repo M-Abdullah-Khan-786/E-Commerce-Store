@@ -29,3 +29,13 @@ export const createColor = async (colorData) => {
   const response = await axios.post(`${base_url}/color/create`, colorData, config);
   return response.data;
 };
+
+export const updateColor = async (id, colorData) => {
+  const response = await axios.put(`${base_url}/color/update/${id}`, colorData, config);
+  return response.data;
+};
+
+export const getSingleColor = async (id) => {
+  const response = await axios.get(`${base_url}/color/${id}`);
+  return response.data;
+};

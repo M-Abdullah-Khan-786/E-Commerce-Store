@@ -1,8 +1,9 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { getColor, deleteColorById, createColor } from "./colorService";
+import { getColor, deleteColorById, createColor, updateColor, getSingleColor } from "./colorService";
 
 const initialState = {
   colors: [],
+  singleColor: null,
   loading: false,
   isError: false,
   isSuccess: false,
@@ -33,6 +34,29 @@ export const createNewColor = createAsyncThunk(
   async (colorData, thunkAPI) => {
     try {
       return await createColor(colorData);
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response.data);
+    }
+  }
+);
+
+export const updateExistingColor = createAsyncThunk(
+  "/update-color",
+  async ({ id, colorData }, thunkAPI) => {
+    try {
+      return await updateColor(id, colorData);
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response.data);
+    }
+  }
+);
+
+export const fetchSingleColor = createAsyncThunk(
+  "/get-single-color",
+  async (id, thunkAPI) => {
+    try {
+      const response = await getSingleColor(id);
+      return response;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response.data);
     }
@@ -87,6 +111,39 @@ export const colorSlice = createSlice({
         }
       })
       .addCase(createNewColor.rejected, (state, action) => {
+        state.loading = false;
+        state.isError = true;
+        state.message = action.payload;
+      })
+      .addCase(updateExistingColor.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(updateExistingColor.fulfilled, (state, action) => {
+        state.loading = false;
+        state.isSuccess = true;
+        if (Array.isArray(state.colors)) {
+          state.colors = state.colors.map(color =>
+            color.id === action.payload.id ? action.payload : color
+          );
+        } else {
+          state.colors = [action.payload];
+        }      
+        state.message = "Color updated successfully";
+      })
+      .addCase(updateExistingColor.rejected, (state, action) => {
+        state.loading = false;
+        state.isError = true;
+        state.message = action.payload || "Error updating color";
+      })
+      .addCase(fetchSingleColor.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(fetchSingleColor.fulfilled, (state, action) => {
+        state.loading = false;
+        state.isSuccess = true;
+        state.singleColor = action.payload || null;
+      })
+      .addCase(fetchSingleColor.rejected, (state, action) => {
         state.loading = false;
         state.isError = true;
         state.message = action.payload;

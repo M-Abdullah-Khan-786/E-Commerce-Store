@@ -52,7 +52,7 @@ const Colorlist = () => {
     title: allColor[i]?.title || "N/A",
     action: (
       <>
-        <Link to="/edit" className="fs-3 text-danger">
+        <Link to={`/admin/color/update/${allColor[i]?._id}`} className="fs-3 text-danger">
           <CiEdit />
         </Link>
         <Link
