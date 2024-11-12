@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import pcategoryService from './pcategoryService'
+import {getCproducts, createCproduct} from './pcategoryService'
 
 const initialState = {
     productsCategory:[],
@@ -13,7 +13,18 @@ export const getCpoducts= createAsyncThunk(
     "product/get-products-category",
     async (thunkAPI) => {
       try {
-        return await pcategoryService.getCproducts()
+        return await getCproducts()
+      } catch (error) {
+        return thunkAPI.rejectWithValue(error.response.data);
+      }
+    }
+  );
+
+  export const createNewPcategory = createAsyncThunk(
+    "/create-pCategory",
+    async (pCategoryData, thunkAPI) => {
+      try {
+        return await createCproduct(pCategoryData);
       } catch (error) {
         return thunkAPI.rejectWithValue(error.response.data);
       }
@@ -40,7 +51,22 @@ export const getCpoducts= createAsyncThunk(
           state.isSuccess = false;
           state.productsCategory = null;
           state.message=action.error
-        });
+        })
+        .addCase(createNewPcategory.pending, (state) => {
+          state.loading = true;
+        })
+        .addCase(createNewPcategory.fulfilled, (state, action) => {
+          state.loading = false;
+          state.isSuccess = true;
+          if (Array.isArray(state.productsCategory)) {
+            state.productsCategory.push(action.payload.newCategory);
+          }
+        })
+        .addCase(createNewPcategory.rejected, (state, action) => {
+          state.loading = false;
+          state.isError = true;
+          state.message = action.payload;
+        })
     },
   });
   

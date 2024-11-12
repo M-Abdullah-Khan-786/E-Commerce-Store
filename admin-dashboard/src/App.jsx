@@ -48,7 +48,7 @@ const App = () => {
             <Route path="color/update/:id" element={<UpdateColor />} />
             <Route path="color-list" element={<Colorlist />} />
             <Route path="category" element={<AddProductCategory />} />
-            <Route path="category-list" element={<Categorylist />} />
+            <Route path="products-category-list" element={<Categorylist />} />
             <Route path="orders" element={<Orders />} />
             <Route path="blog" element={<AddBlog />} />
             <Route path="blog-category" element={<AddBlogCategory />} />
