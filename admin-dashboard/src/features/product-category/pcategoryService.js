@@ -7,6 +7,11 @@ export const getCproducts = async()=>{
     return response.data
 }
 
+export const deleteCproductsbyId = async (id) => {
+    const response = await axios.delete(`${base_url}/product-category/delete/${id}`, config);
+    return response.data;
+  };
+
 export const createCproduct = async (brandData) => {
     const response = await axios.post(`${base_url}/product-category/create`, brandData, config);
     return response.data;

@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import {getCproducts, createCproduct} from './pcategoryService'
+import {getCproducts, createCproduct,deleteCproductsbyId} from './pcategoryService'
 
 const initialState = {
     productsCategory:[],
@@ -14,6 +14,17 @@ export const getCpoducts= createAsyncThunk(
     async (thunkAPI) => {
       try {
         return await getCproducts()
+      } catch (error) {
+        return thunkAPI.rejectWithValue(error.response.data);
+      }
+    }
+  );
+
+  export const deleteCpoducts = createAsyncThunk(
+    "/delete-pCategory",
+    async (id, thunkAPI) => {
+      try {
+        return await deleteCproductsbyId(id);
       } catch (error) {
         return thunkAPI.rejectWithValue(error.response.data);
       }
@@ -51,6 +62,22 @@ export const getCpoducts= createAsyncThunk(
           state.isSuccess = false;
           state.productsCategory = null;
           state.message=action.error
+        })
+        .addCase(deleteCpoducts.pending, (state) => {
+          state.loading = true;
+        })
+        .addCase(deleteCpoducts.fulfilled, (state, action) => {
+          state.loading = false;
+          state.isSuccess = true;
+          state.productsCategory = (Array.isArray(state.productsCategory) ? state.productsCategory : []).filter(
+            (Category) => Category.id !== action.meta.arg
+          );
+        })
+        .addCase(deleteCpoducts.rejected, (state, action) => {
+          state.loading = false;
+          state.isError = true;
+          state.isSuccess = false;
+          state.message = action.payload;
         })
         .addCase(createNewPcategory.pending, (state) => {
           state.loading = true;
