@@ -12,7 +12,17 @@ export const deleteCproductsbyId = async (id) => {
     return response.data;
   };
 
-export const createCproduct = async (brandData) => {
-    const response = await axios.post(`${base_url}/product-category/create`, brandData, config);
+export const createCproduct = async (pCategoryData) => {
+    const response = await axios.post(`${base_url}/product-category/create`, pCategoryData, config);
+    return response.data;
+  };
+
+  export const updateCproduct = async (id, pCategoryData) => {
+    const response = await axios.put(`${base_url}/product-category/update/${id}`, pCategoryData, config);
+    return response.data;
+  };
+  
+  export const getSingleCproduct = async (id) => {
+    const response = await axios.get(`${base_url}/product-category/${id}`);
     return response.data;
   };

@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import {getCproducts, createCproduct,deleteCproductsbyId} from './pcategoryService'
+import {getCproducts, createCproduct,deleteCproductsbyId,getSingleCproduct,updateCproduct} from './pcategoryService'
 
 const initialState = {
     productsCategory:[],
@@ -7,6 +7,7 @@ const initialState = {
     isError: false,
     isSuccess: false,
     message: "",
+    singleproductsCategory: null,
   };
 
 export const getCpoducts= createAsyncThunk(
@@ -21,7 +22,7 @@ export const getCpoducts= createAsyncThunk(
   );
 
   export const deleteCpoducts = createAsyncThunk(
-    "/delete-pCategory",
+    "product/delete-products-category",
     async (id, thunkAPI) => {
       try {
         return await deleteCproductsbyId(id);
@@ -32,10 +33,33 @@ export const getCpoducts= createAsyncThunk(
   );
 
   export const createNewPcategory = createAsyncThunk(
-    "/create-pCategory",
+    "product/create-products-category",
     async (pCategoryData, thunkAPI) => {
       try {
         return await createCproduct(pCategoryData);
+      } catch (error) {
+        return thunkAPI.rejectWithValue(error.response.data);
+      }
+    }
+  );
+
+  export const updateExistingPcategory = createAsyncThunk(
+    "product/update-products-category",
+    async ({ id, pCategoryData }, thunkAPI) => {
+      try {
+        return await updateCproduct(id, pCategoryData);
+      } catch (error) {
+        return thunkAPI.rejectWithValue(error.response.data);
+      }
+    }
+  );
+  
+  export const fetchSinglePcategory = createAsyncThunk(
+    "product/get-single-products-category",
+    async (id, thunkAPI) => {
+      try {
+        const response = await getSingleCproduct(id);
+        return response;
       } catch (error) {
         return thunkAPI.rejectWithValue(error.response.data);
       }
@@ -94,6 +118,39 @@ export const getCpoducts= createAsyncThunk(
           state.isError = true;
           state.message = action.payload;
         })
+        .addCase(updateExistingPcategory.pending, (state) => {
+          state.loading = true;
+        })
+        .addCase(updateExistingPcategory.fulfilled, (state, action) => {
+          state.loading = false;
+          state.isSuccess = true;
+          if (Array.isArray(state.colors)) {
+            state.productsCategory = state.colors.map(category =>
+              category.id === action.payload.id ? action.payload : category
+            );
+          } else {
+            state.productsCategory = [action.payload];
+          }      
+          state.message = "Product category updated successfully";
+        })
+        .addCase(updateExistingPcategory.rejected, (state, action) => {
+          state.loading = false;
+          state.isError = true;
+          state.message = action.payload || "Error updating Product category";
+        })
+        .addCase(fetchSinglePcategory.pending, (state) => {
+          state.loading = true;
+        })
+        .addCase(fetchSinglePcategory.fulfilled, (state, action) => {
+          state.loading = false;
+          state.isSuccess = true;
+          state.singleproductsCategory = action.payload || null;
+        })
+        .addCase(fetchSinglePcategory.rejected, (state, action) => {
+          state.loading = false;
+          state.isError = true;
+          state.message = action.payload;
+        });
     },
   });
   

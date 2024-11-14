@@ -14,7 +14,7 @@ import BlogCategoryList from "./pages/BlogCategoryList";
 import Orders from "./pages/Orders";
 import Customers from "./pages/Customers";
 import Colorlist from "./pages/Colorlist";
-import Categorylist from "./pages/Categorylist";
+import ProductCategorylist from "./pages/ProductCategorylist";
 import Brandlist from "./pages/Brandlist";
 import Productlist from "./pages/Productlist";
 import AddBlog from "./pages/AddBlog";
@@ -26,6 +26,7 @@ import AddProduct from "./pages/AddProduct";
 import UpdateProduct from "./pages/UpdateProduct";
 import UpdateBrand from "./pages/UpdateBrand";
 import UpdateColor from "./pages/UpdateColor";
+import UpdateProductCategory from "./pages/UpdateProductCategory";
 
 const App = () => {
   return (
@@ -47,8 +48,9 @@ const App = () => {
             <Route path="color" element={<AddColor />} />
             <Route path="color/update/:id" element={<UpdateColor />} />
             <Route path="color-list" element={<Colorlist />} />
-            <Route path="category" element={<AddProductCategory />} />
-            <Route path="products-category-list" element={<Categorylist />} />
+            <Route path="product-category" element={<AddProductCategory />} />
+            <Route path="product-category/update/:id" element={<UpdateProductCategory />} />
+            <Route path="products-category-list" element={<ProductCategorylist />} />
             <Route path="orders" element={<Orders />} />
             <Route path="blog" element={<AddBlog />} />
             <Route path="blog-category" element={<AddBlogCategory />} />

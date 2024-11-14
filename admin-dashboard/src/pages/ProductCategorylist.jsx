@@ -27,7 +27,7 @@ const columns = [
   },
 ];
 
-const Categorylist = () => {
+const ProductCategorylist = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -57,7 +57,10 @@ const Categorylist = () => {
     title: allCategory[i]?.title || "N/A",
     action: (
       <>
-        <Link to="/edit" className="fs-3 text-danger">
+        <Link
+          to={`/admin/product-category/update/${allCategory[i]?._id}`}
+          className="fs-3 text-danger"
+        >
           <CiEdit />
         </Link>
         <Link
@@ -83,4 +86,4 @@ const Categorylist = () => {
   );
 };
 
-export default Categorylist;
+export default ProductCategorylist;
