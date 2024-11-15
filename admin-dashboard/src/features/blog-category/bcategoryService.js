@@ -11,3 +11,8 @@ export const deleteCblogbyId = async (id) => {
     const response = await axios.delete(`${base_url}/blog-category/delete/${id}`, config);
     return response.data;
   };
+
+  export const createCblog = async (pBlogData) => {
+    const response = await axios.post(`${base_url}/blog-category/create`, pBlogData, config);
+    return response.data;
+  };
