@@ -1,8 +1,8 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import bcategoryService from './bcategoryService'
+import {getCblog,deleteCblogbyId} from './bcategoryService'
 
 const initialState = {
-    blogssCategory:[],
+    blogsCategory:[],
     loading: false,
     isError: false,
     isSuccess: false,
@@ -10,10 +10,21 @@ const initialState = {
   };
 
 export const getCblogs= createAsyncThunk(
-    "product/get-blog-category",
+    "blog/get-blog-category",
     async (thunkAPI) => {
       try {
-        return await bcategoryService.getCblogs()
+        return await getCblog()
+      } catch (error) {
+        return thunkAPI.rejectWithValue(error.response.data);
+      }
+    }
+  );
+
+  export const deleteCblogs = createAsyncThunk(
+    "blog/delete-blogs-category",
+    async (id, thunkAPI) => {
+      try {
+        return await deleteCblogbyId(id);
       } catch (error) {
         return thunkAPI.rejectWithValue(error.response.data);
       }
@@ -32,15 +43,31 @@ export const getCblogs= createAsyncThunk(
         .addCase(getCblogs.fulfilled, (state, action) => {
             state.loading = false;
             state.isSuccess = true;
-            state.blogssCategory = action.payload;
+            state.blogsCategory = action.payload;
         })
         .addCase(getCblogs.rejected, (state, action) => {
           state.loading = false;
           state.isError = true;
           state.isSuccess = false;
-          state.blogssCategory = null;
+          state.blogsCategory = null;
           state.message=action.error
-        });
+        })
+        .addCase(deleteCblogs.pending, (state) => {
+          state.loading = true;
+        })
+        .addCase(deleteCblogs.fulfilled, (state, action) => {
+          state.loading = false;
+          state.isSuccess = true;
+          state.blogsCategory = (Array.isArray(state.blogsCategory) ? state.blogsCategory : []).filter(
+            (Category) => Category.id !== action.meta.arg
+          );
+        })
+        .addCase(deleteCblogs.rejected, (state, action) => {
+          state.loading = false;
+          state.isError = true;
+          state.isSuccess = false;
+          state.message = action.payload;
+        })
     },
   });
   

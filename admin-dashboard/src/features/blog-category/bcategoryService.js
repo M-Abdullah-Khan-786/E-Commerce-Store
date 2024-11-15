@@ -1,14 +1,13 @@
 import axios from "axios"
 import { base_url } from "../../utils/base_url"
+import { config } from "../../utils/axiosConfig"
 
-const getCblogs = async()=>{
+export const getCblog = async()=>{
     const response = await axios.get(`${base_url}/blog-category`)
     return response.data
 }
 
-const blogCategory = {
-    getCblogs
-}
-
-export default blogCategory;
-
+export const deleteCblogbyId = async (id) => {
+    const response = await axios.delete(`${base_url}/blog-category/delete/${id}`, config);
+    return response.data;
+  };
