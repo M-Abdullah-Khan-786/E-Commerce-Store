@@ -4,7 +4,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { CiEdit } from "react-icons/ci";
 import { MdDeleteOutline } from "react-icons/md";
-import {getCblogs,deleteCblogs  } from "../features/blog-category/bcategorySlice";
+import {
+  getCblogs,
+  deleteCblogs,
+} from "../features/blog-category/bcategorySlice";
 import { toast } from "react-toastify";
 
 const columns = [
@@ -43,7 +46,9 @@ const BlogCategoryList = () => {
     }
   };
 
-  const {allCategory }= useSelector((state) => state.blogCategory.blogsCategory);
+  const { allCategory } = useSelector(
+    (state) => state.blogCategory.blogsCategory
+  );
 
   const dataSource = Array.from({
     length: allCategory?.length || 0,
@@ -52,16 +57,22 @@ const BlogCategoryList = () => {
     title: allCategory[i]?.title || "N/A",
     action: (
       <>
-        <Link to="/edit" className="fs-3 text-danger">
+        <Link
+          to={`/admin/blog-category/update/${allCategory[i]?._id}`}
+          className="fs-3 text-danger"
+        >
           <CiEdit />
         </Link>
-        <Link onClick={() => {
+        <Link
+          onClick={() => {
             handleDelete(allCategory[i]?._id);
-          }} className="ms-3 fs-3 text-danger" >
+          }}
+          className="ms-3 fs-3 text-danger"
+        >
           <MdDeleteOutline />
         </Link>
       </>
-    )
+    ),
   }));
   return (
     <>
@@ -72,7 +83,7 @@ const BlogCategoryList = () => {
         </div>
       </div>
     </>
-  )
-}
+  );
+};
 
-export default BlogCategoryList
+export default BlogCategoryList;

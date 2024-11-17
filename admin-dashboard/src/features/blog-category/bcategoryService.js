@@ -12,7 +12,17 @@ export const deleteCblogbyId = async (id) => {
     return response.data;
   };
 
-  export const createCblog = async (pBlogData) => {
-    const response = await axios.post(`${base_url}/blog-category/create`, pBlogData, config);
+  export const createCblog = async (bCategoryData) => {
+    const response = await axios.post(`${base_url}/blog-category/create`, bCategoryData, config);
+    return response.data;
+  };
+
+  export const updateCblog = async (id, bCategoryData) => {
+    const response = await axios.put(`${base_url}/blog-category/update/${id}`, bCategoryData, config);
+    return response.data;
+  };
+  
+  export const getSingleCblog = async (id) => {
+    const response = await axios.get(`${base_url}/blog-category/${id}`);
     return response.data;
   };

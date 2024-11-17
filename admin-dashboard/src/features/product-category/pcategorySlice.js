@@ -124,8 +124,8 @@ export const getCpoducts= createAsyncThunk(
         .addCase(updateExistingPcategory.fulfilled, (state, action) => {
           state.loading = false;
           state.isSuccess = true;
-          if (Array.isArray(state.colors)) {
-            state.productsCategory = state.colors.map(category =>
+          if (Array.isArray(state.productsCategory)) {
+            state.productsCategory = state.productsCategory.map(category =>
               category.id === action.payload.id ? action.payload : category
             );
           } else {
