@@ -21,15 +21,14 @@ const AddBlog = () => {
     dispatch(getCblogs());
   }, [dispatch]);
 
-  const { allCategory } = useSelector(
-    (state) => state.blogCategory.blogssCategory
-  );
+  const { allCategory } = useSelector((state) => state.blogCategory.blogsCategory);
 
   useEffect(() => {
     if (allCategory) {
       setcBlog(allCategory);
     }
   }, [allCategory]);
+
 
   const handleDesc = (value) => {
     setDescriptionValue(value);

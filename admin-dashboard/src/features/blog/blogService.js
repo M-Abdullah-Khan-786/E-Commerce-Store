@@ -55,3 +55,21 @@ export const deleteBlogs = async (id) => {
     );
   }
 };
+
+export const updateBlog = async (id, data) => {
+  try {
+    const response = await axios.put(`${base_url}/blog/update/${id}`, data, config);
+    return response.data;
+  } catch (error) {
+    throw new Error(`Error updating blog: ${error.response ? error.response.data : error.message}`);
+  }
+};
+
+export const getBlogById = async (id) => {
+  try {
+    const response = await axios.get(`${base_url}/blog/${id}`, config);
+    return response.data;
+  } catch (error) {
+    throw new Error(`Error fetching blog by ID: ${error.response ? error.response.data : error.message}`);
+  }
+};

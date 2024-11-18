@@ -46,7 +46,7 @@ export const updateProduct = async (id, data) => {
     const response = await axios.put(`${base_url}/product/update/${id}`, data, config);
     return response.data;
   } catch (error) {
-    throw new Error(`Error editing product: ${error.response ? error.response.data : error.message}`);
+    throw new Error(`Error updating product: ${error.response ? error.response.data : error.message}`);
   }
 };
 
