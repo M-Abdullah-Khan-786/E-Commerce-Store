@@ -28,6 +28,7 @@ import UpdateBrand from "./pages/UpdateBrand";
 import UpdateColor from "./pages/UpdateColor";
 import UpdateProductCategory from "./pages/UpdateProductCategory";
 import UpdateBlogCategory from "./pages/UpdateBlogCategory";
+import UpdateBlog from "./pages/UpdateBlog";
 
 const App = () => {
   return (
@@ -54,6 +55,7 @@ const App = () => {
             <Route path="products-category-list" element={<ProductCategorylist />} />
             <Route path="orders" element={<Orders />} />
             <Route path="blog" element={<AddBlog />} />
+            <Route path="blog/update/:id" element={<UpdateBlog />} />
             <Route path="blog-category" element={<AddBlogCategory />} />
             <Route path="blog-category/update/:id" element={<UpdateBlogCategory />} />
             <Route path="blogs-list" element={<Bloglist />} />

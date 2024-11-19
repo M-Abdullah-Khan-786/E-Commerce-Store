@@ -59,7 +59,7 @@ const Bloglist = () => {
     category: blogs[i]?.category || "N/A",
     action: (
       <>
-        <Link to="/edit" className="fs-3 text-danger">
+        <Link to={`/admin/blog/update/${blogs[i]?._id}`} className="fs-3 text-danger">
           <CiEdit />
         </Link>
         <Link onClick={() => {
