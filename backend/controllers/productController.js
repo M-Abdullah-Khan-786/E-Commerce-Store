@@ -82,7 +82,7 @@ exports.updateProduct = asyncHandler(async (req, res, next) => {
 
   const product = await Product.findById(id);
   if (!product) {
-    return res.status(404).json({ success: false, message: "Product not found" });
+    return next(errorhandler(404, "Product not found"));
   }
 
   if (removeImages.length > 0) {

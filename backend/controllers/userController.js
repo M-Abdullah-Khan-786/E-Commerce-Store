@@ -205,7 +205,7 @@ exports.getSingleUser = asyncHandler(async (req, res, next) => {
       user,
     });
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 });
 
@@ -374,7 +374,7 @@ exports.getWishlist = asyncHandler(async (req, res, next) => {
       findUser,
     });
   } catch (error) {
-    console.log(error.message);
+    console.error(error.message);
     return next(errorhandler(500, "Internal server error"));
   }
 });
@@ -394,7 +394,7 @@ exports.saveAddress = asyncHandler(async (req, res, next) => {
       findUser,
     });
   } catch (error) {
-    console.log(error.message);
+    console.error(error.message);
     return next(errorhandler(500, "Internal server error"));
   }
 });
@@ -434,7 +434,7 @@ exports.addCart = asyncHandler(async (req, res, next) => {
       newCart,
     });
   } catch (error) {
-    console.log(error.message);
+    console.error(error.message);
   }
 });
 
@@ -454,7 +454,7 @@ exports.getCart = asyncHandler(async (req, res, next) => {
       cart,
     });
   } catch (error) {
-    console.log(error.message);
+    console.error(error.message);
     return next(errorhandler(500, "Internal server error"));
   }
 });
@@ -476,7 +476,7 @@ exports.emptyCart = asyncHandler(async (req, res, next) => {
       checkCart,
     });
   } catch (error) {
-    console.log(error.message);
+    console.error(error.message);
     return next(errorhandler(500, "Internal server error"));
   }
 });
@@ -568,7 +568,7 @@ exports.createOrder = asyncHandler(async (req, res, next) => {
       newOrder,
     });
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 });
 
@@ -586,7 +586,7 @@ exports.getOrder = asyncHandler(async (req, res, next) => {
         .json({ success: false, message: "Order not found" });
     return res.status(200).json({ success: true, order });
   } catch (error) {
-    console.log(error);
+    console.error(error);
     return next(errorhandler(500, "Internal server error"));
   }
 });
@@ -604,7 +604,7 @@ exports.getAllOrder = asyncHandler(async (req, res, next) => {
         .json({ success: false, message: "Order not found" });
     return res.status(200).json({ success: true, order });
   } catch (error) {
-    console.log(error);
+    console.error(error);
     return next(errorhandler(500, "Internal server error"));
   }
 });
@@ -631,7 +631,7 @@ exports.updateOrder = asyncHandler(async (req, res, next) => {
         .json({ success: false, message: "Order not found" });
     return res.status(200).json({ success: true, order });
   } catch (error) {
-    console.log(error);
+    console.error(error);
     return next(errorhandler(500, "Internal server error"));
   }
 });

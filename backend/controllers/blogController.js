@@ -31,28 +31,39 @@ exports.createBlog = asyncHandler(async (req, res, next) => {
 // Update Blog
 exports.updateBlog = asyncHandler(async (req, res, next) => {
   const { id } = req.params;
-  const images = req.files.map((file) => file.path);
-  next(validateId(id));
-  const findBlog = await Blog.findById(id);
-  if (!findBlog) {
+  const existingImages = req.body.images || [];
+  const newImages = req.files ? req.files.map(file => ({ url: file.path, public_id: file.filename })) : [];
+  const removeImages = Array.isArray(req.body.removeImages) ? req.body.removeImages : [];
+
+  const blog = await Blog.findById(id);
+  if (!blog) {
     return next(errorhandler(404, "Blog not found"));
   }
 
-  const updateBlog = await Blog.findByIdAndUpdate(
+  if (removeImages.length > 0) {
+    await Promise.all(removeImages.map(async (publicId) => {
+      await cloudinary.uploader.destroy(publicId);
+    }));
+  }
+
+  const finalImages = [
+    ...existingImages.filter(img => img.public_id && !removeImages.includes(img.public_id)),
+    ...newImages,
+  ];
+
+  const updatedBlog = await Blog.findByIdAndUpdate(
     id,
-    { ...req.body, images },
-    {
-      new: true,
-      runValidators: true,
-    }
+    { ...req.body, images: finalImages },
+    { new: true, runValidators: true }
   );
 
   return res.status(200).json({
     success: true,
     message: "Blog updated successfully",
-    updateBlog,
+    updatedBlog,
   });
 });
+
 
 // Delete Blog
 exports.deleteBlog = asyncHandler(async (req, res, next) => {

@@ -95,7 +95,7 @@ const UpdateBlog = () => {
       });
 
       try {
-        const resultAction = await dispatch(updateBlogById({ id, formData }));
+        const resultAction = await dispatch(updateBlogById({ id, data: formData }));
         if (updateBlogById.fulfilled.match(resultAction)) {
           toast.success("Blog updated successfully");
           navigate("/admin/blogs-list");
@@ -115,7 +115,7 @@ const UpdateBlog = () => {
       file: file,
       preview: URL.createObjectURL(file),
     }));
-
+  
     setImages((prevImages) => [...prevImages, ...newImages]);
   };
 
