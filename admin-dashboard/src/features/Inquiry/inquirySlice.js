@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import inquiryService from './inquiryService'
+import {getInquirys} from './inquiryService'
 
 const initialState = {
     inquiry:[],
@@ -13,7 +13,7 @@ export const getInquiry= createAsyncThunk(
     "inquiry/get-inquiry",
     async (thunkAPI) => {
       try {
-        return await inquiryService.getInquiry()
+        return await getInquirys()
       } catch (error) {
         return thunkAPI.rejectWithValue(error.response.data);
       }
