@@ -1,5 +1,11 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { getBrand, deleteBrandById, createBrand, getSingleBrand, updateBrand } from "./brandService";
+import {
+  getBrand,
+  deleteBrandById,
+  createBrand,
+  getSingleBrand,
+  updateBrand,
+} from "./brandService";
 
 const initialState = {
   brands: [],
@@ -66,7 +72,9 @@ export const fetchSingleBrand = createAsyncThunk(
 export const brandSlice = createSlice({
   name: "brands",
   initialState,
-  reducers: {},
+  reducers: {
+    resetState: () => initialState,
+  },
   extraReducers: (builder) => {
     builder
       .addCase(getBrands.pending, (state) => {
@@ -122,12 +130,12 @@ export const brandSlice = createSlice({
         state.loading = false;
         state.isSuccess = true;
         if (Array.isArray(state.brands)) {
-          state.brands = state.brands.map(brand =>
+          state.brands = state.brands.map((brand) =>
             brand.id === action.payload.id ? action.payload : brand
           );
         } else {
           state.brands = [action.payload];
-        }      
+        }
         state.message = "Brand updated successfully";
       })
       .addCase(updateExistingBrand.rejected, (state, action) => {
@@ -150,5 +158,7 @@ export const brandSlice = createSlice({
       });
   },
 });
+
+export const { resetState } = brandSlice.actions;
 
 export default brandSlice.reducer;

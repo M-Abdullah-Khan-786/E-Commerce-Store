@@ -2,13 +2,11 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import CustomInput from "../components/CustomInput";
 import { useDispatch } from "react-redux";
-import { createNewColor } from "../features/color/colorSlice";
-import { useNavigate } from "react-router-dom";
+import { createNewColor, resetState } from "../features/color/colorSlice";
 import { toast } from "react-toastify";
 
 const AddColor = () => {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
 
   const validationSchema = Yup.object({
     title: Yup.string()
@@ -26,7 +24,9 @@ const AddColor = () => {
         await dispatch(createNewColor(values));
         resetForm();
         toast.success("Color created successfully");
-        navigate("/admin/color-list");
+        setTimeout(() => {
+          dispatch(resetState());
+        }, 3000);
       } catch (error) {
         toast.error("Failed to create color");
         console.error(error);

@@ -1,5 +1,11 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { getProduct, createProducts, deleteProducts, updateProduct, getProductById } from "./productService";
+import {
+  getProduct,
+  createProducts,
+  deleteProducts,
+  updateProduct,
+  getProductById,
+} from "./productService";
 
 const initialState = {
   products: [],
@@ -7,7 +13,7 @@ const initialState = {
   isError: false,
   isSuccess: false,
   message: "",
-  singleProduct: null
+  singleProduct: null,
 };
 
 export const getProducts = createAsyncThunk(
@@ -68,7 +74,9 @@ export const getProductByIds = createAsyncThunk(
 export const productSlice = createSlice({
   name: "products",
   initialState,
-  reducers: {},
+  reducers: {
+    resetState: () => initialState,
+  },
   extraReducers: (builder) => {
     builder
       .addCase(getProducts.pending, (state) => {
@@ -109,9 +117,9 @@ export const productSlice = createSlice({
       .addCase(deleteProductById.fulfilled, (state, action) => {
         state.loading = false;
         state.isSuccess = true;
-        state.products = (Array.isArray(state.products) ? state.products : []).filter(
-          (product) => product.id !== action.meta.arg
-        );
+        state.products = (
+          Array.isArray(state.products) ? state.products : []
+        ).filter((product) => product.id !== action.meta.arg);
         state.message = "Product deleted successfully";
       })
       .addCase(deleteProductById.rejected, (state, action) => {
@@ -127,12 +135,12 @@ export const productSlice = createSlice({
         state.loading = false;
         state.isSuccess = true;
         if (Array.isArray(state.products)) {
-          state.products = state.products.map(product =>
+          state.products = state.products.map((product) =>
             product.id === action.payload.id ? action.payload : product
           );
         } else {
           state.products = [action.payload];
-        }      
+        }
         state.message = "Product updated successfully";
       })
       .addCase(updateProductById.rejected, (state, action) => {
@@ -158,5 +166,7 @@ export const productSlice = createSlice({
       });
   },
 });
+
+export const { resetState } = productSlice.actions;
 
 export default productSlice.reducer;

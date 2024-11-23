@@ -4,9 +4,8 @@ import RichTextEditor from "react-rte";
 import { useDispatch, useSelector } from "react-redux";
 import { getCblogs } from "../features/blog-category/bcategorySlice";
 import { object, string } from "yup";
-import { useNavigate } from "react-router-dom";
 import { useFormik } from "formik";
-import { createBlog } from "../features/blog/blogSlice";
+import { createBlog, resetState } from "../features/blog/blogSlice";
 import { toast } from "react-toastify";
 
 const AddBlog = () => {
@@ -21,7 +20,9 @@ const AddBlog = () => {
     dispatch(getCblogs());
   }, [dispatch]);
 
-  const { allCategory } = useSelector((state) => state.blogCategory.blogsCategory);
+  const { allCategory } = useSelector(
+    (state) => state.blogCategory.blogsCategory
+  );
 
   useEffect(() => {
     if (allCategory) {
@@ -29,13 +30,10 @@ const AddBlog = () => {
     }
   }, [allCategory]);
 
-
   const handleDesc = (value) => {
     setDescriptionValue(value);
     formik.setFieldValue("description", value.toString("html"));
   };
-
-  const navigate = useNavigate();
 
   const BlogSchema = object({
     title: string().required("Title is required"),
@@ -69,7 +67,9 @@ const AddBlog = () => {
           setDescriptionValue(RichTextEditor.createEmptyValue());
           setImages([]);
           toast.success("Blog created successfully");
-          navigate("/admin/blogs-list");
+          setTimeout(() => {
+            dispatch(resetState());
+          }, 3000);
         } else {
           toast.error("Failed to create blog");
           console.error("Failed to blog product:", resultAction.error);

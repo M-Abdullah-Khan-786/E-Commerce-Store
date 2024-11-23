@@ -1,5 +1,11 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { getColor, deleteColorById, createColor, updateColor, getSingleColor } from "./colorService";
+import {
+  getColor,
+  deleteColorById,
+  createColor,
+  updateColor,
+  getSingleColor,
+} from "./colorService";
 
 const initialState = {
   colors: [],
@@ -66,7 +72,9 @@ export const fetchSingleColor = createAsyncThunk(
 export const colorSlice = createSlice({
   name: "colors",
   initialState,
-  reducers: {},
+  reducers: {
+    resetState: () => initialState,
+  },
   extraReducers: (builder) => {
     builder
       .addCase(getColors.pending, (state) => {
@@ -107,7 +115,7 @@ export const colorSlice = createSlice({
         state.loading = false;
         state.isSuccess = true;
         if (Array.isArray(state.colors)) {
-          state.brands.push(action.payload.newColor);
+          state.colors.push(action.payload.newColor);
         }
       })
       .addCase(createNewColor.rejected, (state, action) => {
@@ -122,12 +130,12 @@ export const colorSlice = createSlice({
         state.loading = false;
         state.isSuccess = true;
         if (Array.isArray(state.colors)) {
-          state.colors = state.colors.map(color =>
+          state.colors = state.colors.map((color) =>
             color.id === action.payload.id ? action.payload : color
           );
         } else {
           state.colors = [action.payload];
-        }      
+        }
         state.message = "Color updated successfully";
       })
       .addCase(updateExistingColor.rejected, (state, action) => {
@@ -150,5 +158,7 @@ export const colorSlice = createSlice({
       });
   },
 });
+
+export const { resetState } = colorSlice.actions;
 
 export default colorSlice.reducer;

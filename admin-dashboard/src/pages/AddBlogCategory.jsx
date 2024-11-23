@@ -2,13 +2,14 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import CustomInput from "../components/CustomInput";
 import { useDispatch } from "react-redux";
-import { createNewBcategory } from "../features/blog-category/bcategorySlice";
-import { useNavigate } from "react-router-dom";
+import {
+  createNewBcategory,
+  resetState,
+} from "../features/blog-category/bcategorySlice";
 import { toast } from "react-toastify";
 
 const AddBlogCategory = () => {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
 
   const validationSchema = Yup.object({
     title: Yup.string()
@@ -26,7 +27,9 @@ const AddBlogCategory = () => {
         await dispatch(createNewBcategory(values));
         resetForm();
         toast.success("Blog category created successfully");
-        navigate("/admin/blogs-category-list");
+        setTimeout(() => {
+          dispatch(resetState());
+        }, 3000);
       } catch (error) {
         toast.error("Failed to create Blog category");
         console.error(error);

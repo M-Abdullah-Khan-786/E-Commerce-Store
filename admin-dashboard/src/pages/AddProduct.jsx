@@ -8,9 +8,8 @@ import { getBrands } from "../features/brand/brandSlice";
 import { getCpoducts } from "../features/product-category/pcategorySlice";
 import { getColors } from "../features/color/colorSlice";
 import Multiselect from "react-widgets/Multiselect";
-import { createProduct } from "../features/product/productSlice";
-import { useNavigate } from "react-router-dom";
-import {  toast } from 'react-toastify';
+import { createProduct, resetState } from "../features/product/productSlice";
+import { toast } from "react-toastify";
 
 const AddProduct = () => {
   const [brand, setBrand] = useState([]);
@@ -21,7 +20,6 @@ const AddProduct = () => {
   );
 
   const dispatch = useDispatch();
-  const navigate = useNavigate();
 
   const productSchema = object({
     title: string().required("Title is required"),
@@ -77,7 +75,9 @@ const AddProduct = () => {
           formik.setFieldValue("color", []);
           setImages([]);
           toast.success("Product created successfully");
-          navigate("/admin/product-list");
+          setTimeout(() => {
+            dispatch(resetState());
+          }, 3000);
         } else {
           toast.error("Failed to create product");
           console.error("Failed to create product:", resultAction.error);

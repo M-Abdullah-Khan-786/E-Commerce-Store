@@ -2,13 +2,11 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import CustomInput from "../components/CustomInput";
 import { useDispatch } from "react-redux";
-import { createNewBrand } from "../features/brand/brandSlice";
-import { useNavigate } from "react-router-dom";
+import { createNewBrand, resetState } from "../features/brand/brandSlice";
 import { toast } from "react-toastify";
 
 const AddBrand = () => {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
 
   const validationSchema = Yup.object({
     title: Yup.string()
@@ -26,7 +24,9 @@ const AddBrand = () => {
         await dispatch(createNewBrand(values));
         resetForm();
         toast.success("Brand created successfully");
-        navigate("/admin/brand-list");
+        setTimeout(() => {
+          dispatch(resetState());
+        }, 3000);
       } catch (error) {
         toast.error("Failed to create brand");
         console.error(error);

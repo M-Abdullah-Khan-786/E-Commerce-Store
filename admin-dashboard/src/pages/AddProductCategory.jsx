@@ -2,13 +2,14 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import CustomInput from "../components/CustomInput";
 import { useDispatch } from "react-redux";
-import { createNewPcategory } from "../features/product-category/pcategorySlice";
-import { useNavigate } from "react-router-dom";
+import {
+  createNewPcategory,
+  resetState,
+} from "../features/product-category/pcategorySlice";
 import { toast } from "react-toastify";
 
 const AddProductCategory = () => {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
 
   const validationSchema = Yup.object({
     title: Yup.string()
@@ -26,7 +27,9 @@ const AddProductCategory = () => {
         await dispatch(createNewPcategory(values));
         resetForm();
         toast.success("Product category created successfully");
-        navigate("/admin/products-category-list");
+        setTimeout(() => {
+          dispatch(resetState());
+        }, 3000);
       } catch (error) {
         toast.error("Failed to create Product category");
         console.error(error);
