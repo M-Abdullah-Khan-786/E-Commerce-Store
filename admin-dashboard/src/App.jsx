@@ -29,6 +29,8 @@ import UpdateColor from "./pages/UpdateColor";
 import UpdateProductCategory from "./pages/UpdateProductCategory";
 import UpdateBlogCategory from "./pages/UpdateBlogCategory";
 import UpdateBlog from "./pages/UpdateBlog";
+import AddCoupon from "./pages/AddCoupon";
+import Couponlist from "./pages/Couponlist";
 
 const App = () => {
   return (
@@ -59,6 +61,8 @@ const App = () => {
             <Route path="blog-category" element={<AddBlogCategory />} />
             <Route path="blog-category/update/:id" element={<UpdateBlogCategory />} />
             <Route path="blogs-list" element={<Bloglist />} />
+            <Route path="coupon" element={<AddCoupon />} />
+            <Route path="coupon-list" element={<Couponlist />} />
             <Route path="blogs-category-list" element={<BlogCategoryList />} />
             <Route path="inquiries" element={<Inquiries />} />
           </Route>

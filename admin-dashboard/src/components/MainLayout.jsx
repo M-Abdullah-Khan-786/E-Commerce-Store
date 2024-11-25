@@ -9,6 +9,7 @@ import { FaRegUserCircle } from "react-icons/fa";
 import { GrCatalog, GrDeliver } from "react-icons/gr";
 import { FaProductHunt } from "react-icons/fa6";
 import { SiBrandfolder } from "react-icons/si";
+import { RiCouponLine } from "react-icons/ri";
 import { MdCategory } from "react-icons/md";
 import { AiOutlineBgColors } from "react-icons/ai";
 import { ImBlogger } from "react-icons/im";
@@ -127,6 +128,23 @@ const MainLayout = () => {
                   key: "blogs-category-list",
                   icon: <ImBlogger className="fs-4" />,
                   label: "Blog Category List",
+                },
+              ],
+            },
+            {
+              key: "marketing",
+              icon: <RiCouponLine className="fs-4" />,
+              label: "Marketing",
+              children: [
+                {
+                  key: "coupon",
+                  icon: <RiCouponLine className="fs-4" />,
+                  label: "Add Coupon",
+                },
+                {
+                  key: "coupon-list",
+                  icon: <RiCouponLine className="fs-4" />,
+                  label: "Coupon List",
                 },
               ],
             },
