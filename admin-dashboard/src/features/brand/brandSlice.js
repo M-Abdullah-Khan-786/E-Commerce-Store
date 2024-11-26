@@ -98,7 +98,7 @@ export const brandSlice = createSlice({
       .addCase(deletebrand.fulfilled, (state, action) => {
         state.loading = false;
         state.isSuccess = true;
-        state.colors = (Array.isArray(state.brands) ? state.brands : []).filter(
+        state.brands = (Array.isArray(state.brands) ? state.brands : []).filter(
           (brand) => brand.id !== action.meta.arg
         );
       })
