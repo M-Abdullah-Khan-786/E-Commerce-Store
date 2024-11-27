@@ -1,1 +1,1 @@
-**E-Commerce-Store App 🛒**
+**E-Commerce App 🛒**
