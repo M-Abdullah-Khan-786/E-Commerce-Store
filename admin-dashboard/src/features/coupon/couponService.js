@@ -16,7 +16,7 @@ import { config } from "../../utils/axiosConfig"
 //   : {};
 
 export const getCoupon = async()=>{
-    const response = await axios.get(`${base_url}/coupon`)
+    const response = await axios.get(`${base_url}/coupon`, config)
     return response.data
 }
 
