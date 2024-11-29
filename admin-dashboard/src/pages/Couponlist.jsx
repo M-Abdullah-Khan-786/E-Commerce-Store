@@ -1,10 +1,11 @@
 import { Table } from "antd";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getCoupons } from "../features/coupon/couponSlice";
+import { getCoupons,deleteCoupon } from "../features/coupon/couponSlice";
 import { Link } from "react-router-dom";
 import { CiEdit } from "react-icons/ci";
 import { MdDeleteOutline } from "react-icons/md";
+import { toast } from "react-toastify";
 
 const columns = [
   {
@@ -41,6 +42,17 @@ const Couponlist = () => {
 
   const Coupons = useSelector((state) => state.coupon.coupons.Coupons);
 
+  const handleDelete = async (id) => {
+    try {
+      await dispatch(deleteCoupon(id));
+      dispatch(getCoupons());
+      toast.success("Coupon deleted successfully!");
+    } catch (error) {
+      toast.error("Error deleting coupon!");
+      console.error(error);
+    }
+  };
+
   const dataSource = Coupons?.map((coupon, i) => ({
     key: i + 1,
     name: coupon?.name || "N/A",
@@ -56,7 +68,10 @@ const Couponlist = () => {
         <Link className="fs-3 text-danger">
           <CiEdit />
         </Link>
-        <Link className="ms-3 fs-3 text-danger">
+        <Link 
+        onClick={() => {
+          handleDelete(coupon?._id);
+        }} className="ms-3 fs-3 text-danger">
           <MdDeleteOutline />
         </Link>
       </>
