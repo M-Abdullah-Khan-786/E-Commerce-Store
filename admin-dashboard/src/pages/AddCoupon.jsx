@@ -15,6 +15,8 @@ const AddCoupon = () => {
       expiry: Yup.string()
       .required("Expiry Date is required"),
       discount: Yup.string()
+      .min(1, "Discount must be at least 1%")
+      .max(100, "Discount cannot exceed 100%")
       .required("Discount Percentage is required"),
   });
 

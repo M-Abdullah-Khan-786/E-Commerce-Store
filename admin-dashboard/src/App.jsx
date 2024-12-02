@@ -31,6 +31,7 @@ import UpdateBlogCategory from "./pages/UpdateBlogCategory";
 import UpdateBlog from "./pages/UpdateBlog";
 import AddCoupon from "./pages/AddCoupon";
 import Couponlist from "./pages/Couponlist";
+import UpdateCoupon from "./pages/UpdateCoupon";
 
 const App = () => {
   return (
@@ -62,6 +63,7 @@ const App = () => {
             <Route path="blog-category/update/:id" element={<UpdateBlogCategory />} />
             <Route path="blogs-list" element={<Bloglist />} />
             <Route path="coupon" element={<AddCoupon />} />
+            <Route path="coupon/update/:id" element={<UpdateCoupon />} />
             <Route path="coupon-list" element={<Couponlist />} />
             <Route path="blogs-category-list" element={<BlogCategoryList />} />
             <Route path="inquiries" element={<Inquiries />} />
