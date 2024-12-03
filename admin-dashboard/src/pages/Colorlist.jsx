@@ -1,11 +1,12 @@
 import { Table } from "antd";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getColors, deleteColor } from "../features/color/colorSlice";
 import { Link } from "react-router-dom";
 import { CiEdit } from "react-icons/ci";
 import { MdDeleteOutline } from "react-icons/md";
 import { toast } from "react-toastify";
+import ConfirmDeleteModal from "../components/ConfirmDeleteModal";
 
 const columns = [
   {
@@ -26,11 +27,29 @@ const columns = [
 
 const Colorlist = () => {
   const dispatch = useDispatch();
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [colorToDelete, setColorToDelete] = useState(null);
 
   useEffect(() => {
     dispatch(getColors());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const showDeleteModal = (color) => {
+    setColorToDelete(color);
+    setIsModalVisible(true);
+  };
+
+  const handleModalOk = () => {
+    if (colorToDelete) {
+      handleDelete(colorToDelete._id);
+    }
+    setIsModalVisible(false);
+  };
+
+  const handleModalCancel = () => {
+    setIsModalVisible(false);
+  };
 
   const handleDelete = async (id) => {
     try {
@@ -52,12 +71,15 @@ const Colorlist = () => {
     title: allColor[i]?.title || "N/A",
     action: (
       <>
-        <Link to={`/admin/color/update/${allColor[i]?._id}`} className="fs-3 text-danger">
+        <Link
+          to={`/admin/color/update/${allColor[i]?._id}`}
+          className="fs-3 text-danger"
+        >
           <CiEdit />
         </Link>
         <Link
           onClick={() => {
-            handleDelete(allColor[i]?._id);
+            showDeleteModal(allColor[i]);
           }}
           className="ms-3 fs-3 text-danger"
         >
@@ -74,6 +96,12 @@ const Colorlist = () => {
           <Table columns={columns} dataSource={dataSource} />
         </div>
       </div>
+      <ConfirmDeleteModal
+        visible={isModalVisible}
+        onCancel={handleModalCancel}
+        onConfirm={handleModalOk}
+        name="color"
+      />
     </>
   );
 };
