@@ -1,5 +1,5 @@
 import { Table } from "antd";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { CiEdit } from "react-icons/ci";
@@ -9,6 +9,7 @@ import {
   deleteCblogs,
 } from "../features/blog-category/bcategorySlice";
 import { toast } from "react-toastify";
+import ConfirmDeleteModal from "../components/ConfirmDeleteModal";
 
 const columns = [
   {
@@ -28,12 +29,30 @@ const columns = [
 ];
 
 const BlogCategoryList = () => {
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [blogCategoryToDelete, setBlogCategoryToDelete] = useState(null);
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(getCblogs());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const showDeleteModal = (blogCategory) => {
+    setBlogCategoryToDelete(blogCategory);
+    setIsModalVisible(true);
+  };
+
+  const handleModalOk = () => {
+    if (blogCategoryToDelete) {
+      handleDelete(blogCategoryToDelete._id);
+    }
+    setIsModalVisible(false);
+  };
+
+  const handleModalCancel = () => {
+    setIsModalVisible(false);
+  };
 
   const handleDelete = async (id) => {
     try {
@@ -65,7 +84,7 @@ const BlogCategoryList = () => {
         </Link>
         <Link
           onClick={() => {
-            handleDelete(allCategory[i]?._id);
+            showDeleteModal(allCategory[i]);
           }}
           className="ms-3 fs-3 text-danger"
         >
@@ -82,6 +101,12 @@ const BlogCategoryList = () => {
           <Table columns={columns} dataSource={dataSource} />
         </div>
       </div>
+      <ConfirmDeleteModal
+        visible={isModalVisible}
+        onCancel={handleModalCancel}
+        onConfirm={handleModalOk}
+        name="blog category"
+      />
     </>
   );
 };
