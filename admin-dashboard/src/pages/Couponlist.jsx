@@ -1,11 +1,12 @@
 import { Table } from "antd";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getCoupons,deleteCoupon } from "../features/coupon/couponSlice";
 import { Link } from "react-router-dom";
 import { CiEdit } from "react-icons/ci";
 import { MdDeleteOutline } from "react-icons/md";
 import { toast } from "react-toastify";
+import ConfirmDeleteModal from "../components/ConfirmDeleteModal";
 
 const columns = [
   {
@@ -33,12 +34,31 @@ const columns = [
 ];
 
 const Couponlist = () => {
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [couponToDelete, setCouponToDelete] = useState(null);
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(getCoupons());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const showDeleteModal = (blogCategory) => {
+    setCouponToDelete(blogCategory);
+    setIsModalVisible(true);
+  };
+
+  const handleModalOk = () => {
+    if (couponToDelete) {
+      handleDelete(couponToDelete._id);
+    }
+    setIsModalVisible(false);
+  };
+
+  const handleModalCancel = () => {
+    setIsModalVisible(false);
+  };
+
 
   const Coupons = useSelector((state) => state.coupon.coupons.Coupons);
 
@@ -69,9 +89,9 @@ const Couponlist = () => {
           <CiEdit />
         </Link>
         <Link 
-        onClick={() => {
-          handleDelete(coupon?._id);
-        }} className="ms-3 fs-3 text-danger">
+       onClick={() => {
+        showDeleteModal(coupon);
+      }} className="ms-3 fs-3 text-danger">
           <MdDeleteOutline />
         </Link>
       </>
@@ -86,6 +106,12 @@ const Couponlist = () => {
           <Table columns={columns} dataSource={dataSource} />
         </div>
       </div>
+      <ConfirmDeleteModal
+        visible={isModalVisible}
+        onCancel={handleModalCancel}
+        onConfirm={handleModalOk}
+        name="coupon"
+      />
     </>
   );
 };

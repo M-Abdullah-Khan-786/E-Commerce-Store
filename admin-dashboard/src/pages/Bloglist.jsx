@@ -1,11 +1,12 @@
 import { Table } from "antd";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getBlog, deleteBlogById } from "../features/blog/blogSlice";
 import { Link } from "react-router-dom";
 import { CiEdit } from "react-icons/ci";
 import { MdDeleteOutline } from "react-icons/md";
 import { toast } from "react-toastify";
+import ConfirmDeleteModal from "../components/ConfirmDeleteModal";
 
 const columns = [
   {
@@ -31,12 +32,30 @@ const columns = [
 ];
 
 const Bloglist = () => {
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [blogToDelete, setBlogToDelete] = useState(null);
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(getBlog());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const showDeleteModal = (blogCategory) => {
+    setBlogToDelete(blogCategory);
+    setIsModalVisible(true);
+  };
+
+  const handleModalOk = () => {
+    if (blogToDelete) {
+      handleDelete(blogToDelete._id);
+    }
+    setIsModalVisible(false);
+  };
+
+  const handleModalCancel = () => {
+    setIsModalVisible(false);
+  };
 
   const handleDelete = async (id) => {
     try {
@@ -62,8 +81,8 @@ const Bloglist = () => {
         <Link to={`/admin/blog/update/${blogs[i]?._id}`} className="fs-3 text-danger">
           <CiEdit />
         </Link>
-        <Link onClick={() => {
-            handleDelete(blogs[i]?._id);
+        <Link  onClick={() => {
+            showDeleteModal(blogs[i]);
           }} className="ms-3 fs-3 text-danger" >
           <MdDeleteOutline />
         </Link>
@@ -76,6 +95,12 @@ const Bloglist = () => {
         <h3 className="mb-4 title">Blogs List</h3>
         <div><Table columns={columns} dataSource={dataSource} /></div>
       </div>
+      <ConfirmDeleteModal
+        visible={isModalVisible}
+        onCancel={handleModalCancel}
+        onConfirm={handleModalOk}
+        name="blog"
+      />
     </>
   );
 };
