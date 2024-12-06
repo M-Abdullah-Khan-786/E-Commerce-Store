@@ -1,5 +1,5 @@
 import { Table } from "antd";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { CiEdit } from "react-icons/ci";
@@ -9,6 +9,7 @@ import {
   deleteCpoducts,
 } from "../features/product-category/pcategorySlice";
 import { toast } from "react-toastify";
+import ConfirmDeleteModal from "../components/ConfirmDeleteModal";
 
 const columns = [
   {
@@ -29,11 +30,29 @@ const columns = [
 
 const ProductCategorylist = () => {
   const dispatch = useDispatch();
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [productCategoryToDelete, setProductCategoryToDelete] = useState(null);
 
   useEffect(() => {
     dispatch(getCpoducts());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const showDeleteModal = (poductCategory) => {
+    setProductCategoryToDelete(poductCategory);
+    setIsModalVisible(true);
+  };
+
+  const handleModalOk = () => {
+    if (productCategoryToDelete) {
+      handleDelete(productCategoryToDelete._id);
+    }
+    setIsModalVisible(false);
+  };
+
+  const handleModalCancel = () => {
+    setIsModalVisible(false);
+  };
 
   const handleDelete = async (id) => {
     try {
@@ -65,7 +84,7 @@ const ProductCategorylist = () => {
         </Link>
         <Link
           onClick={() => {
-            handleDelete(allCategory[i]?._id);
+            showDeleteModal(allCategory[i]);
           }}
           className="ms-3 fs-3 text-danger"
         >
@@ -82,6 +101,12 @@ const ProductCategorylist = () => {
           <Table columns={columns} dataSource={dataSource} />
         </div>
       </div>
+      <ConfirmDeleteModal
+        visible={isModalVisible}
+        onCancel={handleModalCancel}
+        onConfirm={handleModalOk}
+        name="product category"
+      />
     </>
   );
 };

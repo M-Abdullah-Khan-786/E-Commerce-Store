@@ -1,5 +1,5 @@
 import { Table } from "antd";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getProducts,
@@ -9,6 +9,7 @@ import { Link } from "react-router-dom";
 import { CiEdit } from "react-icons/ci";
 import { MdDeleteOutline } from "react-icons/md";
 import { toast } from "react-toastify";
+import ConfirmDeleteModal from "../components/ConfirmDeleteModal";
 
 const columns = [
   {
@@ -53,10 +54,28 @@ const columns = [
 
 const Productlist = () => {
   const dispatch = useDispatch();
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [productToDelete, setProductToDelete] = useState(null);
 
   useEffect(() => {
     dispatch(getProducts());
   }, [dispatch]);
+
+  const showDeleteModal = (product) => {
+    setProductToDelete(product);
+    setIsModalVisible(true);
+  };
+
+  const handleModalOk = () => {
+    if (productToDelete) {
+      handleDelete(productToDelete._id);
+    }
+    setIsModalVisible(false);
+  };
+
+  const handleModalCancel = () => {
+    setIsModalVisible(false);
+  };
 
   const handleDelete = async (id) => {
     try {
@@ -87,7 +106,7 @@ const Productlist = () => {
         </Link>
         <Link
           onClick={() => {
-            handleDelete(getAllproducts[i]?._id);
+            showDeleteModal(getAllproducts[i]);
           }}
           className="ms-3 fs-3 text-danger"
         >
@@ -104,6 +123,12 @@ const Productlist = () => {
           <Table columns={columns} dataSource={dataSource} />
         </div>
       </div>
+      <ConfirmDeleteModal
+        visible={isModalVisible}
+        onCancel={handleModalCancel}
+        onConfirm={handleModalOk}
+        name="product"
+      />
     </>
   );
 };
