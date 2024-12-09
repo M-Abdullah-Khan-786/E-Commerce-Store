@@ -77,7 +77,7 @@ const BlogCategoryList = () => {
     action: (
       <>
         <Link
-          to={`/admin/blog-category/update/${allCategory[i]?._id}`}
+          to={`/admin/blog-category/${allCategory[i]?._id}`}
           className="fs-3 text-danger"
         >
           <CiEdit />
