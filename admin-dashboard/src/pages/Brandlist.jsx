@@ -72,7 +72,7 @@ const Brandlist = () => {
     action: (
       <>
         <Link
-          to={`/admin/brand/update/${allBrand[i]?._id}`}
+          to={`/admin/brand/${allBrand[i]?._id}`}
           className="fs-3 text-danger"
         >
           <CiEdit />
