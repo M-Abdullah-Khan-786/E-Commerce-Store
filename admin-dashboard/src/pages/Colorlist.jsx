@@ -72,7 +72,7 @@ const Colorlist = () => {
     action: (
       <>
         <Link
-          to={`/admin/color/update/${allColor[i]?._id}`}
+          to={`/admin/color/${allColor[i]?._id}`}
           className="fs-3 text-danger"
         >
           <CiEdit />

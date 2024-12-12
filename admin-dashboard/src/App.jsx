@@ -24,7 +24,6 @@ import AddProductCategory from "./pages/AddProductCategory";
 import AddBrand from "./pages/AddBrand";
 import AddProduct from "./pages/AddProduct";
 import UpdateProduct from "./pages/UpdateProduct";
-import UpdateColor from "./pages/UpdateColor";
 import UpdateBlog from "./pages/UpdateBlog";
 import AddCoupon from "./pages/AddCoupon";
 import Couponlist from "./pages/Couponlist";
@@ -46,8 +45,7 @@ const App = () => {
             <Route path="product-list" element={<Productlist />} />
             <Route path="brand/:id?" element={<AddBrand />} />
             <Route path="brand-list" element={<Brandlist />} />
-            <Route path="color" element={<AddColor />} />
-            <Route path="color/update/:id" element={<UpdateColor />} />
+            <Route path="color/:id?" element={<AddColor />} />
             <Route path="color-list" element={<Colorlist />} />
             <Route path="product-category/:id?" element={<AddProductCategory />} />
             <Route path="products-category-list" element={<ProductCategorylist />} />
