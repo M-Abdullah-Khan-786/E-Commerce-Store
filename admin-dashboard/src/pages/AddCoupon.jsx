@@ -1,12 +1,28 @@
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import CustomInput from "../components/CustomInput";
-import { useDispatch } from "react-redux";
-import { createNewCoupon, resetState } from "../features/coupon/couponSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { createNewCoupon,updateExistingCoupon,fetchSingleCoupon, resetState } from "../features/coupon/couponSlice";
 import { toast } from "react-toastify";
+import { useNavigate, useParams } from "react-router-dom";
+import { useEffect } from "react";
 
 const AddCoupon = () => {
+  const { id } = useParams();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const isUpdateMode = !!id; 
+
+  useEffect(() => {
+    if (isUpdateMode) {
+      dispatch(fetchSingleCoupon(id));
+    }
+  }, [isUpdateMode, id, dispatch]);
+
+  const singleCoupon = useSelector((state) => state.coupon?.singleCoupon);
+  const coupon = singleCoupon?.findCoupon;
+  console.log(coupon)
 
   const validationSchema = Yup.object({
     name: Yup.string()
@@ -20,23 +36,40 @@ const AddCoupon = () => {
       .required("Discount Percentage is required"),
   });
 
+  const formatDate = (dateString) => {
+    if (!dateString) return "";
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+  };
+
   const formik = useFormik({
+    enableReinitialize: true,
     initialValues: {
-      name: "",
-      expiry: "",
-      discount: "",
+      name: isUpdateMode ? coupon?.name || "" : "",
+      expiry: isUpdateMode ? formatDate(coupon?.expiry) || "" : "",
+      discount: isUpdateMode ? coupon?.discount || "" : "",
     },
     validationSchema,
     onSubmit: async (values, { resetForm }) => {
       try {
-        await dispatch(createNewCoupon(values));
+        if (isUpdateMode) {
+          await dispatch(updateExistingCoupon({ id, couponData: values }));
+          toast.success("Coupon updated successfully");
+          navigate("/admin/coupon-list");
+        } else {
+          await dispatch(createNewCoupon(values));
+          toast.success("Coupon created successfully");
+        }
         resetForm();
-        toast.success("Coupon created successfully");
         setTimeout(() => {
           dispatch(resetState());
         }, 3000);
       } catch (error) {
-        toast.error("Failed to create brand");
+        const action = isUpdateMode ? "update" : "create";
+        toast.error(`Failed to ${action} brand`);
         console.error(error);
       }
     },
@@ -45,7 +78,7 @@ const AddCoupon = () => {
   return (
     <>
       <div>
-        <h3 className="mb-4 title">Add Coupon</h3>
+        <h3 className="mb-4 title">{isUpdateMode ? "Update Coupon" : "Add Coupon"}</h3>
 
         <div>
           <form onSubmit={formik.handleSubmit}>
@@ -95,7 +128,7 @@ const AddCoupon = () => {
               className="btn btn-warning border-0 rounded-3 my-4 float-end me-4"
               type="submit"
             >
-              Add Coupon
+              {isUpdateMode ? "Update Coupon" : "Add Coupon"}
             </button>
           </form>
         </div>
